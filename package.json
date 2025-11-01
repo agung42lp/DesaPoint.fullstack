@@ -20,6 +20,7 @@
     "vue": "3.5.22"
   },
   "dependencies": {
+    "@inertiajs/vue3": "^2.2.15",
     "axios": "^1.13.1",
     "vue-router": "4.6.3"
   }

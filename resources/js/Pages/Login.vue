@@ -247,9 +247,12 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { authService } from '@/services/api'
 
 const isRegister = ref(false)
 const showPassword = ref(false)
+const router = useRouter()
 
 const formData = ref({
   email: '',
@@ -263,21 +266,43 @@ const handleToggle = () => {
   isRegister.value = !isRegister.value
 }
 
-const handleSubmit = () => {
-  if (isRegister.value) {
-    if (!formData.value.name || !formData.value.email || !formData.value.password || !formData.value.phone) {
-      alert('Mohon isi semua field')
-      return
+const handleSubmit = async () => {
+  try {
+    if (isRegister.value) {
+      if (!formData.value.name || !formData.value.username || 
+          !formData.value.password || !formData.value.password_confirmation) {
+        alert('Mohon isi semua field')
+        return
+      }
+      
+      await authService.register(formData.value)
+      alert('Registrasi berhasil!')
+      handleToggle()
+      
+    } else {
+      if (!formData.value.username || !formData.value.password) {
+        alert('Mohon isi username dan password')
+        return
+      }
+      
+      console.log('Sending login request...')
+        const response = await authService.login({
+          username: formData.value.username,
+          password: formData.value.password
+        })
+        
+        if (response.role === 'admin') {
+          router.push('/homeadmin')
+        } else {
+          router.push('/')
+        }
+
+      }
+    } catch (error) {
+      console.error('Full error:', error)
+      console.error('Error response:', error.response)
+      console.error('Error data:', error.response?.data)
+      alert(error.response?.data?.message || 'Terjadi kesalahan')
     }
-    console.log('Register attempt:', formData.value)
-    alert('Register functionality - connect to backend')
-  } else {
-    if (!formData.value.email || !formData.value.password) {
-      alert('Mohon isi email dan password')
-      return
-    }
-    console.log('Login attempt:', formData.value)
-    alert('Login functionality - connect to backend')
   }
-}
 </script>
