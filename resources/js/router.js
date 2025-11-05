@@ -8,11 +8,15 @@ const router = createRouter({
   history: createWebHashHistory('/desapoint/'),
   routes: [
     { path: '/', name: 'Home', component: Home },
-    { path: '/homeadmin', name: 'Homeadmin', component: Homeadmin },
+    { path: '/homeadmin', name: 'Homeadmin', component: Homeadmin, meta: { requiresAuth: true } },
     { path: '/form', name: 'Form', component: Form },
     { path: '/pengaduan', redirect: '/form' },
     { path: '/login', name: 'Login', component: Login }
   ]
+})
+
+router.afterEach(() => {i
+  window.dispatchEvent(new Event('route-changed'))
 })
 
 export default router

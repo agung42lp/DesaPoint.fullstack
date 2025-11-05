@@ -19,9 +19,32 @@
             <a href="#baksos" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Program</a>
             <a href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Keuangan</a>
             <router-link to="/form" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Pengaduan</router-link>
-            <router-link to="/login" class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+            <router-link 
+              v-if="!isLoggedIn"
+              to="/login" 
+              class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
               Login
             </router-link>
+
+            <div v-else class="flex items-center gap-4">
+              <div class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50 shadow-sm">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                  {{ currentUser?.name?.charAt(0).toUpperCase() }}
+                </div>
+                <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
+              </div>
+              <button
+                @click="handleLogout"
+                class="group relative px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <span class="relative z-10 flex items-center gap-2">
+                  <svg class="w-5 h-5 transform group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                  </svg>
+                  Logout
+                </span>
+                <div class="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
           </div>
 
           <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
@@ -38,7 +61,20 @@
             <a @click="mobileMenuOpen = false" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
             <a @click="mobileMenuOpen = false" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
             <router-link @click="mobileMenuOpen = false" to="/form" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/login" class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-center">Login</router-link>
+            <router-link 
+              v-if="!isLoggedIn"
+              @click="mobileMenuOpen = false" 
+              to="/login" 
+              class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-center">
+              Login
+            </router-link>
+
+            <button
+              v-else
+              @click="() => { handleLogout(); mobileMenuOpen = false; }"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -412,9 +448,16 @@
     <!-- Bagian tabel baksos ya guys-->
     <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-12 mb-12 md:mb-16 scroll-animate">
       <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
-          <h2 class="text-xl md:text-2xl font-bold text-white">Riwayat Bantuan Terkini</h2>
-          <p class="text-green-100 mt-1 text-sm">Data penerima bantuan terbaru</p>
+        <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
+          <div>
+            <h2 class="text-xl md:text-2xl font-bold text-white">Riwayat Bantuan Terkini</h2>
+            <p class="text-green-100 mt-1 text-sm">Data penerima bantuan terbaru</p>
+          </div>
+          <button @click="openCreateModal('baksos', 'Riwayat Bantuan Terkini')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+          </button>
         </div>
 
         <div class="hidden md:block overflow-x-auto">
@@ -425,6 +468,7 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tgl Dibantu</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -456,6 +500,20 @@
                     {{ item.keterangan }}
                   </span>
                 </td>
+                <td class="px-6 py-5">
+                  <div class="flex items-center gap-2">
+                    <button class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                      <svg @click="openEditModal(item, index, 'baksos', 'Riwayat Bantuan Terkini')" class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                    </button>
+                    <button @click.stop="openDeleteModal(index, 'baksos', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                      <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -481,6 +539,18 @@
                   {{ item.tanggal }}
                 </div>
                 <div class="text-sm text-gray-600">{{ item.keterangan }}</div>
+                <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                  <button class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </button>
+                  <button class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -639,11 +709,17 @@
      <!-- Bagian tabel bank sampah ya guys-->
       <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-12 mb-12 md:mb-16 scroll-animate">
         <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
-          <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
-            <h2 class="text-2xl font-bold text-white">Rekening Bank Sampah</h2>
-            <p class="text-green-100 mt-1">Data rekening bank sampah warga</p>
+          <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
+            <div>
+              <h2 class="text-xl md:text-2xl font-bold text-white">Rekening Bank Sampah</h2>
+              <p class="text-green-100 mt-1 text-sm">Data rekening bank sampah warga</p>
+            </div>
+            <button @click="openCreateModal('banksampah', 'Riwayat Bantuan Terkini')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
           </div>
-
           <div class="hidden md:block overflow-x-auto">
             <table class="w-full">
               <thead>
@@ -652,11 +728,12 @@
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Sampah</th>
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Uang</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in tableData2" 
+                  v-for="(item, index) in bankSampahData" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300 cursor-pointer transform hover:scale-[1.01]"
                   :class="{ 'animate-fadeInUp': true }"
@@ -687,6 +764,20 @@
                       💰 {{ item.totalUang }}
                     </span>
                   </td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-2">
+                      <button @click="openEditModal(item, index, 'banksampah', 'Riwayat Bantuan Terkini')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                      </button>
+                      <button @click.stop="openDeleteModal(index, 'banksampah', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -694,7 +785,7 @@
 
           <div class="md:hidden divide-y divide-gray-100">
             <div 
-              v-for="(item, index) in tableData2" 
+              v-for="(item, index) in bankSampahData" 
               :key="index"
               class="p-4 hover:bg-green-50 transition-all duration-300"
               :class="{ 'animate-fadeInUp': true }"
@@ -712,13 +803,25 @@
                     {{ item.totalSampah }}
                   </div>
                   <div class="text-sm text-gray-600">{{ item.totalUang }}</div>
+                  <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                    <button class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                      <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                    </button>
+                    <button class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                      <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600">Menampilkan {{ tableData2.length }} rekening aktif</p>
+            <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening aktif</p>
           </div>
         </div>
       </section>
@@ -727,9 +830,16 @@
       <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-12 mb-12 md:mb-16 scroll-animate">
         <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center animate-fadeInUp">Jadwal Ronda</h2>
         <div class="bg-white rounded-xl md-rounded-2xl shadow-xl overflow-hidden">
-          <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
-            <h2 class="text-2xl font-bold text-white">Jadwal Ronda </h2>
-            <p class="text-green-100 mt-1">Data jadwal ronda Warga</p>
+          <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6 flex justify-between items-center">
+            <div>
+              <h2 class="text-xl md:text-2xl font-bold text-white">Jadwal Ronda</h2>
+              <p class="text-green-100 mt-1 text-sm">Data jadwal ronda warga</p>
+            </div>
+            <button @click="openCreateModal('ronda', 'Riwayat Bantuan Terkini')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
           </div>
 
           <div class=" hidden md:block overflow-x-auto">
@@ -739,11 +849,12 @@
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">No</th>
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Peserta Ronda</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in tableData3" 
+                  v-for="(item, index) in jadwalRondaData" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300 cursor-pointer transform hover:scale-[1.01]"
                   :class="{ 'animate-fadeInUp': true }"
@@ -753,20 +864,36 @@
                   
                   <td class="px-6 py-5">
                     <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
+                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
                       </div>
-                      <span class="text-gray-800 font-medium">{{ item.nama }}</span>
+                      <span class="text-gray-800 font-medium">{{ item.tanggal }}</span>
                     </div>
                   </td>
                   
                   <td class="px-6 py-5">
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700 font-semibold">
                       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                       </svg>
-                      {{ item.totalSampah }}
+                      {{ item.peserta_ronda }}
                     </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-2">
+                      <button @click="openEditModal(item, index, 'ronda', 'Riwayat Bantuan Terkini')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                      </button>
+                      <button @click.stop="openDeleteModal(index, 'ronda', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -775,22 +902,34 @@
 
           <div class="md:hidden divide-y divide-gray-100">
             <div 
-              v-for="(item, index) in tableData3" 
+              v-for="(item, index) in jadwalRondaData" 
               :key="index"
               class="p-4 hover:bg-green-50 transition-all duration-300"
               :class="{ 'animate-fadeInUp': true }"
               :style="{ animationDelay: `${index * 0.1}s` }">
               <div class="flex items-start gap-3">
                 <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <span class="text-green-700 font-semibold text-sm">{{ item.nama.charAt(0) }}</span>
+                  <span class="text-green-700 font-semibold text-sm">{{ item.tanggal.charAt(0) }}</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="font-semibold text-gray-900 mb-1">{{ item.nama }}</div>
+                  <div class="font-semibold text-gray-900 mb-1">{{ item.tanggal }}</div>
                   <div class="flex items-center gap-1 text-xs text-blue-700 mb-2">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    {{ item.totalSampah }}
+                    {{ item.peserta_ronda }}
+                  </div>
+                  <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                    <button class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                      <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                      </svg>
+                    </button>
+                    <button class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                      <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                      </svg>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -798,7 +937,7 @@
           </div>
 
           <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600">Menampilkan {{ tableData3.length }} jadwal ronda terkini</p>
+            <p class="text-sm text-gray-600">Menampilkan {{ jadwalRondaData.length }} jadwal ronda terkini</p>
           </div>
         </div>
       </section>
@@ -1022,12 +1161,12 @@
           </div>
         </div>
         <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-          © 2024 RW 05 Si Doi. All rights reserved.
+          © 2025 DesaPoint. All rights reserved.
         </div>
       </div>
     </footer>
 
-    <!--bagain modal guys keknya-->
+    <!--bagian modal guys keknya-->
     <div 
       v-if="showBankSampahModal" 
       @click="showBankSampahModal = false"
@@ -1063,7 +1202,7 @@
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in tableData2" 
+                  v-for="(item, index) in bankSampahData" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300">
                   
@@ -1099,7 +1238,7 @@
 
           <div class="md:hidden divide-y divide-gray-100">
             <div 
-              v-for="(item, index) in tableData2" 
+              v-for="(item, index) in bankSampahData" 
               :key="index"
               class="p-4 hover:bg-green-50 transition-all duration-300">
               <div class="flex items-start gap-3">
@@ -1122,16 +1261,176 @@
         </div>
 
         <div class="bg-gray-50 px-6 md:px-8 py-4 border-t border-gray-200">
-          <p class="text-sm text-gray-600">Menampilkan {{ tableData2.length }} rekening aktif</p>
+          <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening aktif</p>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Modal Create/Edit -->
+        <div 
+          v-if="showFormModal" 
+          @click="closeFormModal"
+          class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div 
+            @click.stop
+            class="bg-white rounded-2xl shadow-2xl max-w-md w-full animate-slideUp">
+            
+            <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 rounded-t-2xl">
+              <h2 class="text-xl font-bold text-white">
+                {{ formMode === 'create' ? 'Tambah Data Baru' : 'Edit Data' }}
+              </h2>
+              <p class="text-green-100 text-sm mt-1">{{ formTitle }}</p>
+            </div>
+
+            <div class="p-6 space-y-4">
+              <!-- Form Baksos -->
+              <template v-if="currentTable === 'baksos'">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
+                  <input 
+                    v-model="formData.nama"
+                    type="text" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Masukkan nama">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                  <input 
+                    v-model="formData.tanggal"
+                    type="date" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
+                  <textarea 
+                    v-model="formData.keterangan"
+                    rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Masukkan keterangan"></textarea>
+                </div>
+              </template>
+
+              <!-- Form Bank Sampah -->
+              <template v-if="currentTable === 'banksampah'">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
+                  <input 
+                    v-model="bankSampahForm.nama"
+                    type="text" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Masukkan nama">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Total Sampah (kg)</label>
+                  <input 
+                    v-model.number="bankSampahForm.total_sampah"
+                    type="number"
+                    step="0.01"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="0.00">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Total Uang (Rp)</label>
+                  <input 
+                    v-model.number="bankSampahForm.total_uang"
+                    type="number"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="0">
+                </div>
+              </template>
+              <!-- Form Jadwal Ronda -->
+              <template v-if="currentTable === 'ronda'">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                  <input 
+                    v-model="jadwalRondaForm.tanggal"
+                    type="date" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Peserta Ronda</label>
+                  <textarea 
+                    v-model="jadwalRondaForm.peserta_ronda"
+                    rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Nama peserta ronda"></textarea>
+                </div>
+              </template>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex gap-3 justify-end">
+              <button 
+                @click="closeFormModal"
+                class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
+                Batal
+              </button>
+              <button 
+                @click="saveData"
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
+                {{ formMode === 'create' ? 'Tambah' : 'Simpan' }}
+              </button>
+            </div>
+          </div>
+        </div>
+                    <!-- Modal Delete pop up guys -->
+            <div 
+              v-if="showDeleteModal" 
+              @click="showDeleteModal = false"
+              class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 animate-fadeIn">
+              <div 
+                @click.stop
+                class="bg-white rounded-2xl shadow-2xl max-w-md w-full animate-slideUp">
+                
+                <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-5 rounded-t-2xl">
+                  <h2 class="text-xl font-bold text-white">Konfirmasi Hapus</h2>
+                  <p class="text-red-100 text-sm mt-1">Data yang dihapus tidak dapat dikembalikan</p>
+                </div>
+
+                <div class="p-6">
+                  <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                      <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-gray-800 font-medium">Apakah Anda yakin ingin menghapus data ini?</p>
+                      <p class="text-gray-600 text-sm mt-1">
+                        <span v-if="currentTable === 'baksos'">{{ formData.nama }}</span>
+                        <span v-else-if="currentTable === 'banksampah'">{{ bankSampahForm.nama }}</span>
+                        <span v-else-if="currentTable === 'ronda'">{{ jadwalRondaForm.tanggal }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex gap-3 justify-end">
+                  <button 
+                    @click="showDeleteModal = false"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
+                    Batal
+                  </button>
+                  <button 
+                    @click="confirmDelete"
+                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            </div>
+      </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { baksosAPI, bankSampahAPI, jadwalRondaAPI, authService } from '../services/api.js'
+import { useRouter, useRoute } from 'vue-router'
+import api from '../services/api.js'
 
+const router = useRouter()
+const route = useRoute()
+const isLoggedIn = ref(false)
+const currentUser = ref(null)
 const mobileMenuOpen = ref(false)
 const observedElements = ref([])
 const isVisible = ref(false)
@@ -1146,6 +1445,197 @@ const animateChart = ref(false)
 const chartMalePercentage = ref(0)
 const chartFemalePercentage = ref(0)
 const animateKeuangan = ref(false)
+const showFormModal = ref(false)
+const showDeleteModal = ref(false)
+const formMode = ref('create') // 'create' or 'edit'
+const formTitle = ref('')
+const handleLogout = async () => {
+  try {
+    await authService.logout()
+  } catch (error) {
+    console.error('Logout error:', error)
+  } finally {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    isLoggedIn.value = false
+    currentUser.value = null
+    router.push('/login')
+  }
+}
+watch(() => route.path, () => {
+  checkAuthStatus()
+})
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+const checkAuthStatus = async () => {
+  const token = localStorage.getItem('token')
+  console.log('Token:', token)
+  
+  if (token) {
+    try {
+      const response = await api.get('/user')
+      console.log('User data:', response.data)
+      isLoggedIn.value = true
+      currentUser.value = response.data
+    } catch (error) {
+      console.error('Auth check failed:', error)
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+    }
+  }
+}
+const formData = ref({
+  nama: '',
+  tanggal: '',
+  keterangan: ''
+})
+const bankSampahForm = ref({
+    nama: '',
+    total_sampah: 0,
+    total_uang: 0
+})
+const jadwalRondaData = ref([])
+const jadwalRondaForm = ref({
+    tanggal: '',
+    peserta_ronda: ''
+})
+const editingIndex = ref(null)
+const currentTable = ref('') // 'baksos', 'banksampah', 'ronda'
+
+const openCreateModal = (tableType, title) => {
+  currentTable.value = tableType
+  formMode.value = 'create'
+  formTitle.value = title
+  
+  if (tableType === 'banksampah') {
+    bankSampahForm.value = { nama: '', total_sampah: 0, total_uang: 0 }
+  } else if (tableType === 'ronda') {
+    jadwalRondaForm.value = { tanggal: '', peserta_ronda: '' }
+  } else {
+    formData.value = { nama: '', tanggal: '', keterangan: '' }
+  }
+  showFormModal.value = true
+}
+
+const openEditModal = (item, index, tableType, title) => {
+  currentTable.value = tableType
+  formMode.value = 'edit'
+  formTitle.value = title
+  editingIndex.value = index
+  
+  if (tableType === 'banksampah') {
+    bankSampahForm.value = {
+      id: item.id,
+      nama: item.nama,
+      total_sampah: parseFloat(item.totalSampah),
+      total_uang: parseInt(item.totalUang.replace(/\D/g, ''))
+    }
+  } else {
+    formData.value = { ...item }
+  }
+  showFormModal.value = true
+}
+
+const openDeleteModal = (index, tableType, item) => {
+  showFormModal.value = false
+  showDeleteModal.value = false
+  editingIndex.value = null
+  currentTable.value = ''
+  
+  nextTick(() => {
+    editingIndex.value = index
+    currentTable.value = tableType
+    
+    if (tableType === 'banksampah') {
+      bankSampahForm.value = { 
+        id: item.id,
+        nama: item.nama 
+      }
+    } else if (tableType === 'ronda') {
+      jadwalRondaForm.value = { 
+        id: item.id,
+        tanggal: item.tanggal 
+      }
+    } else {
+      formData.value = { ...item }
+    }
+    
+    showDeleteModal.value = true
+  })
+}
+
+const closeFormModal = () => {
+  showFormModal.value = false
+  formData.value = { nama: '', tanggal: '', keterangan: '' }
+  bankSampahForm.value = { nama: '', total_sampah: 0, total_uang: 0 }
+}
+
+const saveData = async () => {
+    try {
+        if (currentTable.value === 'banksampah') {
+            const payload = {
+                nama: bankSampahForm.value.nama,
+                total_sampah: bankSampahForm.value.total_sampah,
+                total_uang: bankSampahForm.value.total_uang
+            }
+            if (formMode.value === 'create') {
+                await bankSampahAPI.create(payload)
+            } else {
+                await bankSampahAPI.update(bankSampahForm.value.id, payload)
+            }
+            await fetchBankSampah()
+        } else if (currentTable.value === 'ronda') {
+            const payload = {
+                tanggal: jadwalRondaForm.value.tanggal,
+                peserta_ronda: jadwalRondaForm.value.peserta_ronda
+            }
+            if (formMode.value === 'create') {
+                await jadwalRondaAPI.create(payload)
+            } else {
+                await jadwalRondaAPI.update(jadwalRondaForm.value.id, payload)
+            }
+            await fetchJadwalRonda()
+        } else {
+            const payload = {
+                nama: formData.value.nama,
+                tanggal: formData.value.tanggal,
+                keterangan: formData.value.keterangan
+            }
+            if (formMode.value === 'create') {
+                await baksosAPI.create(payload)
+            } else {
+                await baksosAPI.update(formData.value.id, payload)
+            }
+            await fetchBaksos()
+        }
+        closeFormModal()
+    } catch (error) {
+        console.error('Error saving:', error.response?.data)
+    }
+}
+
+const confirmDelete = async () => {
+  try {
+    if (currentTable.value === 'banksampah') {
+      await bankSampahAPI.delete(bankSampahForm.value.id)
+      await fetchBankSampah()
+    } else if (currentTable.value === 'ronda') {
+      await jadwalRondaAPI.delete(jadwalRondaForm.value.id)
+      await fetchJadwalRonda()
+    } else {
+      await baksosAPI.delete(formData.value.id)
+      await fetchBaksos()
+    }
+    showDeleteModal.value = false
+  } catch (error) {
+    console.error('Error deleting:', error)
+  }
+}
 
 const animatedKeuangan = ref({
   pemasukan: 0,
@@ -1339,104 +1829,71 @@ const initialSlideIndex = computed(() => {
   return sortedEvents.value.findIndex(e => e.status === 'thisweek')
 })
 
-const tableData = ref([
-  {
-    no: 1,
-    nama: 'Ahmad Fauzi',
-    tanggal: '20 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 2,
-    nama: 'Siti Nurhaliza',
-    tanggal: '19 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 3,
-    nama: 'Budi Santoso',
-    tanggal: '18 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 4,
-    nama: 'Dewi Kusuma',
-    tanggal: '17 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 5,
-    nama: 'Rudi Hermawan',
-    tanggal: '16 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  }
-])
+const tableData = ref([])
+const bankSampahData = ref([])
+const isLoading = ref(true)
 
-const tableData2 = ref([
-  {
-    no: 1,
-    nama: 'Ahmad Fauzi',
-    totalSampah: '45 Kg',
-    totalUang: 'Rp 225.000'
-  },
-  {
-    no: 2,
-    nama: 'Siti Nurhaliza',
-    totalSampah: '38 Kg',
-    totalUang: 'Rp 190.000'
-  },
-  {
-    no: 3,
-    nama: 'Budi Santoso',
-    totalSampah: '52 Kg',
-    totalUang: 'Rp 260.000'
-  },
-  {
-    no: 4,
-    nama: 'Dewi Kusuma',
-    totalSampah: '41 Kg',
-    totalUang: 'Rp 205.000'
-  },
-  {
-    no: 5,
-    nama: 'Rudi Hermawan',
-    totalSampah: '35 Kg',
-    totalUang: 'Rp 175.000'
-  }
-])
+const fetchBaksos = async () => {
+    try {
+        isLoading.value = true
+        const response = await baksosAPI.getAll()
+        tableData.value = response.data
+        .sort((a, b) => a.id - b.id)
+        .map((item, index) => ({
+            id: item.id,
+            no: index + 1,
+            nama: item.nama,
+            tanggal: new Date(item.tanggal).toLocaleDateString('id-ID', { 
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric' 
+            }),
+            keterangan: item.keterangan
+        }))
+    } catch (error) {
+        console.error('Error fetching baksos:', error)
+    } finally {
+        isLoading.value = false
+    }
+}
 
-const tableData3 = ref([
-  {
-    no: 1,
-    nama: 'Ahmad Fauzi',
-    totalSampah: '45 Kg',
-    totalUang: 'Rp 225.000'
-  },
-  {
-    no: 2,
-    nama: 'Siti Nurhaliza',
-    totalSampah: '38 Kg',
-    totalUang: 'Supri Supriyadi, Ahmad Mubarok, Supriyanto'
-  },
-  {
-    no: 3,
-    nama: 'Budi Santoso',
-    totalSampah: '52 Kg',
-    totalUang: 'Rp 260.000'
-  },
-  {
-    no: 4,
-    nama: 'Dewi Kusuma',
-    totalSampah: '41 Kg',
-    totalUang: 'Rp 205.000'
-  },
-  {
-    no: 5,
-    nama: 'Rudi Hermawan',
-    totalSampah: '35 Kg',
-    totalUang: 'Rp 175.000'
-  }
-])
+const fetchBankSampah = async () => {
+    try {
+        const response = await bankSampahAPI.getAll()
+        bankSampahData.value = response.data
+            .sort((a, b) => a.id - b.id)
+            .map((item, index) => ({
+                id: item.id,
+                no: index + 1,
+                nama: item.nama,
+                totalSampah: item.total_sampah + ' kg',
+                totalUang: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.total_uang)
+            }))
+    } catch (error) {
+        console.error('Error fetching bank sampah:', error)
+    } finally {
+        isLoading.value = false
+    }
+}
+
+const fetchJadwalRonda = async () => {
+    try {
+        const response = await jadwalRondaAPI.getAll()
+        jadwalRondaData.value = response.data
+            .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
+            .map((item, index) => ({
+                id: item.id,
+                no: index + 1,
+                tanggal: new Date(item.tanggal).toLocaleDateString('id-ID'),
+                peserta_ronda: item.peserta_ronda
+            }))
+    } catch (error) {
+        console.error('Error fetching jadwal ronda:', error)
+    } finally {
+        isLoading.value = false
+    }
+}
+
 
 const currentCleaningSlide = ref(0)
 const cleaningEvents = ref([
@@ -1485,7 +1942,20 @@ const sortedEvents = computed(() => {
 })
 
 onMounted(() => {
+  fetchBaksos()
+  fetchBankSampah()
+  fetchJadwalRonda()
+  console.log('Component mounted, checking auth...')
   isVisible.value = true
+  checkAuthStatus()
+
+  window.addEventListener('storage', checkAuthStatus)
+  
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      checkAuthStatus()
+    }
+  })
 
   const thisWeekIndex = sortedEvents.value.findIndex(e => e.status === 'thisweek')
   if (thisWeekIndex !== -1) {

@@ -290,13 +290,14 @@ const handleSubmit = async () => {
           username: formData.value.username,
           password: formData.value.password
         })
-        
+
+        await new Promise(resolve => setTimeout(resolve, 100))
+
         if (response.role === 'admin') {
           router.push('/homeadmin')
         } else {
           router.push('/')
         }
-
       }
     } catch (error) {
       console.error('Full error:', error)

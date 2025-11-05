@@ -19,9 +19,33 @@
             <a href="#baksos" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Program</a>
             <a href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Keuangan</a>
             <router-link to="/form" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Pengaduan</router-link>
-            <router-link to="/login" class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
+            <router-link 
+              v-if="!isLoggedIn"
+              to="/login" 
+              class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
               Login
             </router-link>
+
+            <div v-else class="flex items-center gap-4">
+              <div class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50 shadow-sm">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                  {{ currentUser?.name?.charAt(0).toUpperCase() }}
+                </div>
+                <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
+              </div>
+              <button
+                @click="handleLogout"
+                class="group relative px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                <span class="relative z-10 flex items-center gap-2">
+                  <svg class="w-5 h-5 transform group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                  </svg>
+                  Logout
+                </span>
+                <div class="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
+
           </div>
 
           <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
@@ -38,7 +62,20 @@
             <a @click="mobileMenuOpen = false" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
             <a @click="mobileMenuOpen = false" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
             <router-link @click="mobileMenuOpen = false" to="/form" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/login" class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-center">Login</router-link>
+            <router-link 
+              v-if="!isLoggedIn"
+              @click="mobileMenuOpen = false" 
+              to="/login" 
+              class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-center">
+              Login
+            </router-link>
+
+            <button
+              v-else
+              @click="() => { handleLogout(); mobileMenuOpen = false; }"
+              class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">
+              Logout
+            </button>
           </div>
         </div>
       </div>
@@ -1130,8 +1167,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { authService } from '../services/api.js'
+import { useRouter, useRoute } from 'vue-router'
+import api from '../services/api.js'
 
+const router = useRouter()
+const route = useRoute()
+const isLoggedIn = ref(false)
+const currentUser = ref(null)
 const mobileMenuOpen = ref(false)
 const observedElements = ref([])
 const isVisible = ref(false)
@@ -1146,6 +1190,10 @@ const animateChart = ref(false)
 const chartMalePercentage = ref(0)
 const chartFemalePercentage = ref(0)
 const animateKeuangan = ref(false)
+
+watch(() => route.path, () => {
+  checkAuthStatus()
+})
 
 const animatedKeuangan = ref({
   pemasukan: 0,
@@ -1174,6 +1222,47 @@ const keuanganData = {
   bankSampahOut: 8,
   lainLain: 156
 }
+
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+const checkAuthStatus = async () => {
+  const token = localStorage.getItem('token')
+  console.log('Token:', token)
+  
+  if (token) {
+    try {
+      const response = await api.get('/user')
+      console.log('User data:', response.data)
+      isLoggedIn.value = true
+      currentUser.value = response.data
+    } catch (error) {
+      console.error('Auth check failed:', error)
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+    }
+  }
+}
+
+const handleLogout = async () => {
+  try {
+    await authService.logout()
+  } catch (error) {
+    console.error('Logout error:', error)
+  } finally {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    isLoggedIn.value = false
+    currentUser.value = null
+    router.push('/login')
+  }
+}
+
 
 const formatNumber = (num) => {
   return new Intl.NumberFormat('id-ID').format(num)
@@ -1485,7 +1574,17 @@ const sortedEvents = computed(() => {
 })
 
 onMounted(() => {
+  console.log('Component mounted, checking auth...')
   isVisible.value = true
+  checkAuthStatus()
+
+  window.addEventListener('storage', checkAuthStatus)
+  
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      checkAuthStatus()
+    }
+  })
 
   const thisWeekIndex = sortedEvents.value.findIndex(e => e.status === 'thisweek')
   if (thisWeekIndex !== -1) {
@@ -1589,6 +1688,9 @@ onUnmounted(() => {
       scrollObserver.unobserve(el)
     })
   }
+  
+  window.removeEventListener('storage', checkAuthStatus)
+  document.removeEventListener('visibilitychange', checkAuthStatus)
 })
 </script>
 
