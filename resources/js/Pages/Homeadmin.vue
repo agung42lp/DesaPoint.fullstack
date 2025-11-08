@@ -16,9 +16,9 @@
           
           <div class="hidden md:flex items-center space-x-6">
             <router-link to="/" class="text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-green-600 after:scale-x-100 transition-all">Beranda</router-link>
-            <a href="#baksos" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Program</a>
-            <a href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Keuangan</a>
-            <router-link to="/form" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Pengaduan</router-link>
+            <router-link to="/program" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Program</router-link>
+            <router-link to="/keuangan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Keuangan</router-link>
+            <router-link to="/pengaduan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Pengaduan</router-link>
             <router-link 
               v-if="!isLoggedIn"
               to="/login" 
@@ -959,12 +959,14 @@
                   <span v-if="animateKeuangan">{{ formatNumber(animatedKeuangan.pemasukan) }}</span>
                   <span v-else>0</span>
                 </h3>
-                <button @click="showBankSampahModal = true" class="inline-flex items-center text-green-600 text-sm font-medium mt-3 hover:text-green-700 group">
+                <router-link 
+                  to="/keuangan" 
+                  class="inline-flex items-center text-green-600 text-sm font-medium mt-3 hover:text-green-700 group">
                   <span>Selengkapnya</span>
                   <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                   </svg>
-                </button>
+                </router-link>
               </div>
               <div class="p-4 bg-green-100 rounded-xl transition-all duration-300"
                   :class="{ 'bg-green-600 scale-110 rotate-12': animatedKeuangan.hoverPemasukan }">
@@ -1034,12 +1036,14 @@
                   <span v-if="animateKeuangan">{{ formatNumber(animatedKeuangan.pengeluaran) }}</span>
                   <span v-else>0</span>
                 </h3>
-                <button @click="showBankSampahModal = true" class="inline-flex items-center text-red-600 text-sm font-medium mt-3 hover:text-red-700 group">
+                <router-link 
+                  to="/keuangan" 
+                  class="inline-flex items-center text-green-600 text-sm font-medium mt-3 hover:text-green-700 group">
                   <span>Selengkapnya</span>
                   <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                   </svg>
-                </button>
+                </router-link>
               </div>
               <div class="p-4 bg-red-100 rounded-xl transition-all duration-300"
                   :class="{ 'bg-red-600 scale-110 rotate-12': animatedKeuangan.hoverPengeluaran }">
@@ -1165,106 +1169,6 @@
         </div>
       </div>
     </footer>
-
-    <!--bagian modal guys keknya-->
-    <div 
-      v-if="showBankSampahModal" 
-      @click="showBankSampahModal = false"
-      class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fadeIn">
-      <div 
-        @click.stop
-        class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden animate-slideUp">
-        
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 md:px-8 py-5 md:py-6 flex items-center justify-between">
-          <div>
-            <h2 class="text-xl md:text-2xl font-bold text-white">Rekening Bank Sampah</h2>
-            <p class="text-green-100 mt-1 text-sm">Data rekening bank sampah warga</p>
-          </div>
-          <button 
-            @click="showBankSampahModal = false"
-            class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all duration-300 hover:rotate-90">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
-          <div class="hidden md:block overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="bg-gray-50 border-b-2 border-green-200">
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">No</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Sampah</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Uang</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr 
-                  v-for="(item, index) in bankSampahData" 
-                  :key="index"
-                  class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300">
-                  
-                  <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
-                  
-                  <td class="px-6 py-5">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
-                      </div>
-                      <span class="text-gray-800 font-medium">{{ item.nama }}</span>
-                    </div>
-                  </td>
-                  
-                  <td class="px-6 py-5">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700 font-semibold">
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
-                      </svg>
-                      {{ item.totalSampah }}
-                    </span>
-                  </td>
-                  
-                  <td class="px-6 py-5">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 font-bold">
-                      💰 {{ item.totalUang }}
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="md:hidden divide-y divide-gray-100">
-            <div 
-              v-for="(item, index) in bankSampahData" 
-              :key="index"
-              class="p-4 hover:bg-green-50 transition-all duration-300">
-              <div class="flex items-start gap-3">
-                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <span class="text-green-700 font-semibold text-sm">{{ item.nama.charAt(0) }}</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="font-semibold text-gray-900 mb-1">{{ item.nama }}</div>
-                  <div class="flex items-center gap-1 text-xs text-emerald-700 mb-2">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
-                    </svg>
-                    {{ item.totalSampah }}
-                  </div>
-                  <div class="text-sm font-bold text-green-700">💰 {{ item.totalUang }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-gray-50 px-6 md:px-8 py-4 border-t border-gray-200">
-          <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening aktif</p>
-        </div>
-      </div>
-    </div>
 
     <!-- Modal Create/Edit -->
         <div 
@@ -1434,7 +1338,6 @@ const currentUser = ref(null)
 const mobileMenuOpen = ref(false)
 const observedElements = ref([])
 const isVisible = ref(false)
-const showBankSampahModal = ref(false)
 const animateNumbers = ref(false)
 const animatedValues = ref([0, 0, 0, 0])
 const animateNumbers2 = ref(false)
@@ -1893,7 +1796,6 @@ const fetchJadwalRonda = async () => {
         isLoading.value = false
     }
 }
-
 
 const currentCleaningSlide = ref(0)
 const cleaningEvents = ref([

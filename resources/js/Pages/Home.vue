@@ -5,8 +5,14 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 md:h-20">
           <div class="flex items-center space-x-4">
-            <div class="h-10 w-10 md:h-12 md:w-12 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold transform hover:rotate-12 hover:scale-110 transition-all duration-300">
-              RW
+             <div
+              class="h-10 w-10 md:h-12 md:w-12 rounded-lg flex items-center justify-center transform hover:rotate-12 hover:scale-110 transition-all duration-300 overflow-hidden"
+            >
+              <img
+                :src="`/images/logo.jpg`"
+                alt="Logo"
+                class="h-full w-full object-cover"
+              />
             </div>
             <div>
               <h1 class="text-lg md:text-xl font-bold text-green-700">DesaPoint</h1>
@@ -16,8 +22,20 @@
           
           <div class="hidden md:flex items-center space-x-6">
             <router-link to="/" class="text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-green-600 after:scale-x-100 transition-all">Beranda</router-link>
-            <a href="#baksos" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Program</a>
-            <a href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Keuangan</a>
+            <a 
+              href="#baksos" 
+              @click.prevent="scrollToSection('baksos')"
+              class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all"
+            >
+              Program
+            </a>
+            <a 
+              href="#keuangan" 
+              @click.prevent="scrollToSection('keuangan')"
+              class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all"
+            >
+              Keuangan
+            </a>
             <router-link to="/form" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Pengaduan</router-link>
             <router-link 
               v-if="!isLoggedIn"
@@ -693,7 +711,7 @@
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in tableData2" 
+                  v-for="(item, index) in bankSampahData" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300 cursor-pointer transform hover:scale-[1.01]"
                   :class="{ 'animate-fadeInUp': true }"
@@ -731,7 +749,7 @@
 
           <div class="md:hidden divide-y divide-gray-100">
             <div 
-              v-for="(item, index) in tableData2" 
+              v-for="(item, index) in bankSampahData" 
               :key="index"
               class="p-4 hover:bg-green-50 transition-all duration-300"
               :class="{ 'animate-fadeInUp': true }"
@@ -755,7 +773,7 @@
           </div>
 
           <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600">Menampilkan {{ tableData2.length }} rekening aktif</p>
+            <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening aktif</p>
           </div>
         </div>
       </section>
@@ -780,7 +798,7 @@
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in tableData3" 
+                  v-for="(item, index) in jadwalRondaData" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300 cursor-pointer transform hover:scale-[1.01]"
                   :class="{ 'animate-fadeInUp': true }"
@@ -790,10 +808,12 @@
                   
                   <td class="px-6 py-5">
                     <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
+                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
                       </div>
-                      <span class="text-gray-800 font-medium">{{ item.nama }}</span>
+                      <span class="text-gray-800 font-medium">{{ item.tanggal }}</span>
                     </div>
                   </td>
                   
@@ -802,7 +822,7 @@
                       <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
                       </svg>
-                      {{ item.totalSampah }}
+                      {{ item.peserta_ronda }}
                     </span>
                   </td>
                 </tr>
@@ -812,22 +832,22 @@
 
           <div class="md:hidden divide-y divide-gray-100">
             <div 
-              v-for="(item, index) in tableData3" 
+              v-for="(item, index) in jadwalRondaData" 
               :key="index"
               class="p-4 hover:bg-green-50 transition-all duration-300"
               :class="{ 'animate-fadeInUp': true }"
               :style="{ animationDelay: `${index * 0.1}s` }">
               <div class="flex items-start gap-3">
                 <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <span class="text-green-700 font-semibold text-sm">{{ item.nama.charAt(0) }}</span>
+                  <span class="text-green-700 font-semibold text-sm">{{ item.tanggal.charAt(0) }}</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="font-semibold text-gray-900 mb-1">{{ item.nama }}</div>
+                  <div class="font-semibold text-gray-900 mb-1">{{ item.tanggal }}</div>
                   <div class="flex items-center gap-1 text-xs text-blue-700 mb-2">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    {{ item.totalSampah }}
+                    {{ item.peserta_ronda }}
                   </div>
                 </div>
               </div>
@@ -835,7 +855,7 @@
           </div>
 
           <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600">Menampilkan {{ tableData3.length }} jadwal ronda terkini</p>
+            <p class="text-sm text-gray-600">Menampilkan {{ jadwalRondaData.length }} jadwal ronda terkini</p>
           </div>
         </div>
       </section>
@@ -1021,19 +1041,19 @@
           <div class="transform hover:scale-105 transition-transform duration-300">
             <h4 class="font-bold mb-4">Ikuti Kami</h4>
             <div class="flex space-x-4">
-              <a href="https://www.tiktok.com/@desa.point" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all duration-300 transform hover:scale-125 hover:rotate-12">
+              <a href="https://www.tiktok.com/@desa.point" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-all duration-300 transform hover:scale-125 hover:rotate-12">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
                 </svg>
               </a>
-              
-              <a href="https://www.instagram.com/desa.point?igsh=MXMyYXdtNTFkbGszcw==" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all duration-300 transform hover:scale-125">
+
+              <a href="https://www.instagram.com/desa.point?igsh=MXMyYXdtNTFkbGszcw==" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-all duration-300 transform hover:scale-125">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                 </svg>
               </a>
-              
-              <a href="https://wa.me/6288289175113" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-500 transition-all duration-300 transform hover:scale-125 hover:-rotate-12">
+
+              <a href="https://wa.me/6288289175113" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-500 transition-all duration-300 transform hover:scale-125 hover:-rotate-12">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                 </svg>
@@ -1100,7 +1120,7 @@
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in tableData2" 
+                  v-for="(item, index) in bankSampahData" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300">
                   
@@ -1136,7 +1156,7 @@
 
           <div class="md:hidden divide-y divide-gray-100">
             <div 
-              v-for="(item, index) in tableData2" 
+              v-for="(item, index) in bankSampahData" 
               :key="index"
               class="p-4 hover:bg-green-50 transition-all duration-300">
               <div class="flex items-start gap-3">
@@ -1159,7 +1179,7 @@
         </div>
 
         <div class="bg-gray-50 px-6 md:px-8 py-4 border-t border-gray-200">
-          <p class="text-sm text-gray-600">Menampilkan {{ tableData2.length }} rekening aktif</p>
+          <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening aktif</p>
         </div>
       </div>
     </div>
@@ -1168,7 +1188,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { authService } from '../services/api.js'
+import { authService, baksosAPI, bankSampahAPI, jadwalRondaAPI, laporanKeuanganAPI } from '../services/api.js'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../services/api.js'
 
@@ -1190,10 +1210,165 @@ const animateChart = ref(false)
 const chartMalePercentage = ref(0)
 const chartFemalePercentage = ref(0)
 const animateKeuangan = ref(false)
+const laporanKeuangan = ref([])
+const tableData = ref([])
+const bankSampahData = ref([])
+const jadwalRondaData = ref([])
 
-watch(() => route.path, () => {
-  checkAuthStatus()
-})
+const scrollToSection = (id) => {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
+}
+
+const fetchBaksos = async () => {
+  try {
+    const response = await baksosAPI.getAll()
+    tableData.value = response.data
+      .sort((a, b) => a.id - b.id)
+      .map((item, index) => ({
+        id: item.id,
+        no: index + 1,
+        nama: item.nama,
+        tanggal: new Date(item.tanggal).toLocaleDateString('id-ID', { 
+          day: '2-digit', 
+          month: 'short', 
+          year: 'numeric' 
+        }),
+        keterangan: item.keterangan
+      }))
+  } catch (error) {
+    console.error('Error fetching baksos:', error)
+  }
+}
+
+const fetchBankSampah = async () => {
+  try {
+    const response = await bankSampahAPI.getAll()
+    bankSampahData.value = response.data
+      .sort((a, b) => a.id - b.id)
+      .map((item, index) => ({
+        id: item.id,
+        no: index + 1,
+        nama: item.nama,
+        totalSampah: item.total_sampah + ' kg',
+        totalUang: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.total_uang)
+      }))
+  } catch (error) {
+    console.error('Error fetching bank sampah:', error)
+  }
+}
+
+const fetchJadwalRonda = async () => {
+  try {
+    const response = await jadwalRondaAPI.getAll()
+    jadwalRondaData.value = response.data
+      .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
+      .map((item, index) => ({
+        id: item.id,
+        no: index + 1,
+        tanggal: new Date(item.tanggal).toLocaleDateString('id-ID'),
+        peserta_ronda: item.peserta_ronda
+      }))
+  } catch (error) {
+    console.error('Error fetching jadwal ronda:', error)
+  }
+}
+
+const fetchLaporanKeuangan = async () => {
+  try {
+    const response = await laporanKeuanganAPI.getAll()
+    laporanKeuangan.value = response.data.map(item => ({
+      ...item,
+      debit: parseFloat(item.debit),
+      kredit: parseFloat(item.kredit),
+      saldo: parseFloat(item.saldo)
+    }))
+    
+    updateKeuanganData()
+  } catch (error) {
+    console.error('Error fetching laporan keuangan:', error)
+  }
+}
+
+const updateKeuanganData = () => {
+  keuanganData.pemasukan = laporanKeuangan.value.reduce((sum, item) => sum + item.debit, 0)
+  
+  keuanganData.pengeluaran = laporanKeuangan.value.reduce((sum, item) => sum + item.kredit, 0)
+  
+  keuanganData.iuran = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('iuran'))
+    .reduce((sum, item) => sum + item.debit, 0)
+  
+  keuanganData.perumahan = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('perumahan'))
+    .reduce((sum, item) => sum + item.debit, 0)
+  
+  keuanganData.donasi = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('donasi'))
+    .reduce((sum, item) => sum + item.debit, 0)
+  
+  keuanganData.bankSampah = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('bank sampah') && item.debit > 0)
+    .reduce((sum, item) => sum + item.debit, 0)
+  
+  keuanganData.baksos = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('bakti sosial') || item.keterangan.toLowerCase().includes('baksos'))
+    .reduce((sum, item) => sum + item.kredit, 0)
+  
+  keuanganData.kerjaBakti = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('kerja bakti') || item.keterangan.toLowerCase().includes('gotong royong'))
+    .reduce((sum, item) => sum + item.kredit, 0)
+  
+  keuanganData.bankSampahOut = laporanKeuangan.value
+    .filter(item => item.keterangan.toLowerCase().includes('bank sampah') && item.kredit > 0)
+    .reduce((sum, item) => sum + item.kredit, 0)
+  
+  keuanganData.lainLain = laporanKeuangan.value
+    .filter(item => {
+      const ket = item.keterangan.toLowerCase()
+      return item.kredit > 0 && 
+        !ket.includes('bakti sosial') && 
+        !ket.includes('baksos') &&
+        !ket.includes('kerja bakti') && 
+        !ket.includes('gotong royong') &&
+        !ket.includes('bank sampah')
+    })
+    .reduce((sum, item) => sum + item.kredit, 0)
+}
+
+watch(laporanKeuangan, (newData) => {
+  if (newData.length > 0) {
+    updateKeuanganData()
+    
+    Object.keys(animatedKeuangan.value).forEach(key => {
+      if (key !== 'hoverPemasukan' && key !== 'hoverPengeluaran') {
+        animatedKeuangan.value[key] = 0
+      }
+    })
+    
+    setTimeout(() => {
+      Object.keys(keuanganData.value).forEach(key => {
+        let current = 0
+        const target = keuanganData.value[key]
+        const increment = target / 50
+        const timer = setInterval(() => {
+          current += increment
+          if (current >= target) {
+            animatedKeuangan.value[key] = target
+            clearInterval(timer)
+          } else {
+            animatedKeuangan.value[key] = Math.floor(current)
+          }
+        }, 30)
+      })
+    }, 100)
+  }
+}, { deep: true })
 
 const animatedKeuangan = ref({
   pemasukan: 0,
@@ -1210,18 +1385,18 @@ const animatedKeuangan = ref({
   hoverPengeluaran: false
 })
 
-const keuanganData = {
-  pemasukan: 1234567,
-  pengeluaran: 1234567,
-  iuran: 2543,
-  perumahan: 12,
-  donasi: 8,
-  bankSampah: 156,
-  baksos: 2543,
-  kerjaBakti: 12,
-  bankSampahOut: 8,
-  lainLain: 156
-}
+const keuanganData = ref({
+  pemasukan: 0,
+  pengeluaran: 0,
+  iuran: 0,
+  perumahan: 0,
+  donasi: 0,
+  bankSampah: 0,
+  baksos: 0,
+  kerjaBakti: 0,
+  bankSampahOut: 0,
+  lainLain: 0
+})
 
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
@@ -1428,105 +1603,6 @@ const initialSlideIndex = computed(() => {
   return sortedEvents.value.findIndex(e => e.status === 'thisweek')
 })
 
-const tableData = ref([
-  {
-    no: 1,
-    nama: 'Ahmad Fauzi',
-    tanggal: '20 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 2,
-    nama: 'Siti Nurhaliza',
-    tanggal: '19 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 3,
-    nama: 'Budi Santoso',
-    tanggal: '18 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 4,
-    nama: 'Dewi Kusuma',
-    tanggal: '17 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  },
-  {
-    no: 5,
-    nama: 'Rudi Hermawan',
-    tanggal: '16 Okt 2025',
-    keterangan: 'Bantuan uang pemakaman'
-  }
-])
-
-const tableData2 = ref([
-  {
-    no: 1,
-    nama: 'Ahmad Fauzi',
-    totalSampah: '45 Kg',
-    totalUang: 'Rp 225.000'
-  },
-  {
-    no: 2,
-    nama: 'Siti Nurhaliza',
-    totalSampah: '38 Kg',
-    totalUang: 'Rp 190.000'
-  },
-  {
-    no: 3,
-    nama: 'Budi Santoso',
-    totalSampah: '52 Kg',
-    totalUang: 'Rp 260.000'
-  },
-  {
-    no: 4,
-    nama: 'Dewi Kusuma',
-    totalSampah: '41 Kg',
-    totalUang: 'Rp 205.000'
-  },
-  {
-    no: 5,
-    nama: 'Rudi Hermawan',
-    totalSampah: '35 Kg',
-    totalUang: 'Rp 175.000'
-  }
-])
-
-const tableData3 = ref([
-  {
-    no: 1,
-    nama: 'Ahmad Fauzi',
-    totalSampah: '45 Kg',
-    totalUang: 'Rp 225.000'
-  },
-  {
-    no: 2,
-    nama: 'Siti Nurhaliza',
-    totalSampah: '38 Kg',
-    totalUang: 'Supri Supriyadi, Ahmad Mubarok, Supriyanto'
-  },
-  {
-    no: 3,
-    nama: 'Budi Santoso',
-    totalSampah: '52 Kg',
-    totalUang: 'Rp 260.000'
-  },
-  {
-    no: 4,
-    nama: 'Dewi Kusuma',
-    totalSampah: '41 Kg',
-    totalUang: 'Rp 205.000'
-  },
-  {
-    no: 5,
-    nama: 'Rudi Hermawan',
-    totalSampah: '35 Kg',
-    totalUang: 'Rp 175.000'
-  }
-])
-
 const currentCleaningSlide = ref(0)
 const cleaningEvents = ref([
   {
@@ -1577,6 +1653,10 @@ onMounted(() => {
   console.log('Component mounted, checking auth...')
   isVisible.value = true
   checkAuthStatus()
+  fetchLaporanKeuangan()
+  fetchBaksos()
+  fetchBankSampah()
+  fetchJadwalRonda()
 
   window.addEventListener('storage', checkAuthStatus)
   

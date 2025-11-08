@@ -6,6 +6,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BaksosController;
 use App\Http\Controllers\BankSampahController;
 use App\Http\Controllers\JadwalRondaController;
+use App\Http\Controllers\LaporanKeuanganController;
+
+Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index']);
+Route::post('/laporan-keuangan', [LaporanKeuanganController::class, 'store']);
+Route::put('/laporan-keuangan/{laporanKeuangan}', [LaporanKeuanganController::class, 'update']);
+Route::delete('/laporan-keuangan/{laporanKeuangan}', [LaporanKeuanganController::class, 'destroy']);
 
 Route::get('/jadwal-ronda', [JadwalRondaController::class, 'index']);
 Route::post('/jadwal-ronda', [JadwalRondaController::class, 'store']);
