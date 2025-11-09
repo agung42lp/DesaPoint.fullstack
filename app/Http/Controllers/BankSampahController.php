@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\BankSampah;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BankSampahExport;
 
 class BankSampahController extends Controller
 {
     public function index()
     {
         return response()->json(BankSampah::oldest()->get());
+    }
+
+    public function export() {
+        return Excel::download(new BankSampahExport, 'bank_sampah.xlsx');
     }
 
     public function store(Request $request)

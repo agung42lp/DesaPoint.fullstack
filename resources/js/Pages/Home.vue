@@ -547,7 +547,7 @@
       </div>
     </section>
 
-    <!-- Bagian Program Kebersihan -->
+    <!-- Bagian Program Kebersihan ya guys-->
     <section class="max-w-4xl mx-auto px-4 py-8 md:py-16 mt-4 md:mt-8 scroll-animate">
       <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center animate-fadeInUp">Program Kebersihan</h2>
       

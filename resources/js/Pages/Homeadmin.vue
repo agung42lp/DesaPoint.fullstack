@@ -562,7 +562,7 @@
       </div>
     </section>
 
-    <!-- Bagian Program Kebersihan -->
+    <!-- Bagian Program Kebersihan ya guys-->
     <section class="max-w-4xl mx-auto px-4 py-8 md:py-16 mt-4 md:mt-8 scroll-animate">
       <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center animate-fadeInUp">Program Kebersihan</h2>
       
@@ -1170,7 +1170,6 @@
       </div>
     </footer>
 
-    <!-- Modal Create/Edit -->
         <div 
           v-if="showFormModal" 
           @click="closeFormModal"
@@ -1187,7 +1186,6 @@
             </div>
 
             <div class="p-6 space-y-4">
-              <!-- Form Baksos -->
               <template v-if="currentTable === 'baksos'">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
@@ -1214,7 +1212,6 @@
                 </div>
               </template>
 
-              <!-- Form Bank Sampah -->
               <template v-if="currentTable === 'banksampah'">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
@@ -1242,7 +1239,6 @@
                     placeholder="0">
                 </div>
               </template>
-              <!-- Form Jadwal Ronda -->
               <template v-if="currentTable === 'ronda'">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
@@ -1276,7 +1272,6 @@
             </div>
           </div>
         </div>
-                    <!-- Modal Delete pop up guys -->
             <div 
               v-if="showDeleteModal" 
               @click="showDeleteModal = false"
@@ -1350,7 +1345,7 @@ const chartFemalePercentage = ref(0)
 const animateKeuangan = ref(false)
 const showFormModal = ref(false)
 const showDeleteModal = ref(false)
-const formMode = ref('create') // 'create' or 'edit'
+const formMode = ref('create') 
 const formTitle = ref('')
 const handleLogout = async () => {
   try {
@@ -1408,7 +1403,7 @@ const jadwalRondaForm = ref({
     peserta_ronda: ''
 })
 const editingIndex = ref(null)
-const currentTable = ref('') // 'baksos', 'banksampah', 'ronda'
+const currentTable = ref('')
 
 const openCreateModal = (tableType, title) => {
   currentTable.value = tableType

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\LaporanKeuangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LaporanKeuanganExport;
 
 class LaporanKeuanganController extends Controller
 {
@@ -14,6 +16,10 @@ class LaporanKeuanganController extends Controller
                                ->orderBy('id', 'asc')
                                ->get();
         return response()->json($data);
+    }
+
+    public function export() {
+        return Excel::download(new LaporanKeuanganExport, 'laporan_keuangan.xlsx');
     }
 
     public function store(Request $request)

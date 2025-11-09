@@ -3,12 +3,18 @@ namespace App\Http\Controllers;
 
 use App\Models\JadwalRonda;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\JadwalRondaExport;
 
 class JadwalRondaController extends Controller
 {
     public function index()
     {
         return response()->json(JadwalRonda::oldest('tanggal')->get());
+    }
+
+    public function export() {
+        return Excel::download(new JadwalRondaExport, 'jadwal_ronda.xlsx');
     }
 
     public function store(Request $request)

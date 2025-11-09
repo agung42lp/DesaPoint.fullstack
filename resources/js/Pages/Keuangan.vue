@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Navbar sama dengan HomeAdmin.vue -->
     <nav class="bg-white shadow-lg sticky top-0 z-50 animate-slideDown">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 md:h-20">
@@ -42,7 +41,6 @@
       </div>
     </nav>
 
-    <!-- Statistik Pemasukan -->
     <section class="max-w-7xl mx-auto px-4 mt-8 mb-4">
       <h2 class="text-2xl font-bold text-gray-900 mb-4">Pemasukan</h2>
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -60,7 +58,6 @@
       </div>
     </section>
 
-    <!-- Statistik Pengeluaran -->
     <section class="max-w-7xl mx-auto px-4 mb-8">
       <h2 class="text-2xl font-bold text-gray-900 mb-4">Pengeluaran</h2>
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -78,7 +75,6 @@
       </div>
     </section>
 
-    <!-- Tabel Laporan Keuangan -->
     <section class="max-w-7xl mx-auto px-4 mb-16">
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-8 py-6 flex justify-between items-center">
@@ -150,7 +146,6 @@
           </table>
         </div>
 
-        <!-- Mobile View -->
         <div class="md:hidden divide-y divide-gray-100">
           <div 
             v-for="(item, index) in laporanKeuangan" 
@@ -203,7 +198,6 @@
       </div>
     </section>
 
-    <!-- Modal Create/Edit -->
     <div 
       v-if="showFormModal" 
       @click="closeFormModal"
@@ -296,7 +290,6 @@
       </div>
     </div>
 
-    <!-- Modal Delete -->
     <div 
       v-if="showDeleteModal" 
       @click="showDeleteModal = false"

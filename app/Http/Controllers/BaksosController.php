@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Baksos;
 use Illuminate\Http\Request;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BaksosExport;
 class BaksosController extends Controller
 {
     public function index()
     {
         return response()->json(Baksos::latest()->get());
+    }
+
+    public function export() {
+        return Excel::download(new BaksosExport, 'baksos.xlsx');
     }
 
     public function store(Request $request)

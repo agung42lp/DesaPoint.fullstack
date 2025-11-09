@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Toast Notification -->
     <transition name="slide-fade">
     <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
         <div 
@@ -17,7 +16,6 @@
     </div>
     </transition>
 
-    <!-- Navbar -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 md:h-20">
@@ -57,7 +55,6 @@
           </button>
         </div>
 
-        <!-- Mobile Menu -->
         <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
           <div class="flex flex-col space-y-3 pt-4">
             <router-link @click="mobileMenuOpen = false" to="/" class="text-gray-700 font-medium py-2">Beranda</router-link>
@@ -71,7 +68,6 @@
       </div>
     </nav>
 
-    <!-- Header -->
     <section class="bg-gradient-to-br from-green-600 to-green-800 py-12 md:py-16">
       <div class="max-w-7xl mx-auto px-4">
         <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Kelola Program RW</h1>
@@ -79,7 +75,6 @@
       </div>
     </section>
 
-    <!-- Tab Navigation -->
     <div class="max-w-7xl mx-auto px-4 -mt-8">
       <div class="bg-white rounded-xl shadow-lg p-2 flex flex-wrap gap-2">
         <button 
@@ -95,9 +90,7 @@
       </div>
     </div>
 
-    <!-- Content Section -->
     <div class="max-w-7xl mx-auto px-4 py-8">
-      <!-- Bakti Sosial Table -->
       <div v-if="activeTab === 'baksos'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
           <div>
@@ -122,7 +115,6 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
-            <!-- Skeleton saat loading -->
             <tbody v-if="isLoading">
                 <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
                     <td v-for="col in 5" :key="col" class="px-6 py-5">
@@ -171,7 +163,6 @@
         </div>
       </div>
 
-      <!-- Bank Sampah Table -->
       <div v-if="activeTab === 'banksampah'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
           <div>
@@ -196,7 +187,6 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
-            <!-- Skeleton saat loading -->
             <tbody v-if="isLoading">
             <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
                 <td v-for="col in 5" :key="col" class="px-6 py-5">
@@ -249,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Jadwal Ronda Table -->
       <div v-if="activeTab === 'ronda'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
           <div>
@@ -273,7 +262,6 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
-            <!-- Skeleton saat loading -->
             <tbody v-if="isLoading">
             <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
                 <td v-for="col in 5" :key="col" class="px-6 py-5">
@@ -321,7 +309,6 @@
         </div>
       </div>
 
-      <!-- Program Kebersihan -->
       <div v-if="activeTab === 'cleaning'" class="space-y-6">
         <div class="bg-white rounded-2xl shadow-xl p-6">
           <div class="flex justify-between items-center mb-6">
@@ -391,8 +378,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Modal Form -->
     <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 rounded-t-2xl">
@@ -403,7 +388,6 @@
         </div>
 
         <div class="p-6 space-y-4">
-          <!-- Form Baksos -->
           <template v-if="currentTable === 'baksos'">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
@@ -419,7 +403,6 @@
             </div>
           </template>
 
-          <!-- Form Bank Sampah -->
           <template v-if="currentTable === 'banksampah'">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
@@ -435,7 +418,6 @@
             </div>
           </template>
 
-          <!-- Form Jadwal Ronda -->
           <template v-if="currentTable === 'ronda'">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
@@ -447,7 +429,6 @@
             </div>
           </template>
 
-          <!-- Form Program Kebersihan -->
           <template v-if="currentTable === 'cleaning'">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Judul Program</label>
@@ -498,7 +479,6 @@
       </div>
     </div>
 
-    <!-- Modal Delete -->
     <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
         <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-5 rounded-t-2xl">
@@ -542,19 +522,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12 mt-16">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="text-center">
-          <h3 class="text-xl font-bold mb-2">DesaPoint</h3>
-          <p class="text-gray-400 text-sm">RW Sejahtera</p>
-          <div class="mt-4 text-gray-400 text-sm">
-            © 2025 DesaPoint. All rights reserved.
-          </div>
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -911,7 +878,6 @@ const confirmDelete = async () => {
   }
 }
 
-// Lifecycle
 onMounted(() => {
   checkAuthStatus()
   fetchBaksos()
@@ -921,6 +887,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(100%);

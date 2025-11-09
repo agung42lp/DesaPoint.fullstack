@@ -7,6 +7,17 @@ use App\Http\Controllers\BaksosController;
 use App\Http\Controllers\BankSampahController;
 use App\Http\Controllers\JadwalRondaController;
 use App\Http\Controllers\LaporanKeuanganController;
+use App\Http\Controllers\PengaduanController;
+
+Route::get('/export/pengaduan', [PengaduanController::class, 'export']);
+Route::get('/export/baksos', [BaksosController::class, 'export']);
+Route::get('/export/bank-sampah', [BankSampahController::class, 'export']);
+Route::get('/export/jadwal-ronda', [JadwalRondaController::class, 'export']);
+Route::get('/export/laporan-keuangan', [LaporanKeuanganController::class, 'export']);
+
+Route::get('/pengaduan', [PengaduanController::class, 'index']);
+Route::post('/pengaduan', [PengaduanController::class, 'store']);
+Route::put('/pengaduan/{pengaduan}', [PengaduanController::class, 'update']);
 
 Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index']);
 Route::post('/laporan-keuangan', [LaporanKeuanganController::class, 'store']);
