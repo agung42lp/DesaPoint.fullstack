@@ -436,7 +436,7 @@
 
     <!-- Bagian stat baksos guys -->
     <section id="baksos" class="max-w-5xl mx-auto px-4 mt-8 md:mt-16 scroll-animate">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center animate-fadeInUp">Program Bakti Sosial</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center animate-fadeInUp">Program Dana Sosial</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <div 
           v-for="(stat, index) in stats2" 
@@ -476,10 +476,13 @@
           <table class="w-full">
             <thead>
               <tr class="bg-gray-50 border-b-2 border-green-200">
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">No</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tgl Dibantu</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Penerima</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kategori</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nominal</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Foto</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -493,23 +496,33 @@
                 <td class="px-6 py-5">
                   <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
+                      <span class="text-green-700 font-semibold">{{ item.nama_penerima.charAt(0) }}</span>
                     </div>
-                    <span class="text-gray-800 font-medium">{{ item.nama }}</span>
+                    <span class="text-gray-800 font-medium">{{ item.nama_penerima }}</span>
                   </div>
                 </td>
                 <td class="px-6 py-5">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    {{ item.tanggal }}
+                    {{ item.tanggal_penyerahan }}
                   </span>
                 </td>
                 <td class="px-6 py-5">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm">
-                    {{ item.keterangan }}
+                  <span 
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                    :class="{
+                      'bg-red-100 text-red-700': item.kategori_bantuan === 'korban_meninggal',
+                      'bg-yellow-100 text-yellow-700': item.kategori_bantuan === 'penderita_sakit',
+                      'bg-orange-100 text-orange-700': item.kategori_bantuan === 'korban_bencana'
+                    }">
+                    {{ getKategoriLabel(item.kategori_bantuan) }}
                   </span>
+                </td>
+                <td class="px-6 py-5">
+                  <span class="text-gray-800 font-bold">{{ item.nominal_bantuan }}</span>
+                </td>
+                <td class="px-6 py-5">
+                  <img v-if="item.foto_penyerahan" :src="item.foto_penyerahan" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:scale-110 transition-transform" @click="viewImage(item.foto_penyerahan)">
+                  <span v-else class="text-gray-400 text-sm">Tidak ada foto</span>
                 </td>
               </tr>
             </tbody>
@@ -973,7 +986,7 @@
               <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-3 md:p-4">
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                  <p class="text-xs md:text-sm text-gray-600">Program Bakti Sosial</p>
+                  <p class="text-xs md:text-sm text-gray-600">Program Dana Sosial</p>
                 </div>
                 <p class="text-lg md:text-xl font-bold text-red-700">
                   <span v-if="animateKeuangan">{{ animatedKeuangan.baksos }}</span>
@@ -1084,7 +1097,7 @@
       </div>
     </footer>
 
-    <!--bagain modal guys keknya-->
+    <!--bagian modal guys keknya-->
     <div 
       v-if="showBankSampahModal" 
       @click="showBankSampahModal = false"
@@ -1095,8 +1108,8 @@
         
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 md:px-8 py-5 md:py-6 flex items-center justify-between">
           <div>
-            <h2 class="text-xl md:text-2xl font-bold text-white">Rekening Bank Sampah</h2>
-            <p class="text-green-100 mt-1 text-sm">Data rekening bank sampah warga</p>
+            <h2 class="text-2xl font-bold text-white">Laporan Keuangan</h2>
+            <p class="text-green-100 mt-1 text-sm">Data transaksi keuangan RW</p>
           </div>
           <button 
             @click="showBankSampahModal = false"
@@ -1113,40 +1126,37 @@
               <thead>
                 <tr class="bg-gray-50 border-b-2 border-green-200">
                   <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">No</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Sampah</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Uang</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Debit</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kredit</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr 
-                  v-for="(item, index) in bankSampahData" 
+                  v-for="(item, index) in laporanKeuangan" 
                   :key="index"
                   class="border-b border-gray-100 hover:bg-green-50 transition-all duration-300">
-                  
-                  <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
-                  
+                  <td class="px-6 py-5 text-gray-700 font-medium">{{ index + 1 }}</td>
+                  <td class="px-6 py-5 text-gray-800">{{ item.tanggal }}</td>
+                  <td class="px-6 py-5 text-gray-800">{{ item.keterangan }}</td>
                   <td class="px-6 py-5">
-                    <div class="flex items-center space-x-3">
-                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                        <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
-                      </div>
-                      <span class="text-gray-800 font-medium">{{ item.nama }}</span>
-                    </div>
-                  </td>
-                  
-                  <td class="px-6 py-5">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700 font-semibold">
-                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
-                      </svg>
-                      {{ item.totalSampah }}
+                    <span v-if="item.debit > 0" class="text-red-700 font-semibold">
+                      Rp {{ formatNumber(item.debit) }}
                     </span>
+                    <span v-else class="text-gray-400">-</span>
                   </td>
-                  
                   <td class="px-6 py-5">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 font-bold">
-                      💰 {{ item.totalUang }}
+                    <span v-if="item.kredit > 0" class="text-green-700 font-semibold">
+                      Rp {{ formatNumber(item.kredit) }}
+                    </span>
+                    <span v-else class="text-gray-400">-</span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="font-bold" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">
+                      Rp {{ formatNumber(item.saldo) }}
                     </span>
                   </td>
                 </tr>
@@ -1179,7 +1189,7 @@
         </div>
 
         <div class="bg-gray-50 px-6 md:px-8 py-4 border-t border-gray-200">
-          <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening aktif</p>
+          <p class="text-sm text-gray-600">Menampilkan {{ laporanKeuangan.length }} transaksi</p>
         </div>
       </div>
     </div>
@@ -1188,7 +1198,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { authService, baksosAPI, bankSampahAPI, jadwalRondaAPI, laporanKeuanganAPI } from '../services/api.js'
+import { authService, danaSosialAPI, bankSampahAPI, jadwalRondaAPI, kebersihanAPI, laporanKeuanganAPI } from '../services/api.js'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../services/api.js'
 
@@ -1214,6 +1224,7 @@ const laporanKeuangan = ref([])
 const tableData = ref([])
 const bankSampahData = ref([])
 const jadwalRondaData = ref([])
+const isLoading = ref(false)
 
 const scrollToSection = (id) => {
   const el = document.getElementById(id)
@@ -1225,25 +1236,27 @@ const scrollToSection = (id) => {
   }
 }
 
-const fetchBaksos = async () => {
+const fetchDanaSosial = async () => {
   try {
-    const response = await baksosAPI.getAll()
-    tableData.value = response.data
+    const response = await danaSosialAPI.getAll()
+    danaSosialData.value = response.data
       .sort((a, b) => a.id - b.id)
       .map((item, index) => ({
         id: item.id,
         no: index + 1,
-        nama: item.nama,
-        tanggal: new Date(item.tanggal).toLocaleDateString('id-ID', { 
+        nama_penerima: item.nama_penerima,
+        tanggal_penyerahan: new Date(item.tanggal_penyerahan).toLocaleDateString('id-ID', { 
           day: '2-digit', 
           month: 'short', 
           year: 'numeric' 
         }),
-        keterangan: item.keterangan
+        kategori_bantuan: item.kategori_bantuan,
+        nominal_bantuan: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.nominal_bantuan),
+        foto_penyerahan: item.foto_penyerahan ? `/storage/${item.foto_penyerahan}` : null
       }))
   } catch (error) {
-    console.error('Error fetching baksos:', error)
-  }
+    console.error('Gagal memuat data Dana Sosial', error)
+  } 
 }
 
 const fetchBankSampah = async () => {
@@ -1284,12 +1297,15 @@ const fetchLaporanKeuangan = async () => {
     const response = await laporanKeuanganAPI.getAll()
     laporanKeuangan.value = response.data.map(item => ({
       ...item,
+      tanggal: new Date(item.tanggal).toLocaleDateString('id-ID', { 
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric' 
+      }),
       debit: parseFloat(item.debit),
       kredit: parseFloat(item.kredit),
       saldo: parseFloat(item.saldo)
     }))
-    
-    updateKeuanganData()
   } catch (error) {
     console.error('Error fetching laporan keuangan:', error)
   }
@@ -1604,32 +1620,24 @@ const initialSlideIndex = computed(() => {
 })
 
 const currentCleaningSlide = ref(0)
-const cleaningEvents = ref([
-  {
-    title: 'Gotong Royong',
-    date: 'Minggu, 19 Oktober 2025',
-    time: 'jam 9 - selesai',
-    location: 'Jalan Utama',
-    image: 'https://images.unsplash.com/photo-1588783948922-8caa83db48b3?w=800',
-    status: 'completed'
-  },
-  {
-    title: 'Bumi Hijau',
-    date: 'Minggu, 26 Oktober 2025',
-    time: 'jam 9 - selesai',
-    location: 'Mushola At-Taqwa',
-    image: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800',
-    status: 'thisweek'
-  },
-  {
-    title: 'Bersih Taman',
-    date: 'Minggu, 2 November 2025',
-    time: 'jam 9 - selesai',
-    location: 'Taman RW 05',
-    image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800',
-    status: 'upcoming'
+const cleaningEvents = ref([])
+const fileInputCleaning = ref(null)
+
+const fetchKebersihan = async () => {
+  isLoading.value = true
+  try {
+    const response = await kebersihanAPI.getAll()
+    cleaningEvents.value = response.data.map((item, index) => ({
+      ...item,
+      no: index + 1,
+      image: item.image ? `/storage/${item.image}` : null
+    }))
+  } catch (error) {
+    showToast('Gagal memuat data Program Kebersihan', 'error')
+  } finally {
+    isLoading.value = false
   }
-])
+}
 
 const nextCleaningSlide = () => {
   if (currentCleaningSlide.value < cleaningEvents.value.length - 1) {
@@ -1654,9 +1662,10 @@ onMounted(() => {
   isVisible.value = true
   checkAuthStatus()
   fetchLaporanKeuangan()
-  fetchBaksos()
+  fetchDanaSosial()
   fetchBankSampah()
   fetchJadwalRonda()
+  fetchKebersihan()
 
   window.addEventListener('storage', checkAuthStatus)
   

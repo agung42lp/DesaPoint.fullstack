@@ -417,7 +417,7 @@
 
     <!-- Bagian stat baksos guys -->
     <section id="baksos" class="max-w-5xl mx-auto px-4 mt-8 md:mt-16 scroll-animate">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center animate-fadeInUp">Program Bakti Sosial</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center animate-fadeInUp">Program Dana Sosial</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <div 
           v-for="(stat, index) in stats2" 
@@ -1059,7 +1059,7 @@
               <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-3 md:p-4">
                 <div class="flex items-center gap-2 mb-2">
                   <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                  <p class="text-xs md:text-sm text-gray-600">Program Bakti Sosial</p>
+                  <p class="text-xs md:text-sm text-gray-600">Program Dana Sosial</p>
                 </div>
                 <p class="text-lg md:text-xl font-bold text-red-700">
                   <span v-if="animateKeuangan">{{ animatedKeuangan.baksos }}</span>
@@ -1322,7 +1322,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
-import { baksosAPI, bankSampahAPI, jadwalRondaAPI, authService } from '../services/api.js'
+import { danaSosialAPI, bankSampahAPI, jadwalRondaAPI, authService } from '../services/api.js'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../services/api.js'
 

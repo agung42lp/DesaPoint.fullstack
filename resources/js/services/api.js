@@ -28,6 +28,17 @@ api.interceptors.response.use(
   }
 )
 
+export const kebersihanAPI = {
+    getAll: () => api.get('/kebersihan'),
+    create: (data) => api.post('/kebersihan', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (id, data) => api.post(`/kebersihan/${id}?_method=PUT`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    delete: (id) => api.delete(`/kebersihan/${id}`)
+}
+
 export const pengaduanAPI = {
     getAll: (params) => api.get('/pengaduan', { params }),
     create: (data) => api.post('/pengaduan', data),
@@ -60,12 +71,19 @@ export const bankSampahAPI = {
     export: () => api.get('/export/bank-sampah', { responseType: 'blob' })
 }
 
-export const baksosAPI = {
-    getAll: () => api.get('/baksos'),
-    create: (data) => api.post('/baksos', data),
-    update: (id, data) => api.put(`/baksos/${id}`, data),
-    delete: (id) => api.delete(`/baksos/${id}`),
-    export: () => api.get('/export/baksos', { responseType: 'blob' })
+export const danaSosialAPI = {
+    getAll: () => api.get('/dana-sosial'),
+    create: (data) => api.post('/dana-sosial', data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    update: (id, data) => {
+        data.append('_method', 'PUT')
+        return api.post(`/dana-sosial/${id}`, data, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    },
+    delete: (id) => api.delete(`/dana-sosial/${id}`),
+    export: () => api.get('/export/dana-sosial', { responseType: 'blob' })
 }
 
 export const authService = {

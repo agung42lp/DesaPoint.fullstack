@@ -30,7 +30,7 @@
           </div>
           
           <div class="hidden md:flex items-center space-x-6">
-            <router-link to="/" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
+            <router-link to="/homeadmin" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
             <router-link to="/program" class="text-green-600 font-medium">Program</router-link>
             <router-link to="/keuangan" class="text-gray-700 hover:text-green-600 font-medium">Keuangan</router-link>
             <router-link to="/pengaduan" class="text-gray-700 hover:text-green-600 font-medium">Pengaduan</router-link>
@@ -57,9 +57,10 @@
 
         <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
           <div class="flex flex-col space-y-3 pt-4">
-            <router-link @click="mobileMenuOpen = false" to="/" class="text-gray-700 font-medium py-2">Beranda</router-link>
+            <router-link @click="mobileMenuOpen = false" to="/homeadmin" class="text-gray-700 font-medium py-2">Beranda</router-link>
             <router-link @click="mobileMenuOpen = false" to="/program" class="text-green-600 font-medium py-2">Program</router-link>
             <router-link @click="mobileMenuOpen = false" to="/keuangan" class="text-gray-700 font-medium py-2">Keuangan</router-link>
+            <router-link @click="mobileMenuOpen = false" to="/pengaduan" class="text-gray-700 font-medium py-2">Pengaduan</router-link>
             <button v-if="isLoggedIn" @click="() => { handleLogout(); mobileMenuOpen = false; }" class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">
               Logout
             </button>
@@ -71,7 +72,7 @@
     <section class="bg-gradient-to-br from-green-600 to-green-800 py-12 md:py-16">
       <div class="max-w-7xl mx-auto px-4">
         <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Kelola Program RW</h1>
-        <p class="text-green-100">Manajemen program Bakti Sosial, Bank Sampah, Jadwal Ronda & Kebersihan</p>
+        <p class="text-green-100">Manajemen program Dana Sosial, Bank Sampah, Jadwal Ronda & Kebersihan</p>
       </div>
     </section>
 
@@ -91,13 +92,13 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
-      <div v-if="activeTab === 'baksos'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div v-if="activeTab === 'danasosial'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
           <div>
-            <h2 class="text-2xl font-bold text-white">Riwayat Bantuan</h2>
+            <h2 class="text-2xl font-bold text-white">Dana Sosial</h2>
             <p class="text-green-100 text-sm">Data penerima bantuan</p>
           </div>
-          <button @click="openCreateModal('baksos', 'Tambah Data Bantuan')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+          <button @click="openCreateModal('danasosial', 'Tambah Data Dana Sosial')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
@@ -109,44 +110,63 @@
             <thead>
               <tr class="bg-gray-50 border-b-2 border-green-200">
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Penerima</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kategori</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nominal</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Foto</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
             <tbody v-if="isLoading">
                 <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
-                    <td v-for="col in 5" :key="col" class="px-6 py-5">
+                    <td v-for="col in 7" :key="col" class="px-6 py-5">
                         <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
                     </td>
                 </tr>
             </tbody>
-            <tbody>
-              <tr v-for="(item, index) in tableData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
+            <tbody v-else>
+              <tr v-for="(item, index) in danaSosialData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
                   <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
+                      <span class="text-green-700 font-semibold">{{ item.nama_penerima.charAt(0) }}</span>
                     </div>
-                    <span class="text-gray-800 font-medium">{{ item.nama }}</span>
+                    <span class="text-gray-800 font-medium">{{ item.nama_penerima }}</span>
                   </div>
                 </td>
                 <td class="px-6 py-5">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
-                    {{ item.tanggal }}
+                    {{ item.tanggal_penyerahan }}
                   </span>
                 </td>
-                <td class="px-6 py-5 text-gray-600">{{ item.keterangan }}</td>
+                <td class="px-6 py-5">
+                  <span 
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                    :class="{
+                      'bg-red-100 text-red-700': item.kategori_bantuan === 'korban_meninggal',
+                      'bg-yellow-100 text-yellow-700': item.kategori_bantuan === 'penderita_sakit',
+                      'bg-orange-100 text-orange-700': item.kategori_bantuan === 'korban_bencana'
+                    }">
+                    {{ getKategoriLabel(item.kategori_bantuan) }}
+                  </span>
+                </td>
+                <td class="px-6 py-5">
+                  <span class="text-gray-800 font-bold">{{ item.nominal_bantuan }}</span>
+                </td>
+                <td class="px-6 py-5">
+                  <img v-if="item.foto_penyerahan" :src="item.foto_penyerahan" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:scale-110 transition-transform" @click="viewImage(item.foto_penyerahan)">
+                  <span v-else class="text-gray-400 text-sm">Tidak ada foto</span>
+                </td>
                 <td class="px-6 py-5">
                   <div class="flex items-center gap-2">
-                    <button @click="openEditModal(item, index, 'baksos', 'Edit Data Bantuan')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                    <button @click="openEditModal(item, index, 'danasosial', 'Edit Data Dana Sosial')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
                       <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                       </svg>
                     </button>
-                    <button @click="openDeleteModal(index, 'baksos', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                    <button @click="openDeleteModal(index, 'danasosial', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
                       <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                       </svg>
@@ -159,7 +179,7 @@
         </div>
 
         <div class="bg-gray-50 px-6 py-4 border-t">
-          <p class="text-sm text-gray-600">Menampilkan {{ tableData.length }} data</p>
+          <p class="text-sm text-gray-600">Menampilkan {{ danaSosialData.length }} data</p>
         </div>
       </div>
 
@@ -194,7 +214,7 @@
                 </td>
             </tr>
             </tbody>
-            <tbody>
+            <tbody v-else>
               <tr v-for="(item, index) in bankSampahData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
@@ -264,12 +284,12 @@
             </thead>
             <tbody v-if="isLoading">
             <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
-                <td v-for="col in 5" :key="col" class="px-6 py-5">
+                <td v-for="col in 4" :key="col" class="px-6 py-5">
                 <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
                 </td>
             </tr>
             </tbody>
-            <tbody>
+            <tbody v-else>
               <tr v-for="(item, index) in jadwalRondaData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
@@ -324,7 +344,18 @@
             </button>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-for="n in 3" :key="n" class="border border-gray-200 rounded-xl overflow-hidden">
+              <div class="h-48 bg-gray-200 animate-pulse"></div>
+              <div class="p-5 space-y-3">
+                <div class="h-6 bg-gray-200 rounded animate-pulse"></div>
+                <div class="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div v-for="(event, index) in cleaningEvents" :key="index" class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
               <div class="relative h-48">
                 <img :src="event.image" :alt="event.title" class="w-full h-full object-cover">
@@ -378,6 +409,7 @@
         </div>
       </div>
     </div>
+
     <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 rounded-t-2xl">
@@ -388,18 +420,48 @@
         </div>
 
         <div class="p-6 space-y-4">
-          <template v-if="currentTable === 'baksos'">
+          <template v-if="currentTable === 'danasosial'">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
-              <input v-model="formData.nama" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Masukkan nama">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Nama Penerima <span class="text-red-500">*</span></label>
+              <input v-model="danaSosialForm.nama_penerima" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Masukkan nama penerima">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-              <input v-model="formData.tanggal" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Penyerahan <span class="text-red-500">*</span></label>
+              <input v-model="danaSosialForm.tanggal_penyerahan" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan</label>
-              <textarea v-model="formData.keterangan" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Masukkan keterangan"></textarea>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Kategori Bantuan <span class="text-red-500">*</span></label>
+              <select v-model="danaSosialForm.kategori_bantuan" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                <option value="">Pilih Kategori</option>
+                <option value="korban_meninggal">Korban Meninggal</option>
+                <option value="penderita_sakit">Penderita Sakit</option>
+                <option value="korban_bencana">Korban Bencana</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Nominal Bantuan (Rp) <span class="text-red-500">*</span></label>
+              <input v-model.number="danaSosialForm.nominal_bantuan" type="number" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Foto Penyerahan <span class="text-red-500">*</span></label>
+              
+              <div v-if="!danaSosialForm.imagePreview" @click="$refs.fileInputDanaSosial.click()" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50/50 transition-all cursor-pointer">
+                <input type="file" accept="image/*" @change="handleDanaSosialImageChange" class="hidden" ref="fileInputDanaSosial" />
+                <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="text-gray-600 font-medium">Klik untuk upload foto</p>
+                <p class="text-xs text-gray-500 mt-1">PNG, JPG (Max 5MB)</p>
+              </div>
+              
+              <div v-else class="relative rounded-lg overflow-hidden">
+                <img :src="danaSosialForm.imagePreview" class="w-full h-48 object-cover" />
+                <button @click="removeDanaSosialImage" type="button" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </template>
 
@@ -447,8 +509,25 @@
               <input v-model="cleaningForm.location" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Jalan Utama">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">URL Gambar</label>
-              <input v-model="cleaningForm.image" type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="https://...">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Upload Foto <span class="text-red-500">*</span></label>
+              
+              <div v-if="!cleaningForm.imagePreview" @click="$refs.fileInputCleaning.click()" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 hover:bg-green-50/50 transition-all cursor-pointer">
+                <input type="file" accept="image/*" @change="handleCleaningImageChange" class="hidden" ref="fileInputCleaning" />
+                <svg class="w-12 h-12 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <p class="text-gray-600 font-medium">Klik untuk upload foto</p>
+                <p class="text-xs text-gray-500 mt-1">PNG, JPG (Max 5MB)</p>
+              </div>
+              
+              <div v-else class="relative rounded-lg overflow-hidden">
+                <img :src="cleaningForm.imagePreview" class="w-full h-48 object-cover" />
+                <button @click="removeCleaningImage" type="button" class="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
@@ -496,7 +575,7 @@
             <div>
               <p class="text-gray-800 font-medium">Apakah Anda yakin ingin menghapus data ini?</p>
               <p class="text-gray-600 text-sm mt-1">
-                <span v-if="currentTable === 'baksos'">{{ formData.nama }}</span>
+                <span v-if="currentTable === 'danasosial'">{{ danaSosialForm.nama_penerima }}</span>
                 <span v-else-if="currentTable === 'banksampah'">{{ bankSampahForm.nama }}</span>
                 <span v-else-if="currentTable === 'ronda'">{{ jadwalRondaForm.tanggal }}</span>
                 <span v-else-if="currentTable === 'cleaning'">{{ cleaningForm.title }}</span>
@@ -518,8 +597,19 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             {{ isDeleting ? 'Menghapus...' : 'Hapus' }}
-            </button>
+          </button>
         </div>
+      </div>
+    </div>
+
+    <div v-if="showImageModal" @click="showImageModal = false" class="fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-4">
+      <div @click.stop class="relative max-w-4xl w-full">
+        <button @click="showImageModal = false" class="absolute -top-12 right-0 text-white hover:text-gray-300">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+        <img :src="currentImage" class="w-full h-auto rounded-lg" />
       </div>
     </div>
   </div>
@@ -528,7 +618,7 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { baksosAPI, bankSampahAPI, jadwalRondaAPI, authService } from '../services/api.js'
+import { danaSosialAPI, bankSampahAPI, jadwalRondaAPI, kebersihanAPI, authService } from '../services/api.js'
 import api from '../services/api.js'
 
 const router = useRouter()
@@ -539,6 +629,8 @@ const isLoading = ref(false)
 const isSaving = ref(false)
 const isDeleting = ref(false)
 const toast = ref({ show: false, message: '', type: '' })
+const showImageModal = ref(false)
+const currentImage = ref('')
 
 const showToast = (message, type = 'success') => {
   toast.value = { show: true, message, type }
@@ -547,42 +639,18 @@ const showToast = (message, type = 'success') => {
   }, 3000)
 }
 
-const activeTab = ref('baksos')
+const activeTab = ref('danasosial')
 const tabs = [
-  { id: 'baksos', label: 'Bakti Sosial' },
+  { id: 'danasosial', label: 'Dana Sosial' },
   { id: 'banksampah', label: 'Bank Sampah' },
   { id: 'ronda', label: 'Jadwal Ronda' },
   { id: 'cleaning', label: 'Program Kebersihan' }
 ]
-const tableData = ref([])
+
+const danaSosialData = ref([])
 const bankSampahData = ref([])
 const jadwalRondaData = ref([])
-const cleaningEvents = ref([
-  {
-    title: 'Gotong Royong',
-    date: 'Minggu, 19 Oktober 2025',
-    time: 'jam 9 - selesai',
-    location: 'Jalan Utama',
-    image: 'https://images.unsplash.com/photo-1588783948922-8caa83db48b3?w=800',
-    status: 'completed'
-  },
-  {
-    title: 'Bumi Hijau',
-    date: 'Minggu, 26 Oktober 2025',
-    time: 'jam 9 - selesai',
-    location: 'Mushola At-Taqwa',
-    image: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800',
-    status: 'thisweek'
-  },
-  {
-    title: 'Bersih Taman',
-    date: 'Minggu, 2 November 2025',
-    time: 'jam 9 - selesai',
-    location: 'Taman RW 05',
-    image: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800',
-    status: 'upcoming'
-  }
-])
+const cleaningEvents = ref([])
 
 const showFormModal = ref(false)
 const showDeleteModal = ref(false)
@@ -591,10 +659,13 @@ const formTitle = ref('')
 const editingIndex = ref(null)
 const currentTable = ref('')
 
-const formData = ref({
-  nama: '',
-  tanggal: '',
-  keterangan: ''
+const danaSosialForm = ref({
+  nama_penerima: '',
+  tanggal_penyerahan: '',
+  kategori_bantuan: '',
+  nominal_bantuan: 0,
+  foto_penyerahan: null,
+  imagePreview: null
 })
 
 const bankSampahForm = ref({
@@ -613,9 +684,27 @@ const cleaningForm = ref({
   date: '',
   time: '',
   location: '',
-  image: '',
+  image: null,
+  imagePreview: null,
   status: 'upcoming'
 })
+
+const fileInputDanaSosial = ref(null)
+const fileInputCleaning = ref(null)
+
+const getKategoriLabel = (kategori) => {
+  const labels = {
+    'korban_meninggal': 'Korban Meninggal',
+    'penderita_sakit': 'Penderita Sakit',
+    'korban_bencana': 'Korban Bencana'
+  }
+  return labels[kategori] || kategori
+}
+
+const viewImage = (imageUrl) => {
+  currentImage.value = imageUrl
+  showImageModal.value = true
+}
 
 const checkAuthStatus = async () => {
   const token = localStorage.getItem('token')
@@ -649,26 +738,28 @@ const handleLogout = async () => {
   }
 }
 
-const fetchBaksos = async () => {
+const fetchDanaSosial = async () => {
   isLoading.value = true
   try {
-    const response = await baksosAPI.getAll()
-    tableData.value = response.data
+    const response = await danaSosialAPI.getAll()
+    danaSosialData.value = response.data
       .sort((a, b) => a.id - b.id)
       .map((item, index) => ({
         id: item.id,
         no: index + 1,
-        nama: item.nama,
-        tanggal: new Date(item.tanggal).toLocaleDateString('id-ID', { 
+        nama_penerima: item.nama_penerima,
+        tanggal_penyerahan: new Date(item.tanggal_penyerahan).toLocaleDateString('id-ID', { 
           day: '2-digit', 
           month: 'short', 
           year: 'numeric' 
         }),
-        keterangan: item.keterangan
+        kategori_bantuan: item.kategori_bantuan,
+        nominal_bantuan: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.nominal_bantuan),
+        foto_penyerahan: item.foto_penyerahan ? `/storage/${item.foto_penyerahan}` : null
       }))
   } catch (error) {
-    showToast('Gagal memuat data Bakti Sosial', 'error')
-  }finally {
+    showToast('Gagal memuat data Dana Sosial', 'error')
+  } finally {
     isLoading.value = false
   }
 }
@@ -712,19 +803,100 @@ const fetchJadwalRonda = async () => {
   }
 }
 
-const openCreateModal = (tableType, title) => {
+const fetchKebersihan = async () => {
+  isLoading.value = true
+  try {
+    const response = await kebersihanAPI.getAll()
+    cleaningEvents.value = response.data.map((item, index) => ({
+      ...item,
+      no: index + 1,
+      image: item.image ? `/storage/${item.image}` : null
+    }))
+  } catch (error) {
+    showToast('Gagal memuat data Program Kebersihan', 'error')
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const handleDanaSosialImageChange = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('File terlalu besar! Max 5MB', 'error')
+    return
+  }
+  
+  danaSosialForm.value.foto_penyerahan = file
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    danaSosialForm.value.imagePreview = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+const removeDanaSosialImage = () => {
+  danaSosialForm.value.foto_penyerahan = null
+  danaSosialForm.value.imagePreview = null
+  if (fileInputDanaSosial.value) {
+    fileInputDanaSosial.value.value = ''
+  }
+}
+
+const handleCleaningImageChange = (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('File terlalu besar! Max 5MB', 'error')
+    return
+  }
+  
+  cleaningForm.value.image = file
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    cleaningForm.value.imagePreview = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+const removeCleaningImage = () => {
+  cleaningForm.value.image = null
+  cleaningForm.value.imagePreview = null
+  if (fileInputCleaning.value) {
+    fileInputCleaning.value.value = ''
+  }
+}
+
+const openCreateModal = (tableType,title) => {
   currentTable.value = tableType
   formMode.value = 'create'
   formTitle.value = title
   
-  if (tableType === 'banksampah') {
+  if (tableType === 'danasosial') {
+    danaSosialForm.value = { 
+      nama_penerima: '', 
+      tanggal_penyerahan: '', 
+      kategori_bantuan: '', 
+      nominal_bantuan: 0, 
+      foto_penyerahan: null, 
+      imagePreview: null 
+    }
+  } else if (tableType === 'banksampah') {
     bankSampahForm.value = { nama: '', total_sampah: 0, total_uang: 0 }
   } else if (tableType === 'ronda') {
     jadwalRondaForm.value = { tanggal: '', peserta_ronda: '' }
   } else if (tableType === 'cleaning') {
-    cleaningForm.value = { title: '', date: '', time: '', location: '', image: '', status: 'upcoming' }
-  } else {
-    formData.value = { nama: '', tanggal: '', keterangan: '' }
+    cleaningForm.value = { 
+      title: '', 
+      date: '', 
+      time: '', 
+      location: '', 
+      image: null, 
+      imagePreview: null, 
+      status: 'upcoming' 
+    }
   }
   showFormModal.value = true
 }
@@ -735,7 +907,17 @@ const openEditModal = (item, index, tableType, title) => {
   formTitle.value = title
   editingIndex.value = index
   
-  if (tableType === 'banksampah') {
+  if (tableType === 'danasosial') {
+    danaSosialForm.value = {
+      id: item.id,
+      nama_penerima: item.nama_penerima,
+      tanggal_penyerahan: item.tanggal_penyerahan,
+      kategori_bantuan: item.kategori_bantuan,
+      nominal_bantuan: parseFloat(item.nominal_bantuan.replace(/\D/g, '')),
+      foto_penyerahan: null,
+      imagePreview: item.foto_penyerahan
+    }
+  } else if (tableType === 'banksampah') {
     bankSampahForm.value = {
       id: item.id,
       nama: item.nama,
@@ -749,9 +931,11 @@ const openEditModal = (item, index, tableType, title) => {
       peserta_ronda: item.peserta_ronda
     }
   } else if (tableType === 'cleaning') {
-    cleaningForm.value = { ...item }
-  } else {
-    formData.value = { ...item }
+    cleaningForm.value = { 
+      ...item,
+      image: null,
+      imagePreview: item.image
+    }
   }
   showFormModal.value = true
 }
@@ -766,7 +950,12 @@ const openDeleteModal = (index, tableType, item) => {
     editingIndex.value = index
     currentTable.value = tableType
     
-    if (tableType === 'banksampah') {
+    if (tableType === 'danasosial') {
+      danaSosialForm.value = { 
+        id: item.id,
+        nama_penerima: item.nama_penerima 
+      }
+    } else if (tableType === 'banksampah') {
       bankSampahForm.value = { 
         id: item.id,
         nama: item.nama 
@@ -778,8 +967,6 @@ const openDeleteModal = (index, tableType, item) => {
       }
     } else if (tableType === 'cleaning') {
       cleaningForm.value = { ...item }
-    } else {
-      formData.value = { ...item }
     }
     
     showDeleteModal.value = true
@@ -788,16 +975,63 @@ const openDeleteModal = (index, tableType, item) => {
 
 const closeFormModal = () => {
   showFormModal.value = false
-  formData.value = { nama: '', tanggal: '', keterangan: '' }
+  danaSosialForm.value = { 
+    nama_penerima: '', 
+    tanggal_penyerahan: '', 
+    kategori_bantuan: '', 
+    nominal_bantuan: 0, 
+    foto_penyerahan: null, 
+    imagePreview: null 
+  }
   bankSampahForm.value = { nama: '', total_sampah: 0, total_uang: 0 }
   jadwalRondaForm.value = { tanggal: '', peserta_ronda: '' }
-  cleaningForm.value = { title: '', date: '', time: '', location: '', image: '', status: 'upcoming' }
+  cleaningForm.value = { 
+    title: '', 
+    date: '', 
+    time: '', 
+    location: '', 
+    image: null, 
+    imagePreview: null, 
+    status: 'upcoming' 
+  }
 }
 
 const saveData = async () => {
   isSaving.value = true
   try {
-    if (currentTable.value === 'banksampah') {
+    if (currentTable.value === 'danasosial') {
+      if (!danaSosialForm.value.nama_penerima || !danaSosialForm.value.tanggal_penyerahan || 
+          !danaSosialForm.value.kategori_bantuan || !danaSosialForm.value.nominal_bantuan) {
+        showToast('Mohon lengkapi semua field!', 'error')
+        isSaving.value = false
+        return
+      }
+      
+      if (!danaSosialForm.value.foto_penyerahan && formMode.value === 'create') {
+        showToast('Mohon upload foto!', 'error')
+        isSaving.value = false
+        return
+      }
+      
+      const formDataToSend = new FormData()
+      formDataToSend.append('nama_penerima', danaSosialForm.value.nama_penerima)
+      formDataToSend.append('tanggal_penyerahan', danaSosialForm.value.tanggal_penyerahan)
+      formDataToSend.append('kategori_bantuan', danaSosialForm.value.kategori_bantuan)
+      formDataToSend.append('nominal_bantuan', danaSosialForm.value.nominal_bantuan)
+      
+      if (danaSosialForm.value.foto_penyerahan) {
+        formDataToSend.append('foto_penyerahan', danaSosialForm.value.foto_penyerahan)
+      }
+      
+      if (formMode.value === 'create') {
+        await danaSosialAPI.create(formDataToSend)
+      } else {
+        await danaSosialAPI.update(danaSosialForm.value.id, formDataToSend)
+      }
+      await fetchDanaSosial()
+      showToast('Data Dana Sosial berhasil disimpan', 'success')
+    } 
+    else if (currentTable.value === 'banksampah') {
       const payload = {
         nama: bankSampahForm.value.nama,
         total_sampah: bankSampahForm.value.total_sampah,
@@ -810,7 +1044,8 @@ const saveData = async () => {
       }
       await fetchBankSampah()
       showToast('Data Bank Sampah berhasil disimpan', 'success')
-    } else if (currentTable.value === 'ronda') {
+    } 
+    else if (currentTable.value === 'ronda') {
       const payload = {
         tanggal: jadwalRondaForm.value.tanggal,
         peserta_ronda: jadwalRondaForm.value.peserta_ronda
@@ -822,30 +1057,45 @@ const saveData = async () => {
       }
       await fetchJadwalRonda()
       showToast('Data Jadwal Ronda berhasil disimpan', 'success')
-    } else if (currentTable.value === 'cleaning') {
-      if (formMode.value === 'create') {
-        cleaningEvents.value.push({ ...cleaningForm.value })
-      } else {
-        cleaningEvents.value[editingIndex.value] = { ...cleaningForm.value }
+    } 
+    else if (currentTable.value === 'cleaning') {
+      if (!cleaningForm.value.title || !cleaningForm.value.date || 
+          !cleaningForm.value.time || !cleaningForm.value.location) {
+        showToast('Mohon lengkapi semua field!', 'error')
+        isSaving.value = false
+        return
       }
+      
+      if (!cleaningForm.value.image && formMode.value === 'create') {
+        showToast('Mohon upload foto!', 'error')
+        isSaving.value = false
+        return
+      }
+      
+      const formDataToSend = new FormData()
+      formDataToSend.append('title', cleaningForm.value.title)
+      formDataToSend.append('date', cleaningForm.value.date)
+      formDataToSend.append('time', cleaningForm.value.time)
+      formDataToSend.append('location', cleaningForm.value.location)
+      formDataToSend.append('status', cleaningForm.value.status)
+      
+      if (cleaningForm.value.image) {
+        formDataToSend.append('image', cleaningForm.value.image)
+      }
+      
+      if (formMode.value === 'create') {
+        await kebersihanAPI.create(formDataToSend)
+      } else {
+        await kebersihanAPI.update(cleaningForm.value.id, formDataToSend)
+      }
+      await fetchKebersihan()
       showToast('Data Program Kebersihan berhasil disimpan', 'success')
-    } else {
-      const payload = {
-        nama: formData.value.nama,
-        tanggal: formData.value.tanggal,
-        keterangan: formData.value.keterangan
-      }
-      if (formMode.value === 'create') {
-        await baksosAPI.create(payload)
-      } else {
-        await baksosAPI.update(formData.value.id, payload)
-      }
-      await fetchBaksos()
-      showToast('Data Bakti Sosial berhasil disimpan', 'success')
     }
+    
     closeFormModal()
   } catch (error) {
     console.error('Error saving:', error.response?.data)
+    showToast(error.response?.data?.message || 'Gagal menyimpan data', 'error')
   } finally {
     isSaving.value = false
   }
@@ -854,7 +1104,11 @@ const saveData = async () => {
 const confirmDelete = async () => {
   isDeleting.value = true
   try {
-    if (currentTable.value === 'banksampah') {
+    if (currentTable.value === 'danasosial') {
+      await danaSosialAPI.delete(danaSosialForm.value.id)
+      await fetchDanaSosial()
+      showToast('Data berhasil dihapus')
+    } else if (currentTable.value === 'banksampah') {
       await bankSampahAPI.delete(bankSampahForm.value.id)
       await fetchBankSampah()
       showToast('Data berhasil dihapus')
@@ -863,12 +1117,9 @@ const confirmDelete = async () => {
       await fetchJadwalRonda()
       showToast('Jadwal berhasil dihapus')
     } else if (currentTable.value === 'cleaning') {
-      cleaningEvents.value.splice(editingIndex.value, 1)
+      await kebersihanAPI.delete(cleaningForm.value.id)
+      await fetchKebersihan()
       showToast('Program berhasil dihapus')
-    } else {
-      await baksosAPI.delete(formData.value.id)
-      await fetchBaksos()
-      showToast('Data berhasil dihapus')
     }
     showDeleteModal.value = false
   } catch (error) {
@@ -880,9 +1131,10 @@ const confirmDelete = async () => {
 
 onMounted(() => {
   checkAuthStatus()
-  fetchBaksos()
+  fetchDanaSosial()
   fetchBankSampah()
   fetchJadwalRonda()
+  fetchKebersihan()
 })
 </script>
 
