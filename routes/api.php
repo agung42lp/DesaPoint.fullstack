@@ -21,10 +21,11 @@ Route::put('/kebersihan/{kebersihan}', [KebersihanController::class, 'update']);
 Route::delete('/kebersihan/{kebersihan}', [KebersihanController::class, 'destroy']);
 
 Route::get('/export/pengaduan', [PengaduanController::class, 'export']);
-Route::get('/export/bank-sampah', [BankSampahController::class, 'export']);
-Route::get('/export/jadwal-ronda', [JadwalRondaController::class, 'export']);
+Route::get('/export/bank-sampah-pdf', [BankSampahController::class, 'exportPdf']);
+Route::get('/export/jadwal-ronda-pdf', [JadwalRondaController::class, 'exportPdf']);
+Route::get('/export/kebersihan-pdf', [KebersihanController::class, 'exportPdf']);
 Route::get('/export/laporan-keuangan', [LaporanKeuanganController::class, 'export']);
-Route::get('/export/dana-sosial', [DanaSosialController::class, 'export']);
+Route::get('/export/dana-sosial', [DanaSosialController::class, 'exportPdf']);
 
 Route::get('/pengaduan', [PengaduanController::class, 'index']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);

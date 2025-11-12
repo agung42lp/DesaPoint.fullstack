@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\DanaSosial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\DanaSosialExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\DanaSosialPdfExport;
+use Illuminate\Support\Facades\Log;
 
 class DanaSosialController extends Controller
 {
@@ -15,8 +16,56 @@ class DanaSosialController extends Controller
         return response()->json(DanaSosial::latest()->get());
     }
 
-     public function export() {
-        return Excel::download(new DanaSosialExport, 'dana_sosial.xlsx');
+  public function exportPdf()
+    {
+        try {
+            $data = DanaSosial::all()->map(function($item) {
+                if ($item->foto_penyerahan && file_exists(public_path('storage/' . $item->foto_penyerahan))) {
+                    $path = public_path('storage/' . $item->foto_penyerahan);
+                    
+                    try {
+                        $imageContent = file_get_contents($path);
+                        $image = @imagecreatefromstring($imageContent);
+                        
+                        if ($image === false) {
+                            \Log::error("Failed to create image from: " . $path);
+                            $item->foto_base64 = null;
+                            return $item;
+                        }
+                        
+                        $width = imagesx($image);
+                        $height = imagesy($image);
+                        $newWidth = 200;
+                        $newHeight = ($height / $width) * $newWidth;
+                        
+                        $resized = imagecreatetruecolor($newWidth, $newHeight);
+                        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                        
+                        ob_start();
+                        imagejpeg($resized, null, 60);
+                        $imageData = ob_get_clean();
+                        
+                        $item->foto_base64 = 'data:image/jpeg;base64,' . base64_encode($imageData);
+                        
+                        imagedestroy($image);
+                        imagedestroy($resized);
+                    } catch (\Exception $e) {
+                        \Log::error("Image processing error: " . $e->getMessage());
+                        $item->foto_base64 = null;
+                    }
+                } else {
+                    $item->foto_base64 = null;
+                }
+                return $item;
+            });
+            
+            $pdf = Pdf::loadView('exports.dana-sosial-pdf', compact('data'));
+            return $pdf->download('dana-sosial-' . date('Y-m-d') . '.pdf');
+            
+        } catch (\Exception $e) {
+            \Log::error('PDF Export Error: ' . $e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)

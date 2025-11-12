@@ -41,6 +41,16 @@
                 </div>
                 <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
               </div>
+              <button 
+              @click="handleExport" 
+              :disabled="isExporting"
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+              <svg v-if="isExporting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ isExporting ? 'Mengexport...' : 'Export PDF' }}</span>
+            </button>
               <button @click="handleLogout" class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
                 Logout
               </button>
@@ -203,13 +213,15 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Sampah</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Uang</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Konversi</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Cair</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Tersisa</th>
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
               </tr>
             </thead>
             <tbody v-if="isLoading">
             <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
-                <td v-for="col in 5" :key="col" class="px-6 py-5">
+                <td v-for="col in 7" :key="col" class="px-6 py-5">
                 <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
                 </td>
             </tr>
@@ -231,8 +243,18 @@
                   </span>
                 </td>
                 <td class="px-6 py-5">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700 font-bold">
+                    {{ item.totalKonversi }}
+                  </span>
+                </td>
+                <td class="px-6 py-5">
                   <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 font-bold">
-                    {{ item.totalUang }}
+                    {{ item.saldoCair }}
+                  </span>
+                </td>
+                <td class="px-6 py-5">
+                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-700 font-bold">
+                    {{ item.saldoTersisa }}
                   </span>
                 </td>
                 <td class="px-6 py-5">
@@ -475,8 +497,16 @@
               <input v-model.number="bankSampahForm.total_sampah" type="number" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0.00">
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Total Uang (Rp)</label>
-              <input v-model.number="bankSampahForm.total_uang" type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Total Konversi (Rp)</label>
+              <input v-model.number="bankSampahForm.total_konversi" type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Saldo Cair (Rp)</label>
+              <input v-model.number="bankSampahForm.saldo_cair" type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Saldo Tersisa (Rp)</label>
+              <input v-model.number="bankSampahForm.saldo_tersisa" type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="0">
             </div>
           </template>
 
@@ -632,6 +662,51 @@ const toast = ref({ show: false, message: '', type: '' })
 const showImageModal = ref(false)
 const currentImage = ref('')
 
+const isExporting = ref(false)
+
+const handleExport = async () => {
+  isExporting.value = true
+  try {
+    let response;
+    let filename;
+    
+    switch(activeTab.value) {
+      case 'danasosial':
+        response = await danaSosialAPI.export()
+        filename = `dana-sosial-${new Date().toISOString().split('T')[0]}.pdf`
+        break
+      case 'banksampah':
+        response = await bankSampahAPI.exportPdf()
+        filename = `bank-sampah-${new Date().toISOString().split('T')[0]}.pdf`
+        break
+      case 'ronda':
+        response = await jadwalRondaAPI.exportPdf()
+        filename = `jadwal-ronda-${new Date().toISOString().split('T')[0]}.pdf`
+        break
+      case 'cleaning':
+        response = await kebersihanAPI.exportPdf()
+        filename = `kebersihan-${new Date().toISOString().split('T')[0]}.pdf`
+        break
+      default:
+        showToast('Tidak ada data untuk diexport', 'error')
+        return
+    }
+    
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', filename)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    showToast('Export berhasil!')
+  } catch (error) {
+    showToast('Gagal export data', 'error')
+  } finally {
+    isExporting.value = false
+  }
+}
+
 const showToast = (message, type = 'success') => {
   toast.value = { show: true, message, type }
   setTimeout(() => {
@@ -671,7 +746,9 @@ const danaSosialForm = ref({
 const bankSampahForm = ref({
   nama: '',
   total_sampah: 0,
-  total_uang: 0
+  total_konversi: 0,
+  saldo_cair: 0,
+  saldo_tersisa: 0
 })
 
 const jadwalRondaForm = ref({
@@ -775,7 +852,9 @@ const fetchBankSampah = async () => {
         no: index + 1,
         nama: item.nama,
         totalSampah: item.total_sampah + ' kg',
-        totalUang: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.total_uang)
+        totalKonversi: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.total_konversi),
+        saldoCair: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.saldo_cair),
+        saldoTersisa: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.saldo_tersisa)
       }))
   } catch (error) {
     showToast('Gagal memuat data Bank Sampah', 'error')
@@ -922,7 +1001,9 @@ const openEditModal = (item, index, tableType, title) => {
       id: item.id,
       nama: item.nama,
       total_sampah: parseFloat(item.totalSampah),
-      total_uang: parseInt(item.totalUang.replace(/\D/g, ''))
+      total_konversi: parseInt(item.totalKonversi.replace(/\D/g, '')),
+      saldo_cair: parseInt(item.saldoCair.replace(/\D/g, '')),
+      saldo_tersisa: parseInt(item.saldoTersisa.replace(/\D/g, ''))
     }
   } else if (tableType === 'ronda') {
     jadwalRondaForm.value = {
@@ -983,7 +1064,13 @@ const closeFormModal = () => {
     foto_penyerahan: null, 
     imagePreview: null 
   }
-  bankSampahForm.value = { nama: '', total_sampah: 0, total_uang: 0 }
+  bankSampahForm.value = { 
+    nama: '', 
+    total_sampah: 0, 
+    total_konversi: 0,
+    saldo_cair: 0,
+    saldo_tersisa: 0
+  }
   jadwalRondaForm.value = { tanggal: '', peserta_ronda: '' }
   cleaningForm.value = { 
     title: '', 
@@ -1031,11 +1118,13 @@ const saveData = async () => {
       await fetchDanaSosial()
       showToast('Data Dana Sosial berhasil disimpan', 'success')
     } 
-    else if (currentTable.value === 'banksampah') {
+      else if (currentTable.value === 'banksampah') {
       const payload = {
         nama: bankSampahForm.value.nama,
         total_sampah: bankSampahForm.value.total_sampah,
-        total_uang: bankSampahForm.value.total_uang
+        total_konversi: bankSampahForm.value.total_konversi,
+        saldo_cair: bankSampahForm.value.saldo_cair,
+        saldo_tersisa: bankSampahForm.value.saldo_tersisa
       }
       if (formMode.value === 'create') {
         await bankSampahAPI.create(payload)
@@ -1044,7 +1133,7 @@ const saveData = async () => {
       }
       await fetchBankSampah()
       showToast('Data Bank Sampah berhasil disimpan', 'success')
-    } 
+    }
     else if (currentTable.value === 'ronda') {
       const payload = {
         tanggal: jadwalRondaForm.value.tanggal,

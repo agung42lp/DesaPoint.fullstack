@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\BankSampah;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\BankSampahExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\BankSampahPdfExport;
 
 class BankSampahController extends Controller
 {
@@ -14,24 +15,25 @@ class BankSampahController extends Controller
         return response()->json(BankSampah::oldest()->get());
     }
 
-    public function export() {
-        return Excel::download(new BankSampahExport, 'bank_sampah.xlsx');
+    public function exportPdf()
+    {
+        $data = BankSampah::all();
+        $pdf = Pdf::loadView('exports.bank-sampah-pdf', compact('data'));
+        return $pdf->download('bank-sampah-' . date('Y-m-d') . '.pdf');
     }
 
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'nama' => 'required|string|max:255',
-                'total_sampah' => 'required|numeric|min:0',
-                'total_uang' => 'required|numeric|min:0',
-            ]);
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'total_sampah' => 'required|numeric|min:0',
+            'total_konversi' => 'required|numeric|min:0',
+            'saldo_cair' => 'required|numeric|min:0',
+            'saldo_tersisa' => 'required|numeric|min:0',
+        ]);
 
-            $result = BankSampah::create($validated);
-            return response()->json($result, 201);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $result = BankSampah::create($validated);
+        return response()->json($result, 201);
     }
 
     public function update(Request $request, BankSampah $bankSampah)
@@ -39,7 +41,9 @@ class BankSampahController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'total_sampah' => 'required|numeric|min:0',
-            'total_uang' => 'required|numeric|min:0',
+            'total_konversi' => 'required|numeric|min:0',
+            'saldo_cair' => 'required|numeric|min:0',
+            'saldo_tersisa' => 'required|numeric|min:0',
         ]);
 
         $bankSampah->update($validated);

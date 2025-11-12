@@ -41,41 +41,52 @@
       </div>
     </nav>
 
-    <section class="max-w-7xl mx-auto px-4 mt-8 mb-4">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">Pemasukan</h2>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div 
-          v-for="(stat, index) in statsPemasukan" 
-          :key="index"
-          class="bg-white rounded-xl shadow-xl p-6 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500"
-          @mouseenter="stat.hover = true"
-          @mouseleave="stat.hover = false">
-          <p class="text-sm text-gray-600 font-medium mb-2">{{ stat.label }}</p>
-          <p class="text-2xl font-bold text-green-700 transition-all duration-300" :class="{ 'scale-110': stat.hover }">
-            Rp {{ formatNumber(stat.value) }}
-          </p>
-        </div>
+    <section class="bg-gradient-to-br from-green-600 to-green-800 py-12 md:py-16">
+      <div class="max-w-7xl mx-auto px-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Kelola Keuangan RW</h1>
+        <p class="text-green-100">Manajemen pemasukan dan pengeluaran kas RW</p>
       </div>
     </section>
 
-    <section class="max-w-7xl mx-auto px-4 mb-8">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">Pengeluaran</h2>
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <div 
-          v-for="(stat, index) in statsPengeluaran" 
-          :key="index"
-          class="bg-white rounded-xl shadow-xl p-6 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500"
-          @mouseenter="stat.hover = true"
-          @mouseleave="stat.hover = false">
-          <p class="text-sm text-gray-600 font-medium mb-2">{{ stat.label }}</p>
-          <p class="text-2xl font-bold text-red-700 transition-all duration-300" :class="{ 'scale-110': stat.hover }">
-            Rp {{ formatNumber(stat.value) }}
-          </p>
+    <div class="max-w-7xl mx-auto px-4 -mt-8">
+      <div class="space-y-4">
+        <div class="bg-white rounded-xl shadow-lg p-4">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Pemasukan</h3>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div 
+              v-for="(stat, index) in statsPemasukan" 
+              :key="index"
+              class="p-3 rounded-lg bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 hover:shadow-md transform hover:-translate-y-1 transition-all duration-300"
+              @mouseenter="stat.hover = true"
+              @mouseleave="stat.hover = false">
+              <p class="text-xs text-gray-600 font-medium mb-1">{{ stat.label }}</p>
+              <p class="text-lg font-bold text-green-700 transition-all duration-300" :class="{ 'scale-110': stat.hover }">
+                Rp {{ formatNumber(stat.value) }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-4">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3">Pengeluaran</h3>
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <div 
+              v-for="(stat, index) in statsPengeluaran" 
+              :key="index"
+              class="p-3 rounded-lg bg-gradient-to-br from-red-50 to-pink-50 border border-red-100 hover:shadow-md transform hover:-translate-y-1 transition-all duration-300"
+              @mouseenter="stat.hover = true"
+              @mouseleave="stat.hover = false">
+              <p class="text-xs text-gray-600 font-medium mb-1">{{ stat.label }}</p>
+              <p class="text-lg font-bold text-red-700 transition-all duration-300" :class="{ 'scale-110': stat.hover }">
+                Rp {{ formatNumber(stat.value) }}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="max-w-7xl mx-auto px-4 mb-16">
+    <section class="max-w-7xl mx-auto px-4 py-8">
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-8 py-6 flex justify-between items-center">
           <div>
@@ -589,6 +600,12 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

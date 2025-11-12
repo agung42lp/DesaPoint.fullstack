@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kebersihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\KebersihanPdfExport;
 
 class KebersihanController extends Controller
 {
@@ -12,6 +14,40 @@ class KebersihanController extends Controller
     {
         $data = Kebersihan::orderBy('created_at', 'desc')->get();
         return response()->json($data);
+    }
+
+    public function exportPdf()
+    {
+        $data = Kebersihan::all()->map(function($item) {
+            if ($item->image && file_exists(public_path('storage/' . $item->image))) {
+                $path = public_path('storage/' . $item->image);
+                
+                $image = imagecreatefromstring(file_get_contents($path));
+                
+                $width = imagesx($image);
+                $height = imagesy($image);
+                $newWidth = 200;
+                $newHeight = ($height / $width) * $newWidth;
+                
+                $resized = imagecreatetruecolor($newWidth, $newHeight);
+                imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                
+                ob_start();
+                imagejpeg($resized, null, 60);
+                $imageData = ob_get_clean();
+                
+                $item->image_base64 = 'data:image/jpeg;base64,' . base64_encode($imageData);
+                
+                imagedestroy($image);
+                imagedestroy($resized);
+            } else {
+                $item->image_base64 = null;
+            }
+            return $item;
+        });
+        
+        $pdf = Pdf::loadView('exports.kebersihan-pdf', compact('data'));
+        return $pdf->download('kebersihan-' . date('Y-m-d') . '.pdf');
     }
 
     public function store(Request $request)

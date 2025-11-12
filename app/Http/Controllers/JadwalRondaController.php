@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\JadwalRonda;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\JadwalRondaExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\JadwalRondaPdfExport;
 
 class JadwalRondaController extends Controller
 {
@@ -13,10 +14,12 @@ class JadwalRondaController extends Controller
         return response()->json(JadwalRonda::oldest('tanggal')->get());
     }
 
-    public function export() {
-        return Excel::download(new JadwalRondaExport, 'jadwal_ronda.xlsx');
+    public function exportPdf()
+    {
+        $data = JadwalRonda::all();
+        $pdf = Pdf::loadView('exports.jadwal-ronda-pdf', compact('data'));
+        return $pdf->download('jadwal-ronda-' . date('Y-m-d') . '.pdf');
     }
-
     public function store(Request $request)
     {
         $validated = $request->validate([

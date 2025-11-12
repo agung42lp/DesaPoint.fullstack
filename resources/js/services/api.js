@@ -36,7 +36,8 @@ export const kebersihanAPI = {
     update: (id, data) => api.post(`/kebersihan/${id}?_method=PUT`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),
-    delete: (id) => api.delete(`/kebersihan/${id}`)
+    delete: (id) => api.delete(`/kebersihan/${id}`),
+    exportPdf: () => api.get('/export/kebersihan-pdf', { responseType: 'blob' })
 }
 
 export const pengaduanAPI = {
@@ -60,7 +61,7 @@ export const jadwalRondaAPI = {
     create: (data) => api.post('/jadwal-ronda', data),
     update: (id, data) => api.put(`/jadwal-ronda/${id}`, data),
     delete: (id) => api.delete(`/jadwal-ronda/${id}`),
-    export: () => api.get('/export/jadwal-ronda', { responseType: 'blob' })
+    exportPdf: () => api.get('/export/jadwal-ronda-pdf', { responseType: 'blob' })
 }
 
 export const bankSampahAPI = {
@@ -68,7 +69,7 @@ export const bankSampahAPI = {
     create: (data) => api.post('/bank-sampah', data),
     update: (id, data) => api.put(`/bank-sampah/${id}`, data),
     delete: (id) => api.delete(`/bank-sampah/${id}`),
-    export: () => api.get('/export/bank-sampah', { responseType: 'blob' })
+    exportPdf: () => api.get('/export/bank-sampah-pdf', { responseType: 'blob' })
 }
 
 export const danaSosialAPI = {
