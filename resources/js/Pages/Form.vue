@@ -63,13 +63,14 @@
             <div class="p-10 space-y-6">
               <div class="animate-slide-up animation-delay-100">
                 <label class="block text-sm font-bold text-gray-800 mb-3">
-                  Nama Lengkap <span class="text-red-500">*</span>
+                  Nama Lengkap
                 </label>
                 <input
                   type="text"
                   v-model="formData.nama"
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
-                  placeholder="Masukkan nama lengkap"
+                  readonly
+                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl bg-gray-50 text-gray-700 font-medium cursor-not-allowed"
+                  placeholder="Nama otomatis terisi"
                 />
               </div>
 
@@ -262,19 +263,22 @@
         </transition>
       </div>
     </div>
-   <a 
-    href="#"
+   <button 
+    @click="router.push('/')"
     class="fixed top-6 left-6 w-12 h-12 bg-green-700/60 backdrop-blur-sm hover:bg-green-700 rounded-full flex items-center justify-center text-green-100 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl group z-50">
     <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
     </svg>
-  </a>
+  </button>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import api from '../services/api'
+
+const router = useRouter()
 
 const handleSubmit = async () => {
   if (!formData.value.namaPermasalahan || !formData.value.kategori || 
@@ -284,7 +288,7 @@ const handleSubmit = async () => {
   }
   
   const formDataToSend = new FormData()
-  formDataToSend.append('nama_pengirim', formData.value.nama)
+  
   formDataToSend.append('rt', formData.value.rt)
   formDataToSend.append('nomor_rumah', formData.value.noRumah)
   formDataToSend.append('no_hp', formData.value.noHp)
@@ -304,11 +308,26 @@ const handleSubmit = async () => {
     })
     alert('Pengaduan berhasil dikirim!')
     currentStep.value = 1
-    formData.value = { nama: '', rt: '', noHp: '', noRumah: '', namaPermasalahan: '', kategori: '', detailPermasalahan: '' }
+    
+    const userName = formData.value.nama
+    formData.value = {
+      nama: userName, 
+      rt: '',
+      noHp: '',
+      noRumah: '',
+      namaPermasalahan: '',
+      kategori: '',
+      detailPermasalahan: ''
+    }
     uploadedImages.value = []
   } catch (error) {
     console.error('Error detail:', error.response?.data)
-    alert('Gagal mengirim pengaduan: ' + (error.response?.data?.message || error.message))
+    if (error.response?.status === 401) {
+      alert('Sesi login habis. Silakan login kembali.')
+      router.push('/login')
+    } else {
+      alert('Gagal mengirim pengaduan: ' + (error.response?.data?.message || error.message))
+    }
   }
 }
 
@@ -374,6 +393,17 @@ const handleFileChange = (event) => {
 const removeImage = (index) => {
   uploadedImages.value.splice(index, 1)
 }
+
+onMounted(() => {
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const token = localStorage.getItem('token')
+  
+  if (!token) {
+    router.push('/login')
+    return
+  }
+  formData.value.nama = user.name || ''
+})
 </script>
 
 <style scoped>

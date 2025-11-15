@@ -44,7 +44,7 @@ export const pengaduanAPI = {
     getAll: (params) => api.get('/pengaduan', { params }),
     create: (data) => api.post('/pengaduan', data),
     update: (id, data) => api.put(`/pengaduan/${id}`, data),
-    export: () => api.get('/export/pengaduan', { responseType: 'blob' })
+    exportPdf: () => api.get('/export/pengaduan-pdf', { responseType: 'blob' })
 }
 
 export const laporanKeuanganAPI = {

@@ -7,9 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 class Pengaduan extends Model
 {
     protected $table = 'pengaduans';
-
+    
     protected $fillable = [
-        'nama_pengirim', 'rt', 'nomor_rumah', 'no_hp', 'judul_permasalahan',
-        'kategori', 'detail_permasalahan', 'foto_1', 'foto_2', 'status', 'tanggapan'
+        'user_id',
+        'nama_pengirim',
+        'rt',
+        'nomor_rumah',
+        'no_hp',
+        'judul_permasalahan',
+        'kategori',
+        'detail_permasalahan',
+        'foto_1',
+        'foto_2',
+        'status',
+        'tanggapan'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

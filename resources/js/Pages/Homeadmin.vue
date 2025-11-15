@@ -57,15 +57,14 @@
 
         <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
           <div class="flex flex-col space-y-3 pt-4">
-            <router-link @click="mobileMenuOpen = false" to="/" class="text-green-600 font-medium py-2">Beranda</router-link>
-            <a @click="mobileMenuOpen = false" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
-            <a @click="mobileMenuOpen = false" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
-            <router-link @click="mobileMenuOpen = false" to="/form" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</router-link>
+            <router-link to="/" class="text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-green-600 after:scale-x-100 transition-all">Beranda</router-link>
+            <router-link to="/program" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Program</router-link>
+            <router-link to="/keuangan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Keuangan</router-link>
+            <router-link to="/pengaduan" class="text-gray-700 hover:text-green-600 font-medium relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-green-600 hover:after:w-full after:transition-all">Pengaduan</router-link>
             <router-link 
               v-if="!isLoggedIn"
-              @click="mobileMenuOpen = false" 
               to="/login" 
-              class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-center">
+              class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg">
               Login
             </router-link>
 

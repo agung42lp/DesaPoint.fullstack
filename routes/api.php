@@ -20,7 +20,7 @@ Route::post('/kebersihan', [KebersihanController::class, 'store']);
 Route::put('/kebersihan/{kebersihan}', [KebersihanController::class, 'update']);
 Route::delete('/kebersihan/{kebersihan}', [KebersihanController::class, 'destroy']);
 
-Route::get('/export/pengaduan', [PengaduanController::class, 'export']);
+Route::get('/export/pengaduan-pdf', [PengaduanController::class, 'exportPdf']);
 Route::get('/export/bank-sampah-pdf', [BankSampahController::class, 'exportPdf']);
 Route::get('/export/jadwal-ronda-pdf', [JadwalRondaController::class, 'exportPdf']);
 Route::get('/export/kebersihan-pdf', [KebersihanController::class, 'exportPdf']);
@@ -30,6 +30,7 @@ Route::get('/export/dana-sosial', [DanaSosialController::class, 'exportPdf']);
 Route::get('/pengaduan', [PengaduanController::class, 'index']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
 Route::put('/pengaduan/{pengaduan}', [PengaduanController::class, 'update']);
+Route::get('/debug-foto', [PengaduanController::class, 'debugFoto']);
 
 Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index']);
 Route::post('/laporan-keuangan', [LaporanKeuanganController::class, 'store']);
@@ -51,6 +52,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::put('/user/profile', [AuthController::class, 'updateProfile']);
+    Route::put('/user/change-password', [AuthController::class, 'changePassword']);
+    Route::post('/pengaduan', [PengaduanController::class, 'store']);
+    Route::get('/pengaduan/my', [PengaduanController::class, 'myPengaduan']);
 });
 
 Route::get('/user', function (Request $request) {

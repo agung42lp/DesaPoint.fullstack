@@ -41,8 +41,15 @@
                 </div>
                 <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
               </div>
-              <button @click="exportPengaduan" class="px-4 py-2 bg-green-600 text-white rounded-lg">
-                Export Excel
+              <button 
+                @click="exportPengaduan" 
+                :disabled="isExporting"
+                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                <svg v-if="isExporting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>{{ isExporting ? 'Mengexport...' : 'Export PDF' }}</span>
               </button>
               <button @click="handleLogout" class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
                 Logout
@@ -264,11 +271,11 @@
               Foto Bukti
             </label>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div v-if="selectedPengaduan.foto_1" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                <img :src="`/storage/${selectedPengaduan.foto_1}`" alt="Foto 1" class="w-full h-72 object-cover" />
+              <div v-ifs="selectedPengaduan.foto_1" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                <img :src="`/${selectedPengaduan.foto_1}`" alt="Foto 1" class="w-full h-72 object-cover" />
               </div>
               <div v-if="selectedPengaduan.foto_2" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                <img :src="`/storage/${selectedPengaduan.foto_2}`" alt="Foto 2" class="w-full h-72 object-cover" />
+                <img :src="`/${selectedPengaduan.foto_1}`" alt="Foto 1" class="w-full h-72 object-cover" />
               </div>
             </div>
           </div>
@@ -328,17 +335,25 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { pengaduanAPI, authService } from '../services/api'
 import api from '../services/api'
-import { useExport } from '../composables/useExport'
 
-const { downloadExcel } = useExport()
+const isExporting = ref(false)
 
 const exportPengaduan = async () => {
+  isExporting.value = true
   try {
-    const response = await pengaduanAPI.export()
-    downloadExcel(response.data, 'pengaduan.xlsx')
-    showToast('Data berhasil diekspor!')
+    const response = await pengaduanAPI.exportPdf()
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `pengaduan-${new Date().toISOString().split('T')[0]}.pdf`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    showToast('Export berhasil!')
   } catch (error) {
-    showToast('Gagal ekspor data', 'error')
+    showToast('Gagal export data', 'error')
+  } finally {
+    isExporting.value = false
   }
 }
 
