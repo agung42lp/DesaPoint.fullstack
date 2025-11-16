@@ -7,6 +7,8 @@ import Keuangan from './Pages/Keuangan.vue'
 import Pengaduan from './Pages/Pengaduan.vue'
 import Program from './Pages/Program.vue'
 import Profile from './Pages/Profile.vue'
+import Profileadmin from './Pages/Profileadmin.vue'
+import Manajemenakun from './Pages/Manajemenakun.vue'
 
 const router = createRouter({
   history: createWebHashHistory('/desapoint/'),
@@ -19,6 +21,12 @@ const router = createRouter({
     { path: '/pengaduan', name: 'Pengaduan', component: Pengaduan },
     { path: '/program', name: 'Program', component: Program },
     { path: '/profile', name: 'Profile', component: Profile, meta: {requiresAuth: true} },
+    { path: '/profileadmin', name: 'Profileadmin', component: Profileadmin, meta: {requiresAuth: true} },
+    {
+      path: '/manajemen-akun',
+      name: 'ManajemenAkun',
+      component: () => import('./Pages/ManajemenAkun.vue')
+  }
   ]
 })
 

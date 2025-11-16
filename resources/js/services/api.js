@@ -28,6 +28,18 @@ api.interceptors.response.use(
   }
 )
 
+export const userManagementAPI = {
+    getAllUsers: () => api.get('/users'),
+    createUser: (data) => api.post('/users', data),
+    updateUser: (id, data) => api.put(`/users/${id}`, data),
+    deleteUser: (id) => api.delete(`/users/${id}`),
+    
+    getAllAdmins: () => api.get('/admins'),
+    createAdmin: (data) => api.post('/admins', data),
+    updateAdmin: (id, data) => api.put(`/admins/${id}`, data),
+    deleteAdmin: (id) => api.delete(`/admins/${id}`)
+}
+
 export const kebersihanAPI = {
     getAll: () => api.get('/kebersihan'),
     create: (data) => api.post('/kebersihan', data, {
@@ -53,7 +65,7 @@ export const laporanKeuanganAPI = {
     create: (data) => api.post('/laporan-keuangan', data),
     update: (id, data) => api.put(`/laporan-keuangan/${id}`, data),
     delete: (id) => api.delete(`/laporan-keuangan/${id}`),
-    export: () => api.get('/export/laporan-keuangan', { responseType: 'blob' })
+    exportPdf: () => api.get('/laporan-keuangan/export-pdf', { responseType: 'blob' })
 }
 
 export const jadwalRondaAPI = {

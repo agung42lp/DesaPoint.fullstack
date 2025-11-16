@@ -1,5 +1,21 @@
 <template>
   <div class="min-h-screen bg-gray-50">
+    <transition name="slide-fade">
+      <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
+        <div 
+          class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
+          :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+          <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="text-white font-medium">{{ toast.message }}</p>
+        </div>
+      </div>
+    </transition>
+
     <nav class="bg-white shadow-lg sticky top-0 z-50 animate-slideDown">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 md:h-20">
@@ -25,6 +41,16 @@
                 </div>
                 <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
               </div>
+              <button
+                @click="exportKeuangan"
+                :disabled="isExporting"
+                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                <svg v-if="isExporting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>{{ isExporting ? 'Mengexport...' : 'Export PDF' }}</span>
+              </button>
               <button
                 @click="handleLogout"
                 class="group relative px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold overflow-hidden shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
@@ -351,6 +377,37 @@ import { laporanKeuanganAPI, authService } from '../services/api.js'
 import { useRouter } from 'vue-router'
 import api from '../services/api.js'
 
+const toast = ref({ show: false, message: '', type: '' })
+
+const showToast = (message, type = 'success') => {
+  toast.value = { show: true, message, type }
+  setTimeout(() => {
+    toast.value.show = false
+  }, 3000)
+}
+
+const isExporting = ref(false)
+
+const exportKeuangan = async () => {
+  isExporting.value = true
+  try {
+    const response = await laporanKeuanganAPI.exportPdf()
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `laporan-keuangan-${new Date().toISOString().split('T')[0]}.pdf`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    showToast('Export berhasil!')
+  } catch (error) {
+    console.error('Export error:', error)
+    showToast('Gagal export data')
+  } finally {
+    isExporting.value = false
+  }
+}
+
 const router = useRouter()
 const isLoggedIn = ref(false)
 const currentUser = ref(null)
@@ -566,7 +623,7 @@ const saveData = async () => {
     closeFormModal()
   } catch (error) {
     console.error('Error saving:', error.response?.data)
-    alert('Gagal menyimpan data: ' + (error.response?.data?.message || 'Terjadi kesalahan'))
+    showToast('Gagal menyimpan data: ' + (error.response?.data?.message || 'Terjadi kesalahan'))
   }
 }
 
@@ -577,7 +634,7 @@ const confirmDelete = async () => {
     showDeleteModal.value = false
   } catch (error) {
     console.error('Error deleting:', error)
-    alert('Gagal menghapus data')
+    showToast('Gagal menghapus data')
   }
 }
 
@@ -643,5 +700,38 @@ onUnmounted(() => {
 
 .animate-slideDown {
   animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>

@@ -117,4 +117,90 @@ class AuthController extends Controller
             'message' => 'Password berhasil diubah'
         ]);
     }
+
+    public function getAllUsers() {
+        return response()->json(User::all());
+    }
+
+    public function createUser(Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
+        
+        $user = User::create([
+            'name' => $validated['name'],
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+        ]);
+        
+        return response()->json($user, 201);
+    }
+
+    public function updateUser(Request $request, $id) {
+        $user = User::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users,username,' . $id,
+            'password' => 'nullable|string|min:6',
+        ]);
+        
+        $user->name = $validated['name'];
+        $user->username = $validated['username'];
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+        $user->save();
+        
+        return response()->json($user);
+    }
+
+    public function deleteUser($id) {
+        User::findOrFail($id)->delete();
+        return response()->json(['message' => 'User deleted']);
+    }
+
+    public function getAllAdmins() {
+        return response()->json(Admin::all());
+    }
+
+    public function createAdmin(Request $request) {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:admins',
+            'password' => 'required|string|min:6',
+        ]);
+        
+        $admin = Admin::create([
+            'name' => $validated['name'],
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+        ]);
+        
+        return response()->json($admin, 201);
+    }
+
+    public function updateAdmin(Request $request, $id) {
+        $admin = Admin::findOrFail($id);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:admins,username,' . $id,
+            'password' => 'nullable|string|min:6',
+        ]);
+        
+        $admin->name = $validated['name'];
+        $admin->username = $validated['username'];
+        if (!empty($validated['password'])) {
+            $admin->password = Hash::make($validated['password']);
+        }
+        $admin->save();
+        
+        return response()->json($admin);
+    }
+
+    public function deleteAdmin($id) {
+        Admin::findOrFail($id)->delete();
+        return response()->json(['message' => 'Admin deleted']);
+    }
 }

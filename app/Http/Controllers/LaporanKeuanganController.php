@@ -6,7 +6,8 @@ use App\Models\LaporanKeuangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\LaporanKeuanganExport;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\LaporanKeuanganPdfExport;
 
 class LaporanKeuanganController extends Controller
 {
@@ -18,8 +19,16 @@ class LaporanKeuanganController extends Controller
         return response()->json($data);
     }
 
-    public function export() {
-        return Excel::download(new LaporanKeuanganExport, 'laporan_keuangan.xlsx');
+    public function exportPdf()
+    {
+        $data = LaporanKeuangan::orderBy('tanggal', 'asc')->get();
+        
+        $totalDebit = $data->sum('debit');
+        $totalKredit = $data->sum('kredit');
+        $saldoAkhir = $data->last()->saldo ?? 0;
+        
+        $pdf = Pdf::loadView('exports.laporan-keuangan-pdf', compact('data', 'totalDebit', 'totalKredit', 'saldoAkhir'));
+        return $pdf->download('laporan-keuangan-' . date('Y-m-d') . '.pdf');
     }
 
     public function store(Request $request)

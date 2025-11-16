@@ -30,8 +30,7 @@
           </div>
           
           <div class="hidden md:flex items-center space-x-6">
-            <router-link to="/" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
-            <router-link to="/form" class="text-gray-700 hover:text-green-600 font-medium">Pengaduan</router-link>
+            <router-link to="/homeadmin" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
             
             <div class="flex items-center gap-4">
               <router-link to="/profile" class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50 shadow-sm hover:shadow-md transition-shadow">
@@ -81,7 +80,7 @@
               <p class="text-gray-600 mb-3">@{{ currentUser?.username }}</p>
               <div class="flex flex-wrap gap-2">
                 <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                  Member sejak {{ formatDate(currentUser?.created_at) }}
+                  Admin sejak {{ formatDate(currentUser?.created_at) }}
                 </span>
               </div>
             </div>
@@ -126,192 +125,6 @@
                   <p class="text-xs text-gray-600 mb-1">Username</p>
                   <p class="text-sm font-semibold text-gray-900 truncate">{{ currentUser?.username }}</p>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-              </svg>
-            </div>
-            <p class="text-3xl font-bold text-green-700">{{ userStats.totalComplaints }}</p>
-          </div>
-          <p class="text-gray-600 text-sm font-medium">Total Pengaduan</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <p class="text-3xl font-bold text-blue-700">{{ userStats.pending }}</p>
-          </div>
-          <p class="text-gray-600 text-sm font-medium">Sedang Diproses</p>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-          <div class="flex items-center justify-between mb-4">
-            <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <p class="text-3xl font-bold text-emerald-700">{{ userStats.completed }}</p>
-          </div>
-          <p class="text-gray-600 text-sm font-medium">Selesai</p>
-        </div>
-      </div>
-      <div class="mt-8 bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5">
-          <h2 class="text-xl font-bold text-white">Riwayat Pengaduan Saya</h2>
-          <p class="text-green-100 text-sm mt-1">Lihat semua pengaduan yang Anda kirimkan</p>
-        </div>
-        
-        <div v-if="loadingPengaduan" class="p-8 text-center">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-green-200 border-t-green-600"></div>
-          <p class="mt-4 text-green-700 font-medium">Memuat pengaduan...</p>
-        </div>
-
-        <div v-else-if="myPengaduan.length === 0" class="p-12 text-center">
-          <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          <p class="text-gray-500 text-lg font-medium">Belum ada pengaduan</p>
-          <router-link to="/form" class="inline-block mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-            Buat Pengaduan
-          </router-link>
-        </div>
-        
-        <div v-else class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div
-              v-for="pengaduan in myPengaduan"
-              :key="pengaduan.id"
-              @click="openDetail(pengaduan)"
-              class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all cursor-pointer overflow-hidden group border border-gray-100"
-            >
-              <div class="p-6">
-                <div class="flex items-start justify-between mb-4">
-                  <span :class="['px-3 py-1 rounded-full text-xs font-bold', getKategoriColor(pengaduan.kategori)]">
-                    {{ pengaduan.kategori }}
-                  </span>
-                  <span :class="['px-3 py-1 rounded-full text-xs font-bold', getStatusColor(pengaduan.status)]">
-                    {{ pengaduan.status.toUpperCase() }}
-                  </span>
-                </div>
-
-                <h3 class="text-xl font-bold text-gray-800 mb-4 line-clamp-2 group-hover:text-green-600 transition-colors">
-                  {{ pengaduan.judul_permasalahan }}
-                </h3>
-
-                <div class="space-y-3 text-sm text-gray-600 mb-5">
-                  <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                    </svg>
-                    <span class="font-semibold">RT {{ pengaduan.rt }} - No. {{ pengaduan.nomor_rumah }}</span>
-                  </div>
-                  <div class="flex items-center gap-3">
-                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span class="font-semibold">{{ formatDate(pengaduan.created_at) }}</span>
-                  </div>
-                </div>
-
-                <p class="text-gray-600 text-sm line-clamp-3 mb-4">
-                  {{ pengaduan.detail_permasalahan }}
-                </p>
-              </div>
-
-              <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-center gap-3 text-white font-bold text-sm group-hover:from-green-700 group-hover:to-green-800 transition-all">
-                <span>Lihat Detail</span>
-                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="showDetailModal" @click="showDetailModal = false" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-        <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
-          <div class="bg-gradient-to-r from-green-600 to-green-700 px-8 py-6 flex items-center justify-between">
-            <div>
-              <h2 class="text-2xl font-bold text-white">Detail Pengaduan</h2>
-              <p class="text-green-100 text-sm">Informasi lengkap pengaduan Anda</p>
-            </div>
-            <button @click="showDetailModal = false" class="text-white hover:bg-white/20 p-2 rounded-lg transition-all">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
-
-          <div class="p-8 space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <p class="text-sm text-green-600 font-bold mb-3">DATA PELAPOR</p>
-                <p class="text-xl font-bold text-gray-800 mb-2">{{ selectedPengaduanDetail.nama_pengirim }}</p>
-                <div class="space-y-1 text-sm text-gray-600">
-                  <p class="font-semibold">RT {{ selectedPengaduanDetail.rt }} - No. {{ selectedPengaduanDetail.nomor_rumah }}</p>
-                  <p class="font-semibold">{{ selectedPengaduanDetail.no_hp }}</p>
-                </div>
-              </div>
-
-              <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <p class="text-sm text-green-600 font-bold mb-3">KATEGORI & STATUS</p>
-                <div class="flex flex-wrap gap-3 mb-3">
-                  <span :class="['px-4 py-2 rounded-full text-xs font-bold', getKategoriColor(selectedPengaduanDetail.kategori)]">
-                    {{ selectedPengaduanDetail.kategori }}
-                  </span>
-                  <span :class="['px-4 py-2 rounded-full text-xs font-bold', getStatusColor(selectedPengaduanDetail.status)]">
-                    {{ selectedPengaduanDetail.status.toUpperCase() }}
-                  </span>
-                </div>
-                <p class="text-sm text-gray-600 font-semibold">{{ formatDate(selectedPengaduanDetail.created_at) }}</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-sm font-bold text-gray-700 mb-3 block">Judul Permasalahan</label>
-              <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                <p class="text-gray-800 font-bold text-lg">{{ selectedPengaduanDetail.judul_permasalahan }}</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-sm font-bold text-gray-700 mb-3 block">Detail Permasalahan</label>
-              <div class="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">{{ selectedPengaduanDetail.detail_permasalahan }}</p>
-              </div>
-            </div>
-
-            <div v-if="selectedPengaduanDetail.foto_1 || selectedPengaduanDetail.foto_2">
-              <label class="text-sm font-bold text-gray-700 mb-4 block">Foto Bukti</label>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div v-if="selectedPengaduanDetail.foto_1" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                  <img :src="`/${selectedPengaduanDetail.foto_1}`" alt="Foto 1" class="w-full h-72 object-cover" />
-                </div>
-                <div v-if="selectedPengaduanDetail.foto_2" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                  <img :src="`/${selectedPengaduanDetail.foto_2}`" alt="Foto 2" class="w-full h-72 object-cover" />
-                </div>
-              </div>
-            </div>
-
-            <div v-if="selectedPengaduanDetail.tanggapan" class="border-t-2 border-gray-200 pt-6 mt-6">
-              <label class="text-sm font-bold text-gray-700 mb-3 block">Tanggapan Admin</label>
-              <div class="bg-blue-50 rounded-xl p-5 border border-blue-200">
-                <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">{{ selectedPengaduanDetail.tanggapan }}</p>
               </div>
             </div>
           </div>
@@ -397,7 +210,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -408,8 +220,6 @@ import { authService } from '../services/api.js'
 import api from '../services/api.js'
 
 const loadingPengaduan = ref(false)
-const showDetailModal = ref(false)
-const selectedPengaduanDetail = ref({})
 
 const loadMyPengaduan = async () => {
   loadingPengaduan.value = true
@@ -421,32 +231,6 @@ const loadMyPengaduan = async () => {
   } finally {
     loadingPengaduan.value = false
   }
-}
-
-const openDetail = (pengaduan) => {
-  selectedPengaduanDetail.value = pengaduan
-  showDetailModal.value = true
-}
-
-const getKategoriColor = (kategori) => {
-  const colors = {
-    'Infrastruktur': 'bg-orange-100 text-orange-700',
-    'Kebersihan': 'bg-green-100 text-green-700',
-    'Keamanan': 'bg-red-100 text-red-700',
-    'Pelayanan': 'bg-blue-100 text-blue-700',
-    'Lainnya': 'bg-gray-100 text-gray-700'
-  }
-  return colors[kategori] || 'bg-gray-100 text-gray-700'
-}
-
-const getStatusColor = (status) => {
-  const colors = {
-    'diterima': 'bg-blue-100 text-blue-700',
-    'diproses': 'bg-yellow-100 text-yellow-700',
-    'selesai': 'bg-green-100 text-green-700',
-    'ditolak': 'bg-red-100 text-red-700'
-  }
-  return colors[status] || 'bg-gray-100 text-gray-700'
 }
 
 const router = useRouter()

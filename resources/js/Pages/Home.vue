@@ -118,18 +118,151 @@
           </div>
         </div>
 
-        <div v-for="(stat, index) in stats.slice(1)" :key="index + 1" class="bg-white rounded-xl md:rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-2xl cursor-pointer">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-gray-600 text-xs md:text-sm font-medium">{{ stat.label }}</p>
-              <p class="text-2xl md:text-3xl font-bold text-green-700 mt-2">{{ stat.value }}</p>
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+          <div>
+            <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Status Kependudukan</p>
+            
+            <div class="flex items-center justify-between gap-3 md:gap-4">
+              <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0">
+                <svg class="w-20 h-20 md:w-24 md:h-24 transform -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6" stroke-width="12"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#86efac" stroke-width="12" :stroke-dasharray="`${asliPercentage * 2.51} 251`" stroke-dashoffset="0" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#16a34a" stroke-width="12" :stroke-dasharray="`${domisiliPercentage * 2.51} 251`" :stroke-dashoffset="`-${asliPercentage * 2.51}`" stroke-linecap="round"/>
+                </svg>
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-xl md:text-2xl font-bold text-green-700">{{ stats[1].value }}</span>
+                </div>
+              </div>
+              
+              <div class="space-y-1.5 md:space-y-2 flex-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-600"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Domisili</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ statusKependudukanData.domisili }}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-300"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Asli</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ statusKependudukanData.asli }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="p-3 md:p-4 bg-green-100 rounded-xl">
-              <svg class="w-6 h-6 md:w-8 md:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path v-if="index === 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                <path v-if="index === 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                <path v-if="index === 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+          <div>
+            <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Distribusi Program</p>
+            
+            <div class="flex items-center justify-between gap-3 md:gap-4">
+              <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0">
+                <svg class="w-20 h-20 md:w-24 md:h-24 transform -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6" stroke-width="12"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#ef4444" stroke-width="12" 
+                    :stroke-dasharray="`${danaSosialPercentage * 2.51} 251`" 
+                    stroke-dashoffset="0" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#eab308" stroke-width="12" 
+                    :stroke-dasharray="`${bankSampahPercentage * 2.51} 251`" 
+                    :stroke-dashoffset="`-${danaSosialPercentage * 2.51}`" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#16a34a" stroke-width="12" 
+                    :stroke-dasharray="`${kebersihanPercentage * 2.51} 251`" 
+                    :stroke-dashoffset="`-${(danaSosialPercentage + bankSampahPercentage) * 2.51}`" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="12" 
+                    :stroke-dasharray="`${keamananPercentage * 2.51} 251`" 
+                    :stroke-dashoffset="`-${(danaSosialPercentage + bankSampahPercentage + kebersihanPercentage) * 2.51}`" stroke-linecap="round"/>
+                </svg>
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-xl md:text-2xl font-bold text-green-700">{{ stats[2].value }}</span>
+                </div>
+              </div>
+              
+              <div class="space-y-1 md:space-y-1.5 flex-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">D. Sosial</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ programData.danaSosial }}%</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-500"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">B. Sampah</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ programData.bankSampah }}%</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-600"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Kebersihan</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ programData.kebersihan }}%</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-blue-500"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Keamanan</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ programData.keamanan }}%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+          <div>
+            <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Status Pengaduan</p>
+            
+            <div class="flex items-center justify-between gap-3 md:gap-4">
+              <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0">
+                <svg class="w-20 h-20 md:w-24 md:h-24 transform -rotate-90" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6" stroke-width="12"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="12" 
+                    :stroke-dasharray="`${diterimaPercentage * 2.51} 251`" 
+                    stroke-dashoffset="0" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#eab308" stroke-width="12" 
+                    :stroke-dasharray="`${diprosesPercentage * 2.51} 251`" 
+                    :stroke-dashoffset="`-${diterimaPercentage * 2.51}`" stroke-linecap="round"/>
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="#16a34a" stroke-width="12" 
+                    :stroke-dasharray="`${selesaiPercentage * 2.51} 251`" 
+                    :stroke-dashoffset="`-${(diterimaPercentage + diprosesPercentage) * 2.51}`" stroke-linecap="round"/>
+                </svg>
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span class="text-xl md:text-2xl font-bold text-green-700">{{ stats[3].value }}</span>
+                </div>
+              </div>
+              
+              <div class="space-y-1.5 md:space-y-2 flex-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-blue-500"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Terkirim</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ pengaduanData.diterima }}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-500"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Diproses</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ pengaduanData.diproses }}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-600"></div>
+                  <div class="flex-1">
+                    <p class="text-[10px] md:text-xs text-gray-600">Selesai</p>
+                    <p class="text-xs md:text-sm font-bold text-gray-800">{{ pengaduanData.selesai }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -139,7 +272,12 @@
     <section class="max-w-7xl mx-auto px-4 py-8 md:py-16 mt-4 md:mt-8">
       <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Layanan Cepat</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <a v-for="(service, index) in quickServices" :key="index" :href="service.href" class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl cursor-pointer">
+        <div
+          v-for="(service, index) in quickServices" 
+          :key="index"
+          @click="handleServiceClick(service)"
+          class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl cursor-pointer transition-shadow"
+        >
           <div class="flex items-start space-x-4">
             <div :class='`p-3 rounded-lg ${service.color}`'>
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +294,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
           </div>
-        </a>
+        </div>
       </div>
     </section>
 
@@ -164,6 +302,50 @@
       <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">Visi & Misi</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="relative overflow-hidden rounded-2xl shadow-2xl mb-4 h-80 bg-gray-200">
+            <img :src="currentMainImage" alt="Pengurus RW" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            <div class="absolute bottom-6 left-6 text-white">
+              <p class="text-sm font-medium mb-1">Pengurus RW 05</p>
+              <h4 class="text-xl font-bold">{{ currentImageTitle }}</h4>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="overflow-hidden">
+              <div class="flex gap-3" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+                <div class="flex gap-3 min-w-full">
+                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="idx" @click="selectImage(idx)" class="flex-1 h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" :class="{ 'ring-4 ring-green-600': selectedImageIndex === idx }">
+                    <img :src="img.src" :alt="img.title" class="w-full h-full object-cover">
+                  </div>
+                </div>
+                
+                <div class="flex gap-3 min-w-full">
+                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="idx" @click="selectImage(idx)" class="flex-1 h-20 md:h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" :class="{ 'ring-2 md:ring-4 ring-green-600': selectedImageIndex === idx }">
+                    <img :src="img.src" :alt="img.title" class="w-full h-full object-cover">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button @click="prevSlide" :disabled="currentSlide === 0" class="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed z-10">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button @click="nextSlide" :disabled="currentSlide === 1" class="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed z-10">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+
+            <div class="flex justify-center gap-2 mt-4">
+              <button v-for="n in 2" :key="n" @click="currentSlide = n - 1" class="w-2 h-2 rounded-full" :class="currentSlide === n - 1 ? 'bg-green-600 w-8' : 'bg-gray-300'"></button>
+            </div>
+          </div>
+        </div>
+
         <div class="space-y-6">
           <div>
             <h3 class="text-2xl font-bold text-green-700 mb-4 flex items-center">
@@ -208,50 +390,6 @@
             </ul>
           </div>
         </div>
-
-        <div>
-          <div class="relative overflow-hidden rounded-2xl shadow-2xl mb-4 h-80 bg-gray-200">
-            <img :src="currentMainImage" alt="Pengurus RW" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-            <div class="absolute bottom-6 left-6 text-white">
-              <p class="text-sm font-medium mb-1">Pengurus RW 05</p>
-              <h4 class="text-xl font-bold">{{ currentImageTitle }}</h4>
-            </div>
-          </div>
-
-          <div class="relative">
-            <div class="overflow-hidden">
-              <div class="flex gap-3" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-                <div class="flex gap-3 min-w-full">
-                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="idx" @click="selectImage(idx)" class="flex-1 h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" :class="{ 'ring-4 ring-green-600': selectedImageIndex === idx }">
-                    <img :src="img.src" :alt="img.title" class="w-full h-full object-cover">
-                  </div>
-                </div>
-                
-                <div class="flex gap-3 min-w-full">
-                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="idx" @click="selectImage(idx)" class="flex-1 h-20 md:h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" :class="{ 'ring-2 md:ring-4 ring-green-600': selectedImageIndex === idx }">
-                    <img :src="img.src" :alt="img.title" class="w-full h-full object-cover">
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <button @click="prevSlide" :disabled="currentSlide === 0" class="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed z-10">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-            </button>
-            <button @click="nextSlide" :disabled="currentSlide === 1" class="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed z-10">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
-
-            <div class="flex justify-center gap-2 mt-4">
-              <button v-for="n in 2" :key="n" @click="currentSlide = n - 1" class="w-2 h-2 rounded-full" :class="currentSlide === n - 1 ? 'bg-green-600 w-8' : 'bg-gray-300'"></button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -289,14 +427,14 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm md:text-lg text-gray-600 font-medium">{{ stat.label }}</p>
-              <p class="text-3xl md:text-5xl font-bold text-green-700 mt-3 md:mt-4">{{ stat.value }}</p>
+              <p class="text-3xl md:text-5xl font-bold text-green-700 mt-3 md:mt-4">
+                {{ index === 0 ? stat.value : formatNumber(stat.value) }}
+              </p>
             </div>
-            <div class="p-4 md:p-6 bg-green-100 rounded-xl">
-              <svg class="w-8 h-8 md:w-12 md:h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path v-if="index === 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                <path v-if="index === 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-              </svg>
-            </div>
+            <svg class="w-8 h-8 md:w-12 md:h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path v-if="index === 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              <path v-if="index === 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
           </div>
         </div>
       </div>
@@ -321,7 +459,22 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Foto</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="tableData.length === 0">
+              <tr>
+                <td colspan="6" class="px-6 py-16">
+                  <div class="flex flex-col items-center justify-center text-center">
+                    <div class="w-32 h-32 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                      <svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Data Bantuan</h3>
+                    <p class="text-gray-600 mb-6 max-w-md">Data penyaluran bantuan sosial akan ditampilkan di sini</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else>
               <tr v-for="(item, index) in tableData" :key="index" class="border-b border-gray-100 hover:bg-green-50 cursor-pointer">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
@@ -469,14 +622,14 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm md:text-lg text-gray-600 font-medium">{{ stat.label }}</p>
-              <p class="text-3xl md:text-5xl font-bold text-green-700 mt-3 md:mt-4">{{ stat.value }}</p>
+              <p class="text-3xl md:text-5xl font-bold text-green-700 mt-3 md:mt-4">
+                {{ index === 0 ? stat.value : formatNumber(stat.value) }}
+              </p>
             </div>
-            <div class="p-4 md:p-6 bg-green-100 rounded-xl">
-              <svg class="w-8 h-8 md:w-12 md:h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path v-if="index === 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                <path v-if="index === 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-              </svg>
-            </div>
+            <svg class="w-8 h-8 md:w-12 md:h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path v-if="index === 0" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+              <path v-if="index === 1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
           </div>
         </div>
       </div>
@@ -501,7 +654,22 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Tersisa</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="bankSampahData.length === 0">
+              <tr>
+                <td colspan="6" class="px-6 py-16">
+                  <div class="flex flex-col items-center justify-center text-center">
+                    <div class="w-32 h-32 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                      <svg class="w-16 h-16 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Rekening</h3>
+                    <p class="text-gray-600 max-w-md">Rekening bank sampah warga akan ditampilkan di sini</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else>
               <tr v-for="(item, index) in bankSampahData" :key="index" class="border-b border-gray-100 hover:bg-green-50 cursor-pointer">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
@@ -580,7 +748,22 @@
                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Peserta Ronda</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="jadwalRondaData.length === 0">
+              <tr>
+                <td colspan="3" class="px-6 py-16">
+                  <div class="flex flex-col items-center justify-center text-center">
+                    <div class="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mb-6 animate-pulse">
+                      <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                      </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Belum Ada Jadwal</h3>
+                    <p class="text-gray-600 max-w-md">Jadwal ronda akan ditampilkan di sini</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else>
               <tr v-for="(item, index) in jadwalRondaData" :key="index" class="border-b border-gray-100 hover:bg-green-50 cursor-pointer">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
@@ -933,16 +1116,84 @@ const jadwalRondaData = ref([])
 const cleaningEvents = ref([])
 const showDeleteModal = ref(false)
 
-const handlePengaduanClick = (e) => {
-  if (!isLoggedIn.value) {
-    showDeleteModal.value = true;
-  } else {
-    router.push('/form');
+const handleServiceClick = (service) => {
+  if (service.action === 'scroll') {
+    scrollToSection(service.target)
+  } else if (service.action === 'navigate') {
+    if (!isLoggedIn.value && service.requireAuth) {
+      showDeleteModal.value = true
+    } else {
+      router.push(service.target)
+    }
   }
 }
 
-const handleMobilePengaduanClick = (e) => {
-  mobileMenuOpen.value = false;
+const statusKependudukanData = ref({
+  domisili: 1580,
+  asli: 963,
+  total: 2543
+})
+
+const programData = ref({
+  danaSosial: 35,
+  bankSampah: 28,
+  kebersihan: 22,
+  keamanan: 15,
+  total: 100
+})
+
+const pengaduanData = ref({
+  diterima: 0,
+  diproses: 0,
+  selesai: 0,
+  total: 0
+})
+
+const domisiliPercentage = computed(() => 
+  (statusKependudukanData.value.domisili / statusKependudukanData.value.total) * 100
+)
+const asliPercentage = computed(() => 
+  (statusKependudukanData.value.asli / statusKependudukanData.value.total) * 100
+)
+
+const danaSosialPercentage = computed(() => programData.value.danaSosial)
+const bankSampahPercentage = computed(() => programData.value.bankSampah)
+const kebersihanPercentage = computed(() => programData.value.kebersihan)
+const keamananPercentage = computed(() => programData.value.keamanan)
+
+const diterimaPercentage = computed(() => 
+  pengaduanData.value.total > 0 
+    ? (pengaduanData.value.diterima / pengaduanData.value.total) * 100
+    : 0
+)
+const diprosesPercentage = computed(() => 
+  pengaduanData.value.total > 0 
+    ? (pengaduanData.value.diproses / pengaduanData.value.total) * 100
+    : 0
+)
+const selesaiPercentage = computed(() => 
+  pengaduanData.value.total > 0 
+    ? (pengaduanData.value.selesai / pengaduanData.value.total) * 100
+    : 0
+)
+
+const fetchPengaduanStats = async () => {
+  try {
+    const response = await api.get('/pengaduan')
+    const allPengaduan = response.data
+    
+    pengaduanData.value = {
+      diterima: allPengaduan.filter(p => p.status === 'diterima').length,
+      diproses: allPengaduan.filter(p => p.status === 'diproses').length,
+      selesai: allPengaduan.filter(p => p.status === 'selesai').length,
+      total: allPengaduan.length
+    }
+  } catch (error) {
+    console.error('Error fetching pengaduan stats:', error)
+  }
+}
+
+const handlePengaduanClick = (e) => {
   if (!isLoggedIn.value) {
     showDeleteModal.value = true;
   } else {
@@ -989,6 +1240,12 @@ const fetchDanaSosial = async () => {
         nominal_bantuan: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.nominal_bantuan),
         foto_penyerahan: item.foto_penyerahan ? `/storage/${item.foto_penyerahan}` : null
       }))
+    
+    const totalOrang = response.data.length
+    const totalPengeluaran = response.data.reduce((sum, item) => sum + parseFloat(item.nominal_bantuan), 0)
+    
+    stats2.value[0].value = totalOrang
+    stats2.value[1].value = totalPengeluaran
   } catch (error) {
     console.error('Gagal memuat data Dana Sosial', error)
   } 
@@ -1008,6 +1265,12 @@ const fetchBankSampah = async () => {
         saldoCair: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.saldo_cair),
         saldoTersisa: 'Rp ' + new Intl.NumberFormat('id-ID').format(item.saldo_tersisa)
       }))
+    
+    const totalSampah = response.data.reduce((sum, item) => sum + parseFloat(item.total_sampah), 0)
+    const totalSaldoCair = response.data.reduce((sum, item) => sum + parseFloat(item.saldo_cair), 0)
+    
+    stats3.value[0].value = totalSampah + ' kg'
+    stats3.value[1].value = totalSaldoCair
   } catch (error) {
     console.error('Gagal memuat data Bank Sampah', error)
   }
@@ -1038,6 +1301,13 @@ const fetchKebersihan = async () => {
       no: index + 1,
       image: item.image ? `/storage/${item.image}` : 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400'
     }))
+    
+    setTimeout(() => {
+      const thisWeekIndex = sortedEvents.value.findIndex(e => e.status === 'thisweek')
+      if (thisWeekIndex !== -1) {
+        currentCleaningSlide.value = thisWeekIndex
+      }
+    }, 50)
   } catch (error) {
     console.error('Gagal memuat data Program Kebersihan', error)
   }
@@ -1097,6 +1367,10 @@ watch(laporanKeuangan, (newData) => {
   }
 }, { deep: true })
 
+watch(pengaduanData, (newData) => {
+  stats.value[3].value = newData.total
+}, { deep: true })
+
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   if (token) {
@@ -1140,10 +1414,10 @@ const formatNumber = (num) => {
 }
 
 const stats = ref([
-  { label: 'Total Penduduk', value: 2543 },
-  { label: 'Jumlah RT', value: 12 },
-  { label: 'Program Aktif', value: 8 },
-  { label: 'Pengaduan Selesai', value: 156 },
+  { label: 'Total Penduduk', value: 2543, type: 'gender' },
+  { label: 'Status Kependudukan', value: 2543, type: 'status' },
+  { label: 'Distribusi Program', value: '100%', type: 'program' },
+  { label: 'Status Pengaduan', value: 0, type: 'pengaduan' }, 
 ])
 
 const genderData = ref({
@@ -1156,13 +1430,13 @@ const malePercentage = computed(() => ((genderData.value.male / genderData.value
 const femalePercentage = computed(() => ((genderData.value.female / genderData.value.total) * 100).toFixed(1))
 
 const stats2 = ref([
-  { label: 'Total Orang Terbantu', value: 15750000 },
-  { label: 'Total Pengeluaran', value: 8420000 }
+  { label: 'Total Orang Terbantu', value: 0 },
+  { label: 'Total Pengeluaran', value: 0 }
 ])
 
 const stats3 = ref([
-  { label: 'Total Sampah Terkumpul', value: 5000 },
-  { label: 'Total Saldo Cair', value: 2750000 }
+  { label: 'Total Sampah Terkumpul', value: '0 kg' },
+  { label: 'Total Saldo Cair', value: 0 }
 ])
 
 const quickServices = ref([
@@ -1170,19 +1444,23 @@ const quickServices = ref([
     title: 'Laporan Keuangan', 
     desc: 'Transparansi keuangan RW',
     color: 'bg-blue-500',
-    href: '#keuangan'
+    action: 'scroll',
+    target: 'keuangan'
   },
   { 
     title: 'Ajukan Pengaduan', 
     desc: 'Sampaikan keluhan atau aspirasi Anda',
     color: 'bg-red-500',
-    href: '/form'
+    action: 'navigate',
+    target: '/form',
+    requireAuth: true
   },
   { 
     title: 'Program RW', 
     desc: 'Jadwal Ronda, Jadwal Bersih-Bersih Bersama, Bank Sampah, Dana Sosial',
     color: 'bg-green-500',
-    href: '#baksos'
+    action: 'scroll',
+    target: 'baksos'
   }
 ])
 
@@ -1261,10 +1539,11 @@ const prevCleaningSlide = () => {
 }
 
 const sortedEvents = computed(() => {
+  const completed = cleaningEvents.value.filter(e => e.status === 'completed')
   const thisweek = cleaningEvents.value.filter(e => e.status === 'thisweek')
   const upcoming = cleaningEvents.value.filter(e => e.status === 'upcoming')
-  const completed = cleaningEvents.value.filter(e => e.status === 'completed')
-  return [...thisweek, ...upcoming, ...completed]
+  
+  return [...completed, ...thisweek, ...upcoming]
 })
 
 onMounted(() => {
@@ -1274,6 +1553,7 @@ onMounted(() => {
   fetchBankSampah()
   fetchJadwalRonda()
   fetchKebersihan()
+  fetchPengaduanStats()
 
   window.addEventListener('storage', checkAuthStatus)
   
@@ -1282,11 +1562,6 @@ onMounted(() => {
       checkAuthStatus()
     }
   })
-
-  const thisWeekIndex = sortedEvents.value.findIndex(e => e.status === 'thisweek')
-  if (thisWeekIndex !== -1) {
-    currentCleaningSlide.value = thisWeekIndex
-  }
 })
 
 onUnmounted(() => {

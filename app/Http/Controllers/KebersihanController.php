@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\KebersihanPdfExport;
+use Illuminate\Support\Facades\Log;
 
 class KebersihanController extends Controller
 {
@@ -16,30 +17,16 @@ class KebersihanController extends Controller
         return response()->json($data);
     }
 
-    public function exportPdf()
+   public function exportPdf()
     {
         $data = Kebersihan::all()->map(function($item) {
             if ($item->image && file_exists(public_path('storage/' . $item->image))) {
-                $path = public_path('storage/' . $item->image);
-                
-                $image = imagecreatefromstring(file_get_contents($path));
-                
-                $width = imagesx($image);
-                $height = imagesy($image);
-                $newWidth = 200;
-                $newHeight = ($height / $width) * $newWidth;
-                
-                $resized = imagecreatetruecolor($newWidth, $newHeight);
-                imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                
-                ob_start();
-                imagejpeg($resized, null, 60);
-                $imageData = ob_get_clean();
-                
-                $item->image_base64 = 'data:image/jpeg;base64,' . base64_encode($imageData);
-                
-                imagedestroy($image);
-                imagedestroy($resized);
+                try {
+                    $item->image_base64 = $this->processImageForPdf(public_path('storage/' . $item->image));
+                } catch (\Exception $e) {
+                    Log::error('Error processing image: ' . $e->getMessage());
+                    $item->image_base64 = null;
+                }
             } else {
                 $item->image_base64 = null;
             }
@@ -48,6 +35,56 @@ class KebersihanController extends Controller
         
         $pdf = Pdf::loadView('exports.kebersihan-pdf', compact('data'));
         return $pdf->download('kebersihan-' . date('Y-m-d') . '.pdf');
+    }
+
+    private function processImageForPdf($path)
+    {
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        
+        if ($extension === 'png') {
+            $image = @imagecreatefrompng($path);
+        } else {
+            switch ($extension) {
+                case 'jpg':
+                case 'jpeg':
+                    $image = imagecreatefromjpeg($path);
+                    break;
+                case 'webp':
+                    $image = function_exists('imagecreatefromwebp') 
+                        ? imagecreatefromwebp($path) 
+                        : imagecreatefromstring(file_get_contents($path));
+                    break;
+                default:
+                    $image = imagecreatefromstring(file_get_contents($path));
+            }
+        }
+        
+        if (!$image) {
+            throw new \Exception('Cannot create image from file');
+        }
+        
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $newWidth = 200;
+        $newHeight = (int)(($height / $width) * $newWidth);
+        
+        $resized = imagecreatetruecolor($newWidth, $newHeight);
+        
+        if (in_array($extension, ['png', 'webp'])) {
+            $white = imagecolorallocate($resized, 255, 255, 255);
+            imagefilledrectangle($resized, 0, 0, $newWidth, $newHeight, $white);
+        }
+        
+        imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+        
+        ob_start();
+        imagejpeg($resized, null, 75);
+        $resizedData = ob_get_clean();
+        
+        imagedestroy($image);
+        imagedestroy($resized);
+        
+        return 'data:image/jpeg;base64,' . base64_encode($resizedData);
     }
 
     public function store(Request $request)

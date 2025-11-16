@@ -56,6 +56,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user/change-password', [AuthController::class, 'changePassword']);
     Route::post('/pengaduan', [PengaduanController::class, 'store']);
     Route::get('/pengaduan/my', [PengaduanController::class, 'myPengaduan']);
+    Route::get('/laporan-keuangan/export-pdf', [LaporanKeuanganController::class, 'exportPdf']);
+    Route::get('/users', [AuthController::class, 'getAllUsers']);
+    Route::post('/users', [AuthController::class, 'createUser']);
+    Route::put('/users/{id}', [AuthController::class, 'updateUser']);
+    Route::delete('/users/{id}', [AuthController::class, 'deleteUser']);
+    Route::get('/admins', [AuthController::class, 'getAllAdmins']);
+    Route::post('/admins', [AuthController::class, 'createAdmin']);
+    Route::put('/admins/{id}', [AuthController::class, 'updateAdmin']);
+    Route::delete('/admins/{id}', [AuthController::class, 'deleteAdmin']);
 });
 
 Route::get('/user', function (Request $request) {

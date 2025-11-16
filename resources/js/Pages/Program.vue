@@ -34,6 +34,9 @@
             <router-link to="/program" class="text-green-600 font-medium">Program</router-link>
             <router-link to="/keuangan" class="text-gray-700 hover:text-green-600 font-medium">Keuangan</router-link>
             <router-link to="/pengaduan" class="text-gray-700 hover:text-green-600 font-medium">Pengaduan</router-link>
+            <router-link to="/manajemen-akun" class="text-gray-700 hover:text-green-600 font-medium">
+              Manajemen Akun
+            </router-link>
             <div v-if="isLoggedIn" class="flex items-center gap-4">
               <div class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50">
                 <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
