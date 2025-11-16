@@ -1,432 +1,491 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <transition name="slide-fade">
-    <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
-        <div 
-        class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
-        :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
-        <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <p class="text-white font-medium">{{ toast.message }}</p>
-        </div>
-    </div>
-    </transition>
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
 
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 md:h-20">
-          <div class="flex items-center space-x-4">
-            <div class="h-10 w-10 md:h-12 md:w-12 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold">
-              RW
-            </div>
-            <div>
-              <h1 class="text-lg md:text-xl font-bold text-green-700">DesaPoint</h1>
-              <p class="text-xs text-gray-600">RW Sejahtera</p>
-            </div>
-          </div>
-          
-          <div class="hidden md:flex items-center space-x-6">
-            <router-link to="/homeadmin" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
-            <router-link to="/program" class="text-green-600 font-medium">Program</router-link>
-            <router-link to="/keuangan" class="text-gray-700 hover:text-green-600 font-medium">Keuangan</router-link>
-            <router-link to="/pengaduan" class="text-gray-700 hover:text-green-600 font-medium">Pengaduan</router-link>
-            <router-link to="/manajemen-akun" class="text-gray-700 hover:text-green-600 font-medium">
-              Manajemen Akun
-            </router-link>
-            <div v-if="isLoggedIn" class="flex items-center gap-4">
-              <div class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
-                  {{ currentUser?.name?.charAt(0).toUpperCase() }}
-                </div>
-                <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
-              </div>
-              <button 
-              @click="handleExport" 
-              :disabled="isExporting"
-              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
-              <svg v-if="isExporting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <span>{{ isExporting ? 'Mengexport...' : 'Export PDF' }}</span>
-            </button>
-              <button @click="handleLogout" class="px-5 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
-                Logout
-              </button>
-            </div>
-          </div>
-
-          <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
-          <div class="flex flex-col space-y-3 pt-4">
-            <router-link @click="mobileMenuOpen = false" to="/homeadmin" class="text-gray-700 font-medium py-2">Beranda</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/program" class="text-green-600 font-medium py-2">Program</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/keuangan" class="text-gray-700 font-medium py-2">Keuangan</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/pengaduan" class="text-gray-700 font-medium py-2">Pengaduan</router-link>
-            <button v-if="isLoggedIn" @click="() => { handleLogout(); mobileMenuOpen = false; }" class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">
-              Logout
-            </button>
-          </div>
+    <aside class="fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex flex-col items-center py-6 border-r border-gray-100">
+      <div class="mb-10">
+        <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
+          <img :src="`/images/logo.jpg`" alt="Logo" class="h-full w-full object-cover rounded-2xl" />
         </div>
       </div>
-    </nav>
 
-    <section class="bg-gradient-to-br from-green-600 to-green-800 py-12 md:py-16">
-      <div class="max-w-7xl mx-auto px-4">
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Kelola Program RW</h1>
-        <p class="text-green-100">Manajemen program Dana Sosial, Bank Sampah, Jadwal Ronda & Kebersihan</p>
-      </div>
-    </section>
+      <nav class="flex-1 w-full flex flex-col items-center space-y-2 px-2">
+        <router-link 
+          to="/homeadmin"
+          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+          :class="$route.path === '/homeadmin' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
+          <svg class="w-6 h-6 transition-colors" :class="$route.path === '/homeadmin' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            Beranda
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
+        </router-link>
 
-    <div class="max-w-7xl mx-auto px-4 -mt-8">
-      <div class="bg-white rounded-xl shadow-lg p-2 flex flex-wrap gap-2">
+        <router-link 
+          to="/program"
+          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+          :class="$route.path === '/program' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
+          <svg class="w-6 h-6 transition-colors" :class="$route.path === '/program' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+          </svg>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            Program
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
+        </router-link>
+
+        <router-link 
+          to="/keuangan"
+          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+          :class="$route.path === '/keuangan' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
+          <svg class="w-6 h-6 transition-colors" :class="$route.path === '/keuangan' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            Keuangan
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
+        </router-link>
+
+        <router-link 
+          to="/pengaduan"
+          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+          :class="$route.path === '/pengaduan' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
+          <svg class="w-6 h-6 transition-colors" :class="$route.path === '/pengaduan' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+          </svg>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            Pengaduan
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
+        </router-link>
+
+        <router-link 
+          to="/manajemen-akun"
+          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+          :class="$route.path === '/manajemen-akun' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
+          <svg class="w-6 h-6 transition-colors" :class="$route.path === '/manajemen-akun' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            Manajemen Akun
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
+        </router-link>
+      </nav>
+
+      <div class="w-full flex flex-col items-center space-y-2 pt-4 border-t border-gray-100 px-2">
+        <router-link 
+          to="/profileadmin"
+          class="group relative w-14 h-14 flex items-center justify-center">
+          <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold cursor-pointer hover:scale-110 transition-all duration-300 shadow-lg">
+            {{ currentUser?.name?.charAt(0).toUpperCase() }}
+          </div>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            {{ currentUser?.name }}
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
+        </router-link>
+
         <button 
-          v-for="tab in tabs" 
-          :key="tab.id"
-          @click="activeTab = tab.id"
-          class="flex-1 min-w-[150px] px-4 py-3 rounded-lg font-medium transition-all"
-          :class="activeTab === tab.id 
-            ? 'bg-green-600 text-white shadow-md' 
-            : 'text-gray-600 hover:bg-gray-100'">
-          {{ tab.label }}
+          @click="handleLogout"
+          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300 hover:bg-red-50">
+          <svg class="w-6 h-6 text-red-500 group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
+            Logout
+            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+          </div>
         </button>
       </div>
-    </div>
+    </aside>
 
-    <div class="max-w-7xl mx-auto px-4 py-8">
-      <div v-if="activeTab === 'danasosial'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
-          <div>
-            <h2 class="text-2xl font-bold text-white">Dana Sosial</h2>
-            <p class="text-green-100 text-sm">Data penerima bantuan</p>
-          </div>
-          <button @click="openCreateModal('danasosial', 'Tambah Data Dana Sosial')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="bg-gray-50 border-b-2 border-green-200">
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Penerima</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kategori</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nominal</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Foto</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
-              </tr>
-            </thead>
-            <tbody v-if="isLoading">
-                <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
-                    <td v-for="col in 7" :key="col" class="px-6 py-5">
-                        <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                    </td>
-                </tr>
-            </tbody>
-            <tbody v-else>
-              <tr v-for="(item, index) in danaSosialData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
-                <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
-                <td class="px-6 py-5">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <span class="text-green-700 font-semibold">{{ item.nama_penerima.charAt(0) }}</span>
-                    </div>
-                    <span class="text-gray-800 font-medium">{{ item.nama_penerima }}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
-                    {{ item.tanggal_penyerahan }}
-                  </span>
-                </td>
-                <td class="px-6 py-5">
-                  <span 
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-                    :class="{
-                      'bg-red-100 text-red-700': item.kategori_bantuan === 'korban_meninggal',
-                      'bg-yellow-100 text-yellow-700': item.kategori_bantuan === 'penderita_sakit',
-                      'bg-orange-100 text-orange-700': item.kategori_bantuan === 'korban_bencana'
-                    }">
-                    {{ getKategoriLabel(item.kategori_bantuan) }}
-                  </span>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="text-gray-800 font-bold">{{ item.nominal_bantuan }}</span>
-                </td>
-                <td class="px-6 py-5">
-                  <img v-if="item.foto_penyerahan" :src="item.foto_penyerahan" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:scale-110 transition-transform" @click="viewImage(item.foto_penyerahan)">
-                  <span v-else class="text-gray-400 text-sm">Tidak ada foto</span>
-                </td>
-                <td class="px-6 py-5">
-                  <div class="flex items-center gap-2">
-                    <button @click="openEditModal(item, index, 'danasosial', 'Edit Data Dana Sosial')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
-                      <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                      </svg>
-                    </button>
-                    <button @click="openDeleteModal(index, 'danasosial', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
-                      <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                      </svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="bg-gray-50 px-6 py-4 border-t">
-          <p class="text-sm text-gray-600">Menampilkan {{ danaSosialData.length }} data</p>
-        </div>
-      </div>
-
-      <div v-if="activeTab === 'banksampah'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
-          <div>
-            <h2 class="text-2xl font-bold text-white">Rekening Bank Sampah</h2>
-            <p class="text-green-100 text-sm">Data rekening warga</p>
-          </div>
-          <button @click="openCreateModal('banksampah', 'Tambah Rekening')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="bg-gray-50 border-b-2 border-green-200">
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Sampah</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Konversi</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Cair</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Tersisa</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
-              </tr>
-            </thead>
-            <tbody v-if="isLoading">
-            <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
-                <td v-for="col in 7" :key="col" class="px-6 py-5">
-                <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </td>
-            </tr>
-            </tbody>
-            <tbody v-else>
-              <tr v-for="(item, index) in bankSampahData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
-                <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
-                <td class="px-6 py-5">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
-                    </div>
-                    <span class="text-gray-800 font-medium">{{ item.nama }}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700 font-semibold">
-                    {{ item.totalSampah }}
-                  </span>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700 font-bold">
-                    {{ item.totalKonversi }}
-                  </span>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 font-bold">
-                    {{ item.saldoCair }}
-                  </span>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100 text-yellow-700 font-bold">
-                    {{ item.saldoTersisa }}
-                  </span>
-                </td>
-                <td class="px-6 py-5">
-                  <div class="flex items-center gap-2">
-                    <button @click="openEditModal(item, index, 'banksampah', 'Edit Rekening')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
-                      <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                      </svg>
-                    </button>
-                    <button @click="openDeleteModal(index, 'banksampah', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
-                      <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                      </svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="bg-gray-50 px-6 py-4 border-t">
-          <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening</p>
-        </div>
-      </div>
-
-      <div v-if="activeTab === 'ronda'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
-          <div>
-            <h2 class="text-2xl font-bold text-white">Jadwal Ronda</h2>
-            <p class="text-green-100 text-sm">Data jadwal ronda warga</p>
-          </div>
-          <button @click="openCreateModal('ronda', 'Tambah Jadwal Ronda')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="bg-gray-50 border-b-2 border-green-200">
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Peserta Ronda</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
-              </tr>
-            </thead>
-            <tbody v-if="isLoading">
-            <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
-                <td v-for="col in 4" :key="col" class="px-6 py-5">
-                <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
-                </td>
-            </tr>
-            </tbody>
-            <tbody v-else>
-              <tr v-for="(item, index) in jadwalRondaData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
-                <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
-                <td class="px-6 py-5">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                      <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                      </svg>
-                    </div>
-                    <span class="text-gray-800 font-medium">{{ item.tanggal }}</span>
-                  </div>
-                </td>
-                <td class="px-6 py-5">
-                  <span class="text-gray-600">{{ item.peserta_ronda }}</span>
-                </td>
-                <td class="px-6 py-5">
-                  <div class="flex items-center gap-2">
-                    <button @click="openEditModal(item, index, 'ronda', 'Edit Jadwal')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
-                      <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                      </svg>
-                    </button>
-                    <button @click="openDeleteModal(index, 'ronda', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
-                      <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                      </svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="bg-gray-50 px-6 py-4 border-t">
-          <p class="text-sm text-gray-600">Menampilkan {{ jadwalRondaData.length }} jadwal</p>
-        </div>
-      </div>
-
-      <div v-if="activeTab === 'cleaning'" class="space-y-6">
-        <div class="bg-white rounded-2xl shadow-xl p-6">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h2 class="text-2xl font-bold text-gray-800">Program Kebersihan</h2>
-              <p class="text-gray-600 text-sm">Kelola jadwal gotong royong</p>
+    <div class="flex-1 ml-20">
+      <transition name="slide-fade">
+        <div v-if="toast.show" class="fixed top-6 right-6 z-[100] max-w-md animate-slideIn">
+          <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
+               :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+              <svg v-if="toast.type === 'success'" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <svg v-else class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
             </div>
-            <button @click="openCreateModal('cleaning', 'Tambah Program Kebersihan')" class="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <p class="text-white font-semibold">{{ toast.message }}</p>
+          </div>
+        </div>
+      </transition>
+
+      <section class="relative bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-16 md:py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-white/10"></div>
+        <div class="max-w-7xl mx-auto px-6 relative">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 bg-white/20 rounded-2xl backdrop-blur-sm flex items-center justify-center">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+              </svg>
+            </div>
+            <span class="text-green-200 font-medium">Admin Panel</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl font-black text-white mb-3 tracking-tight">Kelola Program RW</h1>
+          <p class="text-green-100 text-lg">Manajemen program Dana Sosial, Bank Sampah, Jadwal Ronda & Kebersihan</p>
+          
+          <button 
+            @click="handleExport" 
+            :disabled="isExporting"
+            class="mt-6 px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 flex items-center gap-2 border border-white/30">
+            <svg v-if="isExporting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>{{ isExporting ? 'Mengexport...' : 'Export PDF' }}</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="max-w-7xl mx-auto px-6 -mt-8 relative z-10">
+        <div class="bg-white rounded-2xl shadow-xl p-3 flex flex-wrap gap-3">
+          <button 
+            v-for="tab in tabs" 
+            :key="tab.id"
+            @click="activeTab = tab.id"
+            class="flex-1 min-w-[200px] px-4 py-3 rounded-lg font-medium transition-all"
+            :class="activeTab === tab.id 
+              ? 'bg-green-600 text-white shadow-md' 
+              : 'text-gray-600 hover:bg-gray-100'">
+            {{ tab.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-6 py-8">
+        <div v-if="activeTab === 'danasosial'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Dana Sosial</h2>
+              <p class="text-green-100 text-sm">Data penerima bantuan</p>
+            </div>
+            <button @click="openCreateModal('danasosial', 'Tambah Data Dana Sosial')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
               </svg>
-              Tambah Program
             </button>
           </div>
 
-          <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="n in 3" :key="n" class="border border-gray-200 rounded-xl overflow-hidden">
-              <div class="h-48 bg-gray-200 animate-pulse"></div>
-              <div class="p-5 space-y-3">
-                <div class="h-6 bg-gray-200 rounded animate-pulse"></div>
-                <div class="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
-                <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
-              </div>
-            </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50 border-b-2 border-green-200">
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Penerima</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kategori</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nominal</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Foto</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
+                </tr>
+              </thead>
+              <tbody v-if="isLoading">
+                <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
+                  <td v-for="col in 7" :key="col" class="px-6 py-5">
+                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else>
+                <tr v-for="(item, index) in danaSosialData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
+                  <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <span class="text-green-700 font-semibold">{{ item.nama_penerima.charAt(0) }}</span>
+                      </div>
+                      <span class="text-gray-800 font-medium">{{ item.nama_penerima }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+                      {{ item.tanggal_penyerahan }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span 
+                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                      :class="{
+                        'bg-red-100 text-red-700': item.kategori_bantuan === 'korban_meninggal',
+                        'bg-yellow-100 text-yellow-700': item.kategori_bantuan === 'penderita_sakit',
+                        'bg-orange-100 text-orange-700': item.kategori_bantuan === 'korban_bencana'
+                      }">
+                      {{ getKategoriLabel(item.kategori_bantuan) }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="text-gray-800 font-bold">{{ item.nominal_bantuan }}</span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <img v-if="item.foto_penyerahan" :src="item.foto_penyerahan" class="w-16 h-16 rounded-lg object-cover cursor-pointer hover:scale-110 transition-transform" @click="viewImage(item.foto_penyerahan)">
+                    <span v-else class="text-gray-400 text-sm">Tidak ada foto</span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-2">
+                      <button @click="openEditModal(item, index, 'danasosial', 'Edit Data Dana Sosial')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                      </button>
+                      <button @click="openDeleteModal(index, 'danasosial', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="(event, index) in cleaningEvents" :key="index" class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <div class="relative h-48">
-                <img :src="event.image" :alt="event.title" class="w-full h-full object-cover">
-                <div class="absolute top-3 right-3">
-                  <span 
-                    class="px-3 py-1 rounded-full text-xs font-bold text-white"
-                    :class="{
-                      'bg-green-500': event.status === 'completed',
-                      'bg-red-500 animate-pulse': event.status === 'thisweek',
-                      'bg-blue-500': event.status === 'upcoming'
-                    }">
-                    {{ event.status === 'completed' ? 'Selesai' : event.status === 'thisweek' ? 'Minggu Ini' : 'Akan Datang' }}
-                  </span>
+          <div class="bg-gray-50 px-6 py-4 border-t">
+            <p class="text-sm text-gray-600">Menampilkan {{ danaSosialData.length }} data</p>
+          </div>
+        </div>
+
+        <div v-if="activeTab === 'banksampah'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Rekening Bank Sampah</h2>
+              <p class="text-green-100 text-sm">Data rekening warga</p>
+            </div>
+            <button @click="openCreateModal('banksampah', 'Tambah Rekening')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50 border-b-2 border-green-200">
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Sampah</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Total Konversi</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Cair</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo Tersisa</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
+                </tr>
+              </thead>
+              <tbody v-if="isLoading">
+                <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
+                  <td v-for="col in 7" :key="col" class="px-6 py-5">
+                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else>
+                <tr v-for="(item, index) in bankSampahData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
+                  <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <span class="text-green-700 font-semibold">{{ item.nama.charAt(0) }}</span>
+                      </div>
+                      <span class="text-gray-800 font-medium">{{ item.nama }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-emerald-100 text-emerald-700 font-semibold">
+                      {{ item.totalSampah }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700 font-bold">
+                      {{ item.totalKonversi }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700 font-bold">
+                      {{ item.saldoCair }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-yellow-100text-yellow-700 font-bold">
+                      {{ item.saldoTersisa }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-2">
+                      <button @click="openEditModal(item, index, 'banksampah', 'Edit Rekening')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                      </button>
+                      <button @click="openDeleteModal(index, 'banksampah', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-gray-50 px-6 py-4 border-t">
+            <p class="text-sm text-gray-600">Menampilkan {{ bankSampahData.length }} rekening</p>
+          </div>
+        </div>
+
+        <div v-if="activeTab === 'ronda'" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 flex justify-between items-center">
+            <div>
+              <h2 class="text-2xl font-bold text-white">Jadwal Ronda</h2>
+              <p class="text-green-100 text-sm">Data jadwal ronda warga</p>
+            </div>
+            <button @click="openCreateModal('ronda', 'Tambah Jadwal Ronda')" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50 border-b-2 border-green-200">
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Peserta Ronda</th>
+                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
+                </tr>
+              </thead>
+              <tbody v-if="isLoading">
+                <tr v-for="n in 5" :key="n" class="border-b border-gray-100">
+                  <td v-for="col in 4" :key="col" class="px-6 py-5">
+                    <div class="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody v-else>
+                <tr v-for="(item, index) in jadwalRondaData" :key="index" class="border-b border-gray-100 hover:bg-green-50 transition-colors">
+                  <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                      </div>
+                      <span class="text-gray-800 font-medium">{{ item.tanggal }}</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-5">
+                    <span class="text-gray-600">{{ item.peserta_ronda }}</span>
+                  </td>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-2">
+                      <button @click="openEditModal(item, index, 'ronda', 'Edit Jadwal')" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                      </button>
+                      <button @click="openDeleteModal(index, 'ronda', item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-gray-50 px-6 py-4 border-t">
+            <p class="text-sm text-gray-600">Menampilkan {{ jadwalRondaData.length }} jadwal</p>
+          </div>
+        </div>
+
+        <div v-if="activeTab === 'cleaning'" class="space-y-6">
+          <div class="bg-white rounded-2xl shadow-xl p-6">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h2 class="text-2xl font-bold text-gray-800">Program Kebersihan</h2>
+                <p class="text-gray-600 text-sm">Kelola jadwal gotong royong</p>
+              </div>
+              <button @click="openCreateModal('cleaning', 'Tambah Program Kebersihan')" class="px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Tambah Program
+              </button>
+            </div>
+
+            <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="n in 3" :key="n" class="border border-gray-200 rounded-xl overflow-hidden">
+                <div class="h-48 bg-gray-200 animate-pulse"></div>
+                <div class="p-5 space-y-3">
+                  <div class="h-6 bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                  <div class="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
                 </div>
               </div>
-              
-              <div class="p-5">
-                <h3 class="text-xl font-bold text-gray-800 mb-2">{{ event.title }}</h3>
-                <div class="space-y-2 text-sm text-gray-600">
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span>{{ event.date }}</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span>{{ event.time }}</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    </svg>
-                    <span>{{ event.location }}</span>
+            </div>
+
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="(event, index) in cleaningEvents" :key="index" class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="relative h-48">
+                  <img :src="event.image" :alt="event.title" class="w-full h-full object-cover">
+                  <div class="absolute top-3 right-3">
+                    <span 
+                      class="px-3 py-1 rounded-full text-xs font-bold text-white"
+                      :class="{
+                        'bg-green-500': event.status === 'completed',
+                        'bg-red-500 animate-pulse': event.status === 'thisweek',
+                        'bg-blue-500': event.status === 'upcoming'
+                      }">
+                      {{ event.status === 'completed' ? 'Selesai' : event.status === 'thisweek' ? 'Minggu Ini' : 'Akan Datang' }}
+                    </span>
                   </div>
                 </div>
+                
+                <div class="p-5">
+                  <h3 class="text-xl font-bold text-gray-800 mb-2">{{ event.title }}</h3>
+                  <div class="space-y-2 text-sm text-gray-600">
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                      <span>{{ event.date }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span>{{ event.time }}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                      </svg>
+                      <span>{{ event.location }}</span>
+                    </div>
+                  </div>
 
-                <div class="flex gap-2 mt-4 pt-4 border-t">
-                  <button @click="openEditModal(event, index, 'cleaning', 'Edit Program')" class="flex-1 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
-                    Edit
-                  </button>
-                  <button @click="openDeleteModal(index, 'cleaning', event)" class="flex-1 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium">
-                    Hapus
-                  </button>
+                  <div class="flex gap-2 mt-4 pt-4 border-t">
+                    <button @click="openEditModal(event, index, 'cleaning', 'Edit Program')" class="flex-1 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
+                      Edit
+                    </button>
+                    <button @click="openDeleteModal(index, 'cleaning', event)" class="flex-1 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium">
+                      Hapus
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -582,8 +641,8 @@
             :disabled="isSaving"
             class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
             <svg v-if="isSaving" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             {{ isSaving ? 'Menyimpan...' : (formMode === 'create' ? 'Tambah' : 'Simpan') }}
           </button>
@@ -626,8 +685,8 @@
             :disabled="isDeleting"
             class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2">
             <svg v-if="isDeleting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             {{ isDeleting ? 'Menghapus...' : 'Hapus' }}
           </button>
@@ -657,7 +716,6 @@ import api from '../services/api.js'
 const router = useRouter()
 const isLoggedIn = ref(false)
 const currentUser = ref(null)
-const mobileMenuOpen = ref(false)
 const isLoading = ref(false)
 const isSaving = ref(false)
 const isDeleting = ref(false)
@@ -951,7 +1009,7 @@ const removeCleaningImage = () => {
   }
 }
 
-const openCreateModal = (tableType,title) => {
+const openCreateModal = (tableType, title) => {
   currentTable.value = tableType
   formMode.value = 'create'
   formTitle.value = title
@@ -966,7 +1024,7 @@ const openCreateModal = (tableType,title) => {
       imagePreview: null 
     }
   } else if (tableType === 'banksampah') {
-    bankSampahForm.value = { nama: '', total_sampah: 0, total_uang: 0 }
+    bankSampahForm.value = { nama: '', total_sampah: 0, total_konversi: 0, saldo_cair: 0, saldo_tersisa: 0 }
   } else if (tableType === 'ronda') {
     jadwalRondaForm.value = { tanggal: '', peserta_ronda: '' }
   } else if (tableType === 'cleaning') {
@@ -1121,7 +1179,7 @@ const saveData = async () => {
       await fetchDanaSosial()
       showToast('Data Dana Sosial berhasil disimpan', 'success')
     } 
-      else if (currentTable.value === 'banksampah') {
+    else if (currentTable.value === 'banksampah') {
       const payload = {
         nama: bankSampahForm.value.nama,
         total_sampah: bankSampahForm.value.total_sampah,
@@ -1231,7 +1289,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 * {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -1268,5 +1326,12 @@ onMounted(() => {
 .slide-fade-leave-to {
   transform: translateX(100%);
   opacity: 0;
+}
+
+.bg-grid-white\/10 {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 </style>

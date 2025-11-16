@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: '/manajemen-akun',
       name: 'ManajemenAkun',
-      component: () => import('./Pages/ManajemenAkun.vue')
+      component: Manajemenakun, meta: {requiresAuth: true}
   }
   ]
 })
