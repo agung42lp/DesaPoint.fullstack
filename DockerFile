@@ -1,0 +1,35 @@
+# Use PHP 8.2 FPM base image
+FROM php:8.2-fpm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git curl zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip gd
+
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy application files
+COPY . .
+
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Generate key (if not exists)
+RUN php artisan key:generate --force
+
+# Create storage & cache symbolic links
+RUN php artisan storage:link || true
+
+# Clear caches
+RUN php artisan config:clear
+RUN php artisan route:clear
+RUN php artisan view:clear
+
+# Expose PHP-FPM port
+EXPOSE 9000
+
+CMD ["php-fpm"]
