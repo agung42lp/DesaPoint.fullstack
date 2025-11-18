@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 md:h-20">
           <div class="flex items-center space-x-4">
-             <div class="h-10 w-10 md:h-12 md:w-12 rounded-lg flex items-center justify-center overflow-hidden">
+            <div class="h-10 w-10 md:h-12 md:w-12 rounded-lg flex items-center justify-center overflow-hidden">
               <img :src="`/images/logo.jpg`" alt="Logo" class="h-full w-full object-cover" />
             </div>
             <div>
@@ -66,13 +66,27 @@
       </div>
     </nav>
 
-    <section class="relative h-[350px] md:h-[500px] bg-gradient-to-br from-green-600 to-green-800">
-      <div class="relative max-w-7xl mx-auto px-4 h-full flex items-center">
+    <section class="relative h-[350px] md:h-[500px] bg-gradient-to-br from-green-600 to-green-800 overflow-hidden">
+      <div 
+        class="absolute inset-0 bg-cover bg-center"
+        :style="{ 
+          backgroundImage: 'url(/images/banner.jpg)',
+          transform: `translateY(${scrollY * 0.5}px)`
+        }"
+      ></div>
+      <div class="absolute inset-0 bg-black/40"></div>
+      
+      <div class="relative max-w-7xl mx-auto px-4 h-full flex items-center z-10">
         <div class="text-white">
           <h1 class="text-3xl md:text-5xl font-extrabold mb-3 md:mb-4">Selamat Datang di RW 12</h1>
           <p class="text-base md:text-xl mb-6 md:mb-8 text-green-100">Bersama Membangun Lingkungan yang Harmonis dan Sejahtera</p>
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <router-link to="/form" class="px-6 py-3 bg-white text-green-700 rounded-lg font-bold hover:bg-green-50 shadow-lg text-center">Ajukan Pengaduan</router-link>
+            <button 
+              @click="handlePengaduanClick"
+              class="px-6 py-3 bg-white text-green-700 rounded-lg font-bold hover:bg-green-50 shadow-lg text-center"
+            >
+              Ajukan Pengaduan
+            </button>
             <a href="#tentang" @click.prevent="scrollToSection('tentang')" class="px-6 py-3 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800 border-2 border-white/50 hover:border-white text-center">Tentang Kami</a>
           </div>
         </div>
@@ -157,7 +171,7 @@
 
         <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
           <div>
-            <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Distribusi Program</p>
+            <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Distribusi Keuangan</p>
             
             <div class="flex items-center justify-between gap-3 md:gap-4">
               <div class="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0">
@@ -314,15 +328,21 @@
 
           <div class="relative">
             <div class="overflow-hidden">
-              <div class="flex gap-3" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+              <div class="flex gap-3 transition-transform duration-500" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
                 <div class="flex gap-3 min-w-full">
-                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="idx" @click="selectImage(idx)" class="flex-1 h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" :class="{ 'ring-4 ring-green-600': selectedImageIndex === idx }">
+                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="`slide1-${idx}`" 
+                      @click="selectImage(idx)" 
+                      class="flex-1 h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" 
+                      :class="{ 'ring-4 ring-green-600': selectedImageIndex === idx }">
                     <img :src="img.src" :alt="img.title" class="w-full h-full object-cover">
                   </div>
                 </div>
                 
                 <div class="flex gap-3 min-w-full">
-                  <div v-for="(img, idx) in galleryImages.slice(0, 4)" :key="idx" @click="selectImage(idx)" class="flex-1 h-20 md:h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" :class="{ 'ring-2 md:ring-4 ring-green-600': selectedImageIndex === idx }">
+                  <div v-for="(img, idx) in galleryImages.slice(4, 8)" :key="`slide2-${idx}`" 
+                      @click="selectImage(idx + 4)" 
+                      class="flex-1 h-24 rounded-lg overflow-hidden cursor-pointer shadow-lg" 
+                      :class="{ 'ring-4 ring-green-600': selectedImageIndex === idx + 4 }">
                     <img :src="img.src" :alt="img.title" class="w-full h-full object-cover">
                   </div>
                 </div>
@@ -353,7 +373,7 @@
               Visi
             </h3>
             <p class="text-gray-700 leading-relaxed text-lg">
-              Mewujudkan RW 05 Si Doi sebagai lingkungan yang harmonis, sejahtera, dan berdaya saing dengan mengedepankan gotong royong dan transparansi dalam setiap aspek kehidupan bermasyarakat.
+              Mewujudkan RW 12 sebagai lingkungan yang harmonis, sejahtera, dan berdaya saing dengan mengedepankan gotong royong dan transparansi dalam setiap aspek kehidupan bermasyarakat.
             </p>
           </div>
           
@@ -395,27 +415,45 @@
 
     <section class="bg-white py-8 md:py-16">
       <div class="max-w-7xl mx-auto px-4">
-        <div class="flex justify-between items-center mb-6 md:mb-8">
-          <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Berita & Pengumuman</h2>
-          <a href="/berita" class="text-green-600 hover:text-green-700 font-medium flex items-center">
-            <span>Lihat Semua</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-          </a>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Dokumentasi Kegiatan</h2>
+
+        <div class="relative overflow-hidden">
+          <div class="flex transition-transform duration-700 ease-in-out" 
+              :style="{ transform: `translateX(-${currentNewsSlide * 100}%)` }">
+            <div class="min-w-full grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div v-for="i in 4" :key="`news1-${i}`" class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-xl h-48 md:h-64 bg-gray-200 shadow-lg">
+                  <img :src="allNewsImages[i-1].image" :alt="allNewsImages[i-1].title" 
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <h3 class="absolute bottom-4 left-4 right-4 text-white font-bold text-sm md:text-base">
+                    {{ allNewsImages[i-1].title }}
+                  </h3>
+                </div>
+              </div>
+            </div>
+            
+            <div class="min-w-full grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div v-for="i in 4" :key="`news2-${i}`" class="group cursor-pointer">
+                <div class="relative overflow-hidden rounded-xl h-48 md:h-64 bg-gray-200 shadow-lg">
+                  <img :src="allNewsImages[i+3].image" :alt="allNewsImages[i+3].title" 
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <h3 class="absolute bottom-4 left-4 right-4 text-white font-bold text-sm md:text-base">
+                    {{ allNewsImages[i+3].title }}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div v-for="(news, index) in latestNews" :key="news.id" class="cursor-pointer">
-            <div class="relative overflow-hidden rounded-xl mb-4 h-48 bg-gray-200 shadow-lg">
-              <img :src="news.image" :alt="news.title" class="w-full h-full object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-              <div class="absolute top-4 left-4 px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full">{{ news.category }}</div>
-            </div>
-            <p class="text-gray-500 text-sm mb-2">{{ news.date }}</p>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">{{ news.title }}</h3>
-            <p class="text-gray-600 text-sm">{{ news.excerpt }}</p>
-          </div>
+        <div class="flex justify-center gap-2 mt-6">
+          <button v-for="n in 2" :key="n" 
+                  @click="currentNewsSlide = n - 1"
+                  class="w-2 h-2 rounded-full transition-all" 
+                  :class="currentNewsSlide === n - 1 ? 'bg-green-600 w-8' : 'bg-gray-300'">
+          </button>
         </div>
       </div>
     </section>
@@ -639,7 +677,8 @@
       <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
           <h2 class="text-2xl font-bold text-white">Rekening Bank Sampah</h2>
-          <p class="text-green-100 mt-1">Data rekening bank sampah warga</p>
+          <p class="text-green-100 mt-1">1 kg sampah seharga Rp 3.000 (pengantaran sampah
+            dan penarikan uang dilakukan secara offline).</p>
         </div>
 
         <div class="hidden md:block overflow-x-auto">
@@ -736,7 +775,7 @@
       <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
           <h2 class="text-2xl font-bold text-white">Jadwal Ronda</h2>
-          <p class="text-green-100 mt-1">Data jadwal ronda Warga</p>
+          <p class="text-green-100 mt-1">Ronda dilakukan mulai dari jam 21.00 sampai jam 04.00</p>
         </div>
 
         <div class="hidden md:block overflow-x-auto">
@@ -764,16 +803,28 @@
               </tr>
             </tbody>
             <tbody v-else>
-              <tr v-for="(item, index) in jadwalRondaData" :key="index" class="border-b border-gray-100 hover:bg-green-50 cursor-pointer">
+              <tr v-for="(item, index) in jadwalRondaData" :key="index" 
+                  class="border-b border-gray-100 hover:bg-green-50 cursor-pointer"
+                  :class="{ 'bg-red-50': item.isToday }">
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
                   <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                      <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                        :class="item.isToday ? 'bg-red-500' : 'bg-green-100'">
+                      <svg class="w-5 h-5" :class="item.isToday ? 'text-white' : 'text-green-700'" 
+                          fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                       </svg>
                     </div>
-                    <span class="text-gray-800 font-medium">{{ item.tanggal }}</span>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-gray-800 font-medium">{{ item.tanggal }}</span>
+                        <span v-if="item.isToday" 
+                          class="px-2 py-0.5 bg-red-600 text-white text-xs font-bold rounded-full">
+                          Hari Ini
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </td>
                 <td class="px-6 py-5">
@@ -849,17 +900,17 @@
             <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3 md:p-4">
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-blue-600"></div>
-                <p class="text-xs md:text-sm text-gray-600">Perumahan</p>
+                <p class="text-xs md:text-sm text-gray-600">Dana Pemerintah</p>
               </div>
-              <p class="text-lg md:text-xl font-bold text-blue-700">{{ formatNumber(keuanganData.perumahan) }}</p>
+              <p class="text-lg md:text-xl font-bold text-blue-700">{{ formatNumber(keuanganData.danaPemerintah) }}</p>
             </div>
             
             <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3 md:p-4">
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-purple-600"></div>
-                <p class="text-xs md:text-sm text-gray-600">Donasi</p>
+                <p class="text-xs md:text-sm text-gray-600">CSR</p>
               </div>
-              <p class="text-lg md:text-xl font-bold text-purple-700">{{ formatNumber(keuanganData.donasi) }}</p>
+              <p class="text-lg md:text-xl font-bold text-purple-700">{{ formatNumber(keuanganData.csr) }}</p>
             </div>
             
             <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-3 md:p-4">
@@ -897,15 +948,15 @@
                 <div class="w-2 h-2 rounded-full bg-red-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Dana Sosial</p>
               </div>
-              <p class="text-lg md:text-xl font-bold text-red-700">{{ formatNumber(keuanganData.baksos) }}</p>
+              <p class="text-lg md:text-xl font-bold text-red-700">{{ formatNumber(keuanganData.dansos) }}</p>
             </div>
             
             <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-3 md:p-4">
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-orange-600"></div>
-                <p class="text-xs md:text-sm text-gray-600">Kerja Bakti</p>
+                <p class="text-xs md:text-sm text-gray-600">Program Kebersihan</p>
               </div>
-              <p class="text-lg md:text-xl font-bold text-orange-700">{{ formatNumber(keuanganData.kerjaBakti) }}</p>
+              <p class="text-lg md:text-xl font-bold text-orange-700">{{ formatNumber(keuanganData.programKebersihan) }}</p>
             </div>
             
             <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-3 md:p-4">
@@ -1116,6 +1167,26 @@ const jadwalRondaData = ref([])
 const cleaningEvents = ref([])
 const showDeleteModal = ref(false)
 
+const currentNewsSlide = ref(0)
+let newsInterval = null
+
+const allNewsImages = ref([
+  { title: 'Gotong Royong Bersih Lingkungan', image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400' },
+  { title: 'Bantuan Sosial untuk Keluarga', image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400' },
+  { title: 'Jadwal Ronda Bulan November', image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400' },
+  { title: 'Kerja Bakti Lingkungan', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400' },
+  { title: 'Pembagian Sembako', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400' },
+  { title: 'Rapat Koordinasi RW', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400' },
+  { title: 'Posyandu Balita', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400' },
+  { title: 'Bank Sampah Warga', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400' }
+])
+
+const scrollY = ref(0)
+
+const handleScroll = () => {
+  scrollY.value = window.scrollY
+}
+
 const handleServiceClick = (service) => {
   if (service.action === 'scroll') {
     scrollToSection(service.target)
@@ -1129,8 +1200,8 @@ const handleServiceClick = (service) => {
 }
 
 const statusKependudukanData = ref({
-  domisili: 1580,
-  asli: 963,
+  asli: 1580,
+  domisili: 963,
   total: 2543
 })
 
@@ -1279,15 +1350,28 @@ const fetchBankSampah = async () => {
 const fetchJadwalRonda = async () => {
   try {
     const response = await jadwalRondaAPI.getAll()
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+    
     jadwalRondaData.value = response.data
-      .sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal))
+      .sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) // Urut lama ke baru
       .slice(0, 10)
-      .map((item, index) => ({
-        id: item.id,
-        no: index + 1,
-        tanggal: new Date(item.tanggal).toLocaleDateString('id-ID'),
-        peserta_ronda: item.peserta_ronda
-      }))
+      .map((item, index) => {
+        const itemDate = new Date(item.tanggal)
+        itemDate.setHours(0, 0, 0, 0)
+        
+        const dayName = days[itemDate.getDay()]
+        
+        return {
+          id: item.id,
+          no: index + 1,
+          tanggal: `${dayName}, ${itemDate.toLocaleDateString('id-ID')}`,
+          peserta_ronda: item.peserta_ronda,
+          isToday: itemDate.getTime() === today.getTime() // Cek hari ini
+        }
+      })
   } catch (error) {
     console.error('Error fetching jadwal ronda:', error)
   }
@@ -1336,28 +1420,28 @@ const keuanganData = ref({
   pemasukan: 0,
   pengeluaran: 0,
   iuran: 0,
-  perumahan: 0,
-  donasi: 0,
+  danaPemerintah: 0,
+  csr: 0,
   bankSampah: 0,
-  baksos: 0,
-  kerjaBakti: 0,
+  dansos: 0,
+  programKebersihan: 0,
   bankSampahOut: 0,
   lainLain: 0
 })
 
-const updateKeuanganData = () => {
+const updateKeuanganData = () => { //cek ini nanti 
   keuanganData.value.pemasukan = laporanKeuangan.value.reduce((sum, item) => sum + item.debit, 0)
   keuanganData.value.pengeluaran = laporanKeuangan.value.reduce((sum, item) => sum + item.kredit, 0)
   keuanganData.value.iuran = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('iuran')).reduce((sum, item) => sum + item.debit, 0)
-  keuanganData.value.perumahan = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('perumahan')).reduce((sum, item) => sum + item.debit, 0)
-  keuanganData.value.donasi = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('donasi')).reduce((sum, item) => sum + item.debit, 0)
+  keuanganData.value.danaPemerintah = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('dana pemerintah')).reduce((sum, item) => sum + item.debit, 0)
+  keuanganData.value.csr = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('csr')).reduce((sum, item) => sum + item.debit, 0)
   keuanganData.value.bankSampah = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bank sampah') && item.debit > 0).reduce((sum, item) => sum + item.debit, 0)
-  keuanganData.value.baksos = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bakti sosial') || item.keterangan.toLowerCase().includes('baksos')).reduce((sum, item) => sum + item.kredit, 0)
-  keuanganData.value.kerjaBakti = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('kerja bakti') || item.keterangan.toLowerCase().includes('gotong royong')).reduce((sum, item) => sum + item.kredit, 0)
+  keuanganData.value.dansos = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('dana sosial') || item.keterangan.toLowerCase().includes('dansos')).reduce((sum, item) => sum + item.kredit, 0)
+  keuanganData.value.programKebersihan = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('program kebersihan') || item.keterangan.toLowerCase().includes('gotong royong')).reduce((sum, item) => sum + item.kredit, 0)
   keuanganData.value.bankSampahOut = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bank sampah') && item.kredit > 0).reduce((sum, item) => sum + item.kredit, 0)
   keuanganData.value.lainLain = laporanKeuangan.value.filter(item => {
     const ket = item.keterangan.toLowerCase()
-    return item.kredit > 0 && !ket.includes('bakti sosial') && !ket.includes('baksos') && !ket.includes('kerja bakti') && !ket.includes('gotong royong') && !ket.includes('bank sampah')
+    return item.kredit > 0 && !ket.includes('dana sosial') && !ket.includes('dansos') && !ket.includes('kerja bakti') && !ket.includes('gotong royong') && !ket.includes('bank sampah')
   }).reduce((sum, item) => sum + item.kredit, 0)
 }
 
@@ -1556,17 +1640,24 @@ onMounted(() => {
   fetchPengaduanStats()
 
   window.addEventListener('storage', checkAuthStatus)
+  window.addEventListener('scroll', handleScroll)
   
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
       checkAuthStatus()
     }
   })
+
+  newsInterval = setInterval(() => {
+    currentNewsSlide.value = (currentNewsSlide.value + 1) % 2
+  }, 5000)
 })
 
 onUnmounted(() => {
   window.removeEventListener('storage', checkAuthStatus)
+  window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('visibilitychange', checkAuthStatus)
+  if (newsInterval) clearInterval(newsInterval)
 })
 </script>
 

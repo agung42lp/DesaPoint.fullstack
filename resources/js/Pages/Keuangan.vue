@@ -184,11 +184,11 @@
                   <td class="px-6 py-5 text-gray-800">{{ item.tanggal }}</td>
                   <td class="px-6 py-5 text-gray-800">{{ item.keterangan }}</td>
                   <td class="px-6 py-5">
-                    <span v-if="item.debit > 0" class="text-red-700 font-semibold">Rp {{ formatNumber(item.debit) }}</span>
+                    <span v-if="item.debit > 0" class="text-green-700 font-semibold">Rp {{ formatNumber(item.debit) }}</span>
                     <span v-else class="text-gray-400">-</span>
                   </td>
                   <td class="px-6 py-5">
-                    <span v-if="item.kredit > 0" class="text-green-700 font-semibold">Rp {{ formatNumber(item.kredit) }}</span>
+                    <span v-if="item.kredit > 0" class="text-red-700 font-semibold">Rp {{ formatNumber(item.kredit) }}</span>
                     <span v-else class="text-gray-400">-</span>
                   </td>
                   <td class="px-6 py-5">
@@ -222,12 +222,12 @@
               <div class="grid grid-cols-2 gap-2 text-sm mb-3">
                 <div>
                   <span class="text-gray-600">Debit:</span>
-                  <span v-if="item.debit > 0" class="text-red-700 font-semibold ml-2">Rp {{ formatNumber(item.debit) }}</span>
+                  <span v-if="item.debit > 0" class="text-green-700 font-semibold ml-2">Rp {{ formatNumber(item.debit) }}</span>
                   <span v-else class="text-gray-400 ml-2">-</span>
                 </div>
                 <div>
                   <span class="text-gray-600">Kredit:</span>
-                  <span v-if="item.kredit > 0" class="text-green-700 font-semibold ml-2">Rp {{ formatNumber(item.kredit) }}</span>
+                  <span v-if="item.kredit > 0" class="text-red-700 font-semibold ml-2">Rp {{ formatNumber(item.kredit) }}</span>
                   <span v-else class="text-gray-400 ml-2">-</span>
                 </div>
               </div>
@@ -258,23 +258,16 @@
     </div>
 
     <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-3xl shadow-2xl max-w-md w-full">
-        <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-6 rounded-t-3xl">
+      <div @click.stop class="bg-white rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-6 rounded-t-3xl flex-shrink-0">
           <h2 class="text-2xl font-black text-white">{{ formMode === 'create' ? 'Tambah Transaksi' : 'Edit Transaksi' }}</h2>
           <p class="text-green-100 text-sm mt-1">Laporan Keuangan</p>
         </div>
 
-        <div class="p-8 space-y-5">
+        <div class="p-8 space-y-5 overflow-y-auto">
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Tanggal</label>
+            <label class="block text-sm font-bold text-gray-700mb-2">Tanggal</label>
             <input v-model="formData.tanggal" type="date" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
-          </div>
-          
-          <div v-if="isFirstTransaction && formMode === 'create'"><label class="block text-sm font-bold text-gray-700 mb-2">Saldo Awal</label>
-            <input v-model.number="formData.saldo_awal" type="number" min="0"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
-                   placeholder="0">
-            <p class="text-xs text-gray-500 mt-1">Masukkan saldo awal untuk transaksi pertama</p>
           </div>
           
           <div>
@@ -288,14 +281,23 @@
             <label class="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
             <div class="flex gap-4">
               <label class="flex items-center cursor-pointer">
-                <input v-model="formData.kategori" type="radio" value="debit" class="w-4 h-4 text-green-600 focus:ring-green-500">
+                <input v-model="formData.kategori" type="radio" value="debit" 
+                       class="w-4 h-4 text-green-600 focus:ring-green-500">
                 <span class="ml-2 text-gray-700 font-medium">Debit (Masuk)</span>
               </label>
-              <label class="flex items-center cursor-pointer">
-                <input v-model="formData.kategori" type="radio" value="kredit" class="w-4 h-4 text-green-600 focus:ring-green-500">
+              <label class="flex items-center cursor-pointer" :class="{'opacity-50 cursor-not-allowed': isFirstTransaction && formMode === 'create'}">
+                <input v-model="formData.kategori" type="radio" value="kredit" 
+                       :disabled="isFirstTransaction && formMode === 'create'"
+                       class="w-4 h-4 text-green-600 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span class="ml-2 text-gray-700 font-medium">Kredit (Keluar)</span>
               </label>
             </div>
+            <p v-if="isFirstTransaction && formMode === 'create'" class="text-xs text-orange-600 mt-2 font-medium flex items-center gap-1">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+              </svg>
+              Transaksi pertama harus berupa pemasukan (Debit)
+            </p>
           </div>
 
           <div>
@@ -352,6 +354,45 @@
         </div>
       </div>
     </div>
+
+    <div v-if="showConfirmationModal" @click="showConfirmationModal = false" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[120] flex items-center justify-center p-4">
+      <div @click.stop class="bg-white rounded-3xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 rounded-t-3xl">
+          <h2 class="text-2xl font-black text-white">Peringatan Saldo Minus</h2>
+          <p class="text-orange-100 text-sm mt-1">Transaksi ini akan membuat saldo menjadi minus</p>
+        </div>
+
+        <div class="p-8">
+          <div class="flex items-center gap-5 mb-6">
+            <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-gray-900 font-bold text-lg mb-2">Saldo akan menjadi minus</p>
+              <div class="space-y-1 text-sm">
+                <p class="text-gray-600">Saldo saat ini: <span class="font-bold text-green-700">Rp {{ formatNumber(pendingSaldo.current) }}</span></p>
+                <p class="text-gray-600">Pengeluaran: <span class="font-bold text-red-700">Rp {{ formatNumber(pendingSaldo.amount) }}</span></p>
+                <p class="text-gray-600">Saldo setelah: <span class="font-bold text-red-700">Rp {{ formatNumber(pendingSaldo.after) }}</span></p>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-700 text-sm">Apakah Anda yakin ingin melanjutkan transaksi ini?</p>
+        </div>
+
+        <div class="px-8 py-6 bg-gray-50 rounded-b-3xl flex gap-3">
+          <button @click="showConfirmationModal = false"
+                  class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-xl font-semibold transition-all duration-300">
+            Batal
+          </button>
+          <button @click="confirmSaveWithMinus"
+                  class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:shadow-lg hover:shadow-orange-500/30 text-white rounded-xl font-semibold transition-all duration-300">
+            Ya, Lanjutkan
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -396,20 +437,22 @@ const router = useRouter()
 const isLoggedIn = ref(false)
 const currentUser = ref(null)
 const laporanKeuangan = ref([])
+const laporanKeuanganRaw = ref([])
 const showFormModal = ref(false)
 const showDeleteModal = ref(false)
+const showConfirmationModal = ref(false)
 const formMode = ref('create')
 const editingIndex = ref(null)
+const pendingSaldo = ref({ current: 0, amount: 0, after: 0 })
 
 const formData = ref({
   tanggal: '',
   keterangan: '',
-  kategori: '',
-  jumlah: 0,
-  saldo_awal: 0
+  kategori: 'debit',
+  jumlah: 0
 })
 
-const isFirstTransaction = computed(() => laporanKeuangan.value.length === 0)
+const isFirstTransaction = computed(() => laporanKeuanganRaw.value.length === 0)
 
 const handleLogout = async () => {
   try {
@@ -457,42 +500,62 @@ const formatNumber = (num) => {
 const statsPemasukan = computed(() => {
   const total = laporanKeuangan.value.reduce((sum, item) => sum + parseFloat(item.debit), 0)
   const iuran = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('iuran')).reduce((sum, item) => sum + parseFloat(item.debit), 0)
-  const perumahan = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('perumahan')).reduce((sum, item) => sum + parseFloat(item.debit), 0)
-  const donasi = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('donasi')).reduce((sum, item) => sum + parseFloat(item.debit), 0)
+  const danaPemerintah = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('dana pemerintah')).reduce((sum, item) => sum + parseFloat(item.debit), 0)
+  const csr = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('csr')).reduce((sum, item) => sum + parseFloat(item.debit), 0)
   const bankSampah = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bank sampah') && parseFloat(item.debit) > 0).reduce((sum, item) => sum + parseFloat(item.debit), 0)
 
   return [
     { label: 'Total Pemasukan', value: total, hover: false },
     { label: 'Iuran', value: iuran, hover: false },
-    { label: 'Perumahan', value: perumahan, hover: false },
-    { label: 'Donasi', value: donasi, hover: false },
+    { label: 'Dana Pemerintah', value: danaPemerintah, hover: false },
+    { label: 'CSR', value: csr, hover: false },
     { label: 'Bank Sampah', value: bankSampah, hover: false }
   ]
 })
 
 const statsPengeluaran = computed(() => {
   const total = laporanKeuangan.value.reduce((sum, item) => sum + parseFloat(item.kredit), 0)
-  const baksos = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bakti sosial') || item.keterangan.toLowerCase().includes('baksos')).reduce((sum, item) => sum + parseFloat(item.kredit), 0)
-  const kerjaBakti = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('kerja bakti') || item.keterangan.toLowerCase().includes('gotong royong')).reduce((sum, item) => sum + parseFloat(item.kredit), 0)
+  const dansos = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('dana sosial') || item.keterangan.toLowerCase().includes('dansos')).reduce((sum, item) => sum + parseFloat(item.kredit), 0)
+  const programKebersihan = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('program kebersihan') || item.keterangan.toLowerCase().includes('gotong royong')).reduce((sum, item) => sum + parseFloat(item.kredit), 0)
   const bankSampah = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bank sampah') && parseFloat(item.kredit) > 0).reduce((sum, item) => sum + parseFloat(item.kredit), 0)
   const lainLain = laporanKeuangan.value.filter(item => {
     const ket = item.keterangan.toLowerCase()
-    return parseFloat(item.kredit) > 0 && !ket.includes('bakti sosial') && !ket.includes('baksos') && !ket.includes('kerja bakti') && !ket.includes('gotong royong') && !ket.includes('bank sampah')
+    return parseFloat(item.kredit) > 0 && !ket.includes('dana sosial') && !ket.includes('dansos') && !ket.includes('program kebersihan') && !ket.includes('gotong royong') && !ket.includes('bank sampah')
   }).reduce((sum, item) => sum + parseFloat(item.kredit), 0)
 
   return [
     { label: 'Total Pengeluaran', value: total, hover: false },
-    { label: 'Bakti Sosial', value: baksos, hover: false },
-    { label: 'Kerja Bakti', value: kerjaBakti, hover: false },
+    { label: 'Dana Sosial', value: dansos, hover: false },
+    { label: 'Program Kebersihan', value: programKebersihan, hover: false },
     { label: 'Bank Sampah', value: bankSampah, hover: false },
     { label: 'Lain-lain', value: lainLain, hover: false }
   ]
 })
 
+const recalculateSaldo = (data) => {
+  const sortedData = [...data].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal))
+  
+  let runningSaldo = 0
+  return sortedData.map(item => {
+    const debit = parseFloat(item.debit) || 0
+    const kredit = parseFloat(item.kredit) || 0
+    runningSaldo = runningSaldo + debit - kredit
+    
+    return {
+      ...item,
+      saldo: runningSaldo
+    }
+  })
+}
+
 const fetchLaporanKeuangan = async () => {
   try {
     const response = await laporanKeuanganAPI.getAll()
-    laporanKeuangan.value = response.data.map(item => ({
+    laporanKeuanganRaw.value = response.data
+    
+    const recalculated = recalculateSaldo(response.data)
+    
+    laporanKeuangan.value = recalculated.map(item => ({
       ...item,
       tanggal: new Date(item.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
       debit: parseFloat(item.debit),
@@ -506,18 +569,21 @@ const fetchLaporanKeuangan = async () => {
 
 const openCreateModal = () => {
   formMode.value = 'create'
-  formData.value = { tanggal: '', keterangan: '', kategori: '', jumlah: 0, saldo_awal: 0 }
+  formData.value = { tanggal: '', keterangan: '', kategori: 'debit', jumlah: 0 }
   showFormModal.value = true
 }
 
 const openEditModal = (item, index) => {
   formMode.value = 'edit'
   editingIndex.value = index
-  const kategori = item.debit > 0 ? 'debit' : 'kredit'
-  const jumlah = item.debit > 0 ? item.debit : item.kredit
+  
+  const originalItem = laporanKeuanganRaw.value.find(raw => raw.id === item.id)
+  const kategori = originalItem.debit > 0 ? 'debit' : 'kredit'
+  const jumlah = originalItem.debit > 0 ? originalItem.debit : originalItem.kredit
+  
   formData.value = {
     id: item.id,
-    tanggal: new Date(item.tanggal).toISOString().split('T')[0],
+    tanggal: new Date(originalItem.tanggal).toISOString().split('T')[0],
     keterangan: item.keterangan,
     kategori: kategori,
     jumlah: jumlah
@@ -533,20 +599,85 @@ const openDeleteModal = (index, item) => {
 
 const closeFormModal = () => {
   showFormModal.value = false
-  formData.value = { tanggal: '', keterangan: '', kategori: '', jumlah: 0, saldo_awal: 0 }
+  formData.value = { tanggal: '', keterangan: '', kategori: 'debit', jumlah: 0 }
+}
+
+const calculateSaldoAfterTransaction = () => {
+  if (formMode.value === 'create') {
+    const sortedData = [...laporanKeuanganRaw.value].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal))
+    const currentSaldo = sortedData.length > 0 
+      ? sortedData.reduce((sum, item) => sum + parseFloat(item.debit || 0) - parseFloat(item.kredit || 0), 0)
+      : 0
+    
+    if (formData.value.kategori === 'kredit') {
+      return currentSaldo - formData.value.jumlah
+    } else {
+      return currentSaldo + formData.value.jumlah
+    }
+  } else {
+    const tempData = laporanKeuanganRaw.value.map(item => {
+      if (item.id === formData.value.id) {
+        return {
+          ...item,
+          tanggal: formData.value.tanggal,
+          keterangan: formData.value.keterangan,
+          debit: formData.value.kategori === 'debit' ? formData.value.jumlah : 0,
+          kredit: formData.value.kategori === 'kredit' ? formData.value.jumlah : 0
+        }
+      }
+      return item
+    })
+    
+    const recalculated = recalculateSaldo(tempData)
+    const minSaldo = Math.min(...recalculated.map(item => item.saldo))
+    
+    return minSaldo
+  }
 }
 
 const saveData = async () => {
+  if (!formData.value.tanggal || !formData.value.keterangan || !formData.value.kategori || formData.value.jumlah <= 0) {
+    showToast('Mohon lengkapi semua field', 'error')
+    return
+  }
+
+  if (isFirstTransaction.value && formMode.value === 'create' && formData.value.kategori === 'kredit') {
+    showToast('Transaksi pertama harus berupa pemasukan (Debit)', 'error')
+    return
+  }
+
+  const saldoAfter = calculateSaldoAfterTransaction()
+  
+  if (formData.value.kategori === 'kredit' && saldoAfter < 0 && !isFirstTransaction.value) {
+    const sortedData = [...laporanKeuanganRaw.value].sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal))
+    const currentSaldo = sortedData.length > 0 
+      ? sortedData.reduce((sum, item) => sum + parseFloat(item.debit || 0) - parseFloat(item.kredit || 0), 0)
+      : 0
+    
+    pendingSaldo.value = {
+      current: currentSaldo,
+      amount: formData.value.jumlah,
+      after: saldoAfter
+    }
+    showConfirmationModal.value = true
+    return
+  }
+
+  await performSave()
+}
+
+const confirmSaveWithMinus = async () => {
+  showConfirmationModal.value = false
+  await performSave()
+}
+
+const performSave = async () => {
   try {
     const payload = {
       tanggal: formData.value.tanggal,
       keterangan: formData.value.keterangan,
       kategori: formData.value.kategori,
       jumlah: formData.value.jumlah
-    }
-
-    if (isFirstTransaction.value && formMode.value === 'create') {
-      payload.saldo_awal = formData.value.saldo_awal
     }
 
     if (formMode.value === 'create') {

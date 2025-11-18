@@ -76,13 +76,13 @@
 
               <div class="animate-slide-up animation-delay-200">
                 <label class="block text-sm font-bold text-gray-800 mb-3">
-                  RT/RW <span class="text-red-500">*</span>
+                  RT<span class="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   v-model="formData.rt"
                   class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
-                  placeholder="Contoh: 001/002"
+                  placeholder="Contoh: 001"
                 />
               </div>
 

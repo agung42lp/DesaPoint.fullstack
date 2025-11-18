@@ -260,7 +260,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl p-6">
             <div class="flex items-center justify-between mb-6">
-              <h2 class="text-2xl font-bold text-gray-900">Aktivitas Terbaru</h2>
+              <h2 class="text-2xl font-bold text-gray-900">Aktivitas Terbaru di Program</h2>
               <span class="text-sm text-gray-500">{{ recentActivities.length }} aktivitas</span>
             </div>
             
@@ -370,14 +370,27 @@
 
           <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="text-center p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-xl">
-              <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+            <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="flex items-center justify-center gap-2 mb-2">
+              <h3 class="font-bold text-gray-900">Korban Meninggal</h3>
+              <div class="relative group">
+                <button class="w-5 h-5 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-colors">
+                  <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </button>
+                <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
+                  Dana diterima oleh keluarga almarhum
+                  <div class="absolute left-1/2 -translate-x-1/2 top-full -mt-1 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
+                </div>
               </div>
-              <h3 class="font-bold text-gray-900 mb-2">Korban Meninggal</h3>
-              <p class="text-3xl font-black text-red-600">{{ chartData.korbanMeninggal }}</p>
-              <p class="text-sm text-gray-600 mt-2">{{ chartData.korbanMeninggalNominal }}</p>
+            </div>
+            <p class="text-3xl font-black text-red-600">{{ chartData.korbanMeninggal }}</p>
+            <p class="text-sm text-gray-600 mt-2">{{ chartData.korbanMeninggalNominal }}</p>
             </div>
 
             <div class="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl">
@@ -386,7 +399,20 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                 </svg>
               </div>
-              <h3 class="font-bold text-gray-900 mb-2">Penderita Sakit</h3>
+              <div class="flex items-center justify-center gap-2 mb-2">
+                <h3 class="font-bold text-gray-900">Penderita Sakit</h3>
+                <div class="relative group">
+                  <button class="w-5 h-5 bg-yellow-600 hover:bg-yellow-700 rounded-full flex items-center justify-center transition-colors">
+                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </button>
+                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
+                    Dana diterima oleh korban langsung
+                    <div class="absolute left-1/2 -translate-x-1/2 top-full -mt-1 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
+                  </div>
+                </div>
+              </div>
               <p class="text-3xl font-black text-yellow-600">{{ chartData.penderitaSakit }}</p>
               <p class="text-sm text-gray-600 mt-2">{{ chartData.penderitaSakitNominal }}</p>
             </div>
@@ -397,7 +423,20 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
               </div>
-              <h3 class="font-bold text-gray-900 mb-2">Korban Bencana</h3>
+              <div class="flex items-center justify-center gap-2 mb-2">
+                <h3 class="font-bold text-gray-900">Korban Bencana</h3>
+                <div class="relative group">
+                  <button class="w-5 h-5 bg-orange-600 hover:bg-orange-700 rounded-full flex items-center justify-center transition-colors">
+                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </button>
+                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
+                    Dana diterima oleh korban terdampak
+                    <div class="absolute left-1/2 -translate-x-1/2 top-full -mt-1 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
+                  </div>
+                </div>
+              </div>
               <p class="text-3xl font-black text-orange-600">{{ chartData.korbanBencana }}</p>
               <p class="text-sm text-gray-600 mt-2">{{ chartData.korbanBencanaNominal }}</p>
             </div>
@@ -561,6 +600,8 @@ const fetchDashboardData = async () => {
     const bankSampahData = bankSampahRes.data
     const totalBankSampah = bankSampahData.reduce((sum, item) => sum + parseFloat(item.total_konversi), 0)
     
+    bankSampahData.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+
     stats.value.bankSampah = {
       total: 'Rp ' + new Intl.NumberFormat('id-ID').format(totalBankSampah),
       count: bankSampahData.length,
@@ -568,12 +609,20 @@ const fetchDashboardData = async () => {
     }
 
     const rondaData = rondaRes.data
-    const today = new Date()
-    const weekStart = new Date(today.setDate(today.getDate() - today.getDay()))
-    const weekEnd = new Date(today.setDate(today.getDate() - today.getDay() + 6))
-    
+
+    const now = new Date()
+    const currentDay = now.getDay() 
+    const weekStart = new Date(now)
+    weekStart.setDate(now.getDate() - currentDay)
+    weekStart.setHours(0, 0, 0, 0)
+
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekStart.getDate() + 6)
+    weekEnd.setHours(23, 59, 59, 999)
+
     const thisWeekRonda = rondaData.filter(item => {
       const itemDate = new Date(item.tanggal)
+      itemDate.setHours(0, 0, 0, 0)
       return itemDate >= weekStart && itemDate <= weekEnd
     }).length
 
@@ -593,50 +642,78 @@ const fetchDashboardData = async () => {
     }
 
     const activities = []
-    
-    danaSosialData.slice(0, 2).forEach(item => {
+
+    const sortedDanaSosial = [...danaSosialData].sort((a, b) => 
+      new Date(b.updated_at) - new Date(a.updated_at)
+    )
+
+    sortedDanaSosial.slice(0, 2).forEach(item => {
+      const itemDate = new Date(item.updated_at)
+      const now = new Date()
+      const diffHours = Math.floor((now - itemDate) / 3600000)
+      
       activities.push({
         id: `ds-${item.id}`,
         type: 'danasosial',
         label: 'Dana Sosial',
         title: `Dana Sosial untuk ${item.nama_penerima}`,
-        time: new Date(item.tanggal_penyerahan).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+        time: diffHours < 24 ? `${diffHours} jam lalu` : itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+        timestamp: itemDate.getTime()
       })
     })
 
     bankSampahData.slice(0, 1).forEach(item => {
+      const itemDate = new Date(item.updated_at)
+      const now = new Date()
+      const diffHours = Math.floor((now - itemDate) / 3600000)
+      
       activities.push({
         id: `bs-${item.id}`,
         type: 'banksampah',
         label: 'Bank Sampah',
         title: `Update rekening ${item.nama}`,
-        time: 'Hari ini'
+        time: diffHours < 1 ? 'Baru saja' : diffHours < 24 ? `${diffHours} jam lalu` : itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+        timestamp: itemDate.getTime()
       })
     })
 
-    rondaData.slice(0, 1).forEach(item => {
+    const sortedRonda = [...rondaData].sort((a, b) => 
+      new Date(b.updated_at) - new Date(a.updated_at)
+    )
+
+    sortedRonda.slice(0, 1).forEach(item => {
+      const itemDate = new Date(item.updated_at)
       activities.push({
         id: `r-${item.id}`,
         type: 'ronda',
         label: 'Ronda',
         title: `Jadwal ronda ${new Date(item.tanggal).toLocaleDateString('id-ID')}`,
-        time: new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+        time: itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+        timestamp: itemDate.getTime()
       })
     })
 
-    kebersihanData.slice(0, 1).forEach(item => {
+    const sortedKebersihan = [...kebersihanData].sort((a, b) => 
+      new Date(b.updated_at) - new Date(a.updated_at)
+    )
+
+    sortedKebersihan.slice(0, 1).forEach(item => {
+      const itemDate = new Date(item.updated_at)
       activities.push({
         id: `k-${item.id}`,
         type: 'kebersihan',
         label: 'Kebersihan',
         title: item.title,
-        time: item.date
+        time: itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+        timestamp: itemDate.getTime()
       })
     })
 
+    activities.sort((a, b) => b.timestamp - a.timestamp)
     recentActivities.value = activities.slice(0, 5)
 
     const schedules = []
+    const today = new Date()
     today.setHours(0, 0, 0, 0)
 
     rondaData.forEach(item => {

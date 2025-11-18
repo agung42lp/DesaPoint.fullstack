@@ -55,4 +55,15 @@ class BankSampahController extends Controller
         $bankSampah->delete();
         return response()->json(['message' => 'Deleted']);
     }
+
+   public function getByName($name)
+    {
+        $bankSampah = BankSampah::where('nama', $name)->first();
+        
+        if (!$bankSampah) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+        
+        return response()->json($bankSampah);
+    }
 }

@@ -78,6 +78,7 @@ export const jadwalRondaAPI = {
 
 export const bankSampahAPI = {
     getAll: () => api.get('/bank-sampah'),
+    getByName: (name) => api.get(`/bank-sampah/by-name/${encodeURIComponent(name)}`),
     create: (data) => api.post('/bank-sampah', data),
     update: (id, data) => api.put(`/bank-sampah/${id}`, data),
     delete: (id) => api.delete(`/bank-sampah/${id}`),

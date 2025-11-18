@@ -42,6 +42,7 @@ Route::post('/jadwal-ronda', [JadwalRondaController::class, 'store']);
 Route::put('/jadwal-ronda/{jadwalRonda}', [JadwalRondaController::class, 'update']);
 Route::delete('/jadwal-ronda/{jadwalRonda}', [JadwalRondaController::class, 'destroy']);
 
+Route::get('/bank-sampah/by-name/{name}', [BankSampahController::class, 'getByName']);
 Route::get('/bank-sampah', [BankSampahController::class, 'index']);
 Route::post('/bank-sampah', [BankSampahController::class, 'store']);
 Route::put('/bank-sampah/{bankSampah}', [BankSampahController::class, 'update']);

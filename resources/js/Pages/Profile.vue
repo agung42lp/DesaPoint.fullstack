@@ -132,6 +132,87 @@
         </div>
       </div>
 
+      <div v-if="bankSampahData" class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-5">
+          <h2 class="text-xl font-bold text-white">Rekening Bank Sampah</h2>
+          <p class="text-emerald-100 text-sm mt-1">Silahkan datangi petugas RW untuk mengantar sampah atau mencairkan saldo anda</p>
+        </div>
+        
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-blue-600 font-medium">Total Sampah</p>
+                  <p class="text-2xl font-bold text-blue-900">{{ bankSampahData.total_sampah }} kg</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border border-green-200">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-green-600 font-medium">Total Konversi</p>
+                  <p class="text-2xl font-bold text-green-900">Rp {{ formatCurrency(bankSampahData.total_konversi) }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-5 border border-yellow-200">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-yellow-600 font-medium">Saldo Dicairkan</p>
+                  <p class="text-2xl font-bold text-yellow-900">Rp {{ formatCurrency(bankSampahData.saldo_cair) }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border border-purple-200">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs text-purple-600 font-medium">Saldo Tersisa</p>
+                  <p class="text-2xl font-bold text-purple-900">Rp {{ formatCurrency(bankSampahData.saldo_tersisa) }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-gray-600 to-gray-700 px-6 py-5">
+          <h2 class="text-xl font-bold text-white">Rekening Bank Sampah</h2>
+          <p class="text-gray-100 text-sm mt-1">Informasi saldo dan transaksi bank sampah Anda</p>
+        </div>
+        <div class="p-12 text-center">
+          <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+          </svg>
+          <p class="text-gray-500 text-lg font-medium">Rekening bank sampah belum tersedia</p>
+          <p class="text-gray-400 text-sm mt-2">Hubungi admin untuk mendaftarkan rekening bank sampah Anda</p>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
           <div class="flex items-center justify-between mb-4">
@@ -336,7 +417,14 @@
         <div class="p-6 space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-            <input v-model="editForm.name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all">
+            <input 
+              v-model="editForm.name" 
+              type="text" 
+              disabled
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+              title="Nama tidak dapat diubah"
+            >
+            <p class="text-xs text-gray-500 mt-1">Nama tidak dapat diubah</p>
           </div>
 
           <div>
@@ -404,12 +492,13 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { authService } from '../services/api.js'
+import { authService, bankSampahAPI } from '../services/api.js'
 import api from '../services/api.js'
 
 const loadingPengaduan = ref(false)
 const showDetailModal = ref(false)
 const selectedPengaduanDetail = ref({})
+const bankSampahData = ref(null)
 
 const loadMyPengaduan = async () => {
   loadingPengaduan.value = true
@@ -420,6 +509,19 @@ const loadMyPengaduan = async () => {
     console.error('Failed to load pengaduan:', error)
   } finally {
     loadingPengaduan.value = false
+  }
+}
+
+const loadBankSampahData = async () => {
+  if (!currentUser.value?.name) return
+  
+  try {
+    const response = await bankSampahAPI.getByName(currentUser.value.name)
+    bankSampahData.value = response.data
+  } catch (error) {
+    if (error.response?.status !== 404) {
+      console.error('Failed to load bank sampah data:', error)
+    }
   }
 }
 
@@ -447,6 +549,11 @@ const getStatusColor = (status) => {
     'ditolak': 'bg-red-100 text-red-700'
   }
   return colors[status] || 'bg-gray-100 text-gray-700'
+}
+
+const formatCurrency = (value) => {
+  if (!value) return '0'
+  return new Intl.NumberFormat('id-ID').format(value)
 }
 
 const router = useRouter()
@@ -501,6 +608,8 @@ const loadUserData = async () => {
       name: currentUser.value.name || '',
       username: currentUser.value.username || ''
     }
+
+    await loadBankSampahData()
   } catch (error) {
     console.error('Failed to load user data:', error)
     router.push('/login')
@@ -509,9 +618,9 @@ const loadUserData = async () => {
 
 const updateProfile = async () => {
   try {
-    await api.put('/user/profile', editForm.value)
+    await api.put('/user/profile', { username: editForm.value.username })
     
-    const updatedUser = { ...currentUser.value, ...editForm.value }
+    const updatedUser = { ...currentUser.value, username: editForm.value.username }
     localStorage.setItem('user', JSON.stringify(updatedUser))
     
     showEditModal.value = false
@@ -561,6 +670,7 @@ onMounted(() => {
   loadMyPengaduan() 
 })
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
