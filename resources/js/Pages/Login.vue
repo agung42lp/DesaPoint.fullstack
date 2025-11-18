@@ -101,7 +101,7 @@
 
           <div v-show="isRegister" :key="'register'">
             <h2 class="text-3xl font-bold text-gray-900 mb-2">Sign Up</h2>
-            <p class="text-gray-600 mb-6">Daftar sebagai warga RW 05</p>
+            <p class="text-gray-600 mb-6">Daftar sebagai warga RW 12</p>
 
             <div class="space-y-4">
               <div>
@@ -196,7 +196,7 @@
               transform: 'translateY(0) scale(1)',
               opacity: 1
             }">
-            <h2 class="text-4xl font-bold mb-4">{{ isRegister ? 'Join Us!' : 'RW 12.' }}</h2>
+            <h2 class="text-4xl font-bold mb-4">{{ isRegister ? 'Join Us!' : 'RW 12' }}</h2>
             <div class="w-20 h-1 bg-white mx-auto mb-6"></div>
             <h3 class="text-3xl font-bold mb-4">{{ isRegister ? 'Selamat Datang!' : 'Hello, Warga!' }}</h3>
             <p class="text-green-50 mb-8 max-w-sm">

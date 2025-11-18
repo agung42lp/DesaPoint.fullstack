@@ -321,7 +321,7 @@
             <img :src="currentMainImage" alt="Pengurus RW" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
             <div class="absolute bottom-6 left-6 text-white">
-              <p class="text-sm font-medium mb-1">Pengurus RW 05</p>
+              <p class="text-sm font-medium mb-1">Pengurus RW 12</p>
               <h4 class="text-xl font-bold">{{ currentImageTitle }}</h4>
             </div>
           </div>
@@ -1171,14 +1171,14 @@ const currentNewsSlide = ref(0)
 let newsInterval = null
 
 const allNewsImages = ref([
-  { title: 'Gotong Royong Bersih Lingkungan', image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400' },
-  { title: 'Bantuan Sosial untuk Keluarga', image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400' },
-  { title: 'Jadwal Ronda Bulan November', image: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400' },
-  { title: 'Kerja Bakti Lingkungan', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400' },
-  { title: 'Pembagian Sembako', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400' },
-  { title: 'Rapat Koordinasi RW', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400' },
-  { title: 'Posyandu Balita', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400' },
-  { title: 'Bank Sampah Warga', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400' }
+  { title: 'Program Kebersihan #1', image: 'https://www.padangsambian.denpasarkota.go.id/public/uploads/berita/Berita_231104030411_giat-gotong-royong-kerja-bakti-lingkungan-lingkungan-di-kelurahan-padangsambian.jpeg' },
+  { title: 'Program Kebersihan #2', image: 'https://desatepus.gunungkidulkab.go.id/assets/files/artikel/sedang_1708775439IMG_20240224_183957.jpg' },
+  { title: 'Kegiatan Ronda Malam #1', image: 'https://pojokkampung.data.blog/wp-content/uploads/2023/01/img-20230113-wa00195350446220279713694.jpg' },
+  { title: 'Kegiatan Ronda Malam #2', image: 'https://tribratanews-respesawaran.lampung.polri.go.id/berkas/post-images/2025-09/ronda-malam-di-sukadadi-bukti-sinergi-polri-dan-masyarakat-wujudkan-desa-aman.jpg' },
+  { title: 'Penyaluran Dana Sosial #1', image: 'https://static.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/p1/79/2025/03/19/ayobdg_pembagian-hasil-menabung-sampah_ncos-8-3698765415.jpg' },
+  { title: 'Penyaluran Dana Sosial #2', image: 'https://img.antarafoto.com/cache/1200x797/2013/08/05/pembagian-zakat-uang-759i-dom.webp' },
+  { title: 'Bank Sampah Warga #1', image: 'https://www.denpasarkota.go.id/public/uploads/berita/Berita_230707070753_bank-sampah-pelita-bagikan-tas-ramah-lingkungan-ajak-warga-kelola-sampah-berbasis-sumber.jpg' },
+  { title: 'Bank Sampah Warga #2', image: 'https://www.tzuchi.or.id/inliners/1740623675-foto-1-edt.jpg' }
 ])
 
 const scrollY = ref(0)
@@ -1356,7 +1356,7 @@ const fetchJadwalRonda = async () => {
     const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
     
     jadwalRondaData.value = response.data
-      .sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) // Urut lama ke baru
+      .sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal)) 
       .slice(0, 10)
       .map((item, index) => {
         const itemDate = new Date(item.tanggal)
@@ -1369,7 +1369,7 @@ const fetchJadwalRonda = async () => {
           no: index + 1,
           tanggal: `${dayName}, ${itemDate.toLocaleDateString('id-ID')}`,
           peserta_ronda: item.peserta_ronda,
-          isToday: itemDate.getTime() === today.getTime() // Cek hari ini
+          isToday: itemDate.getTime() === today.getTime() 
         }
       })
   } catch (error) {
@@ -1429,7 +1429,7 @@ const keuanganData = ref({
   lainLain: 0
 })
 
-const updateKeuanganData = () => { //cek ini nanti 
+const updateKeuanganData = () => { 
   keuanganData.value.pemasukan = laporanKeuangan.value.reduce((sum, item) => sum + item.debit, 0)
   keuanganData.value.pengeluaran = laporanKeuangan.value.reduce((sum, item) => sum + item.kredit, 0)
   keuanganData.value.iuran = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('iuran')).reduce((sum, item) => sum + item.debit, 0)
@@ -1441,7 +1441,7 @@ const updateKeuanganData = () => { //cek ini nanti
   keuanganData.value.bankSampahOut = laporanKeuangan.value.filter(item => item.keterangan.toLowerCase().includes('bank sampah') && item.kredit > 0).reduce((sum, item) => sum + item.kredit, 0)
   keuanganData.value.lainLain = laporanKeuangan.value.filter(item => {
     const ket = item.keterangan.toLowerCase()
-    return item.kredit > 0 && !ket.includes('dana sosial') && !ket.includes('dansos') && !ket.includes('kerja bakti') && !ket.includes('gotong royong') && !ket.includes('bank sampah')
+    return item.kredit > 0 && !ket.includes('dana sosial') && !ket.includes('dansos') && !ket.includes('program kebersihan') && !ket.includes('gotong royong') && !ket.includes('bank sampah')
   }).reduce((sum, item) => sum + item.kredit, 0)
 }
 
@@ -1579,14 +1579,14 @@ const currentSlide = ref(0)
 const selectedImageIndex = ref(0)
 
 const galleryImages = ref([
-  { src: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400', title: 'Ketua RW' },
-  { src: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400', title: 'Wakil Ketua' },
-  { src: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400', title: 'Sekretaris' },
-  { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400', title: 'Bendahara' },
-  { src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400', title: 'Seksi Keamanan' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400', title: 'Seksi Kebersihan' },
-  { src: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400', title: 'Seksi Sosial' },
-  { src: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=400', title: 'Seksi Pembangunan' }
+  { src: 'https://i.pinimg.com/1200x/f5/5a/83/f55a83bcb7381ab3ce5a5a23053a4c77.jpg', title: 'Ketua RW' },
+  { src: 'https://i.pinimg.com/1200x/74/e2/79/74e279981b30745dbe00c17b1754686d.jpg', title: 'Wakil Ketua' },
+  { src: 'https://i.pinimg.com/736x/f4/08/53/f40853f4e6e1c83509cd016529b527e5.jpg', title: 'Sekretaris' },
+  { src: 'https://i.pinimg.com/1200x/47/af/97/47af97bb75eb12d05aec8cf080f51e9a.jpg', title: 'Bendahara' },
+  { src: 'https://i.pinimg.com/1200x/ac/ec/af/acecaf94603673a6077327c3b175a41a.jpg', title: 'Seksi Keamanan' },
+  { src: 'https://i.pinimg.com/1200x/5f/c5/48/5fc5485d6cfc3f4071504102ec9c69a3.jpg', title: 'Seksi Kebersihan' },
+  { src: 'https://i.pinimg.com/1200x/19/56/7b/19567b9f94a57acbc1c1e47da908f818.jpg', title: 'Seksi Sosial' },
+  { src: 'https://i.pinimg.com/1200x/34/41/01/344101028dbe65ba8e189ea86e0b09bd.jpg', title: 'Seksi Pembangunan' }
 ])
 
 const currentMainImage = computed(() => galleryImages.value[selectedImageIndex.value].src)
