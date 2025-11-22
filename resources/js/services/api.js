@@ -101,6 +101,13 @@ export const danaSosialAPI = {
 }
 
 export const authService = {
+  async checkName(name) {
+    const response = await api.get('/check-name', { 
+      params: { name } 
+    })
+    return response.data
+  },
+
   async register(data) {
     const response = await api.post('/register', data)
     return response.data

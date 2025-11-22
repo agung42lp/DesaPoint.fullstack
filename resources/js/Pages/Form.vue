@@ -1,5 +1,22 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 py-12 px-4">
+    <transition name="slide-fade">
+      <div v-if="toast.show" class="fixed top-6 right-6 z-[150] max-w-md animate-slideIn">
+        <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
+             :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+          <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <svg v-if="toast.type === 'success'" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <svg v-else class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <p class="text-white font-semibold">{{ toast.message }}</p>
+        </div>
+      </div>
+    </transition>
+
     <div class="max-w-6xl mx-auto">
       <div class="mb-10 animate-fade-in-down">
         <div class="flex items-center justify-center gap-4">
@@ -81,6 +98,7 @@
                 <input
                   type="text"
                   v-model="formData.rt"
+                  maxlength="3"
                   class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
                   placeholder="Contoh: 001"
                 />
@@ -88,13 +106,13 @@
 
               <div class="animate-slide-up animation-delay-300">
                 <label class="block text-sm font-bold text-gray-800 mb-3">
-                  Email <span class="text-red-500">*</span>
+                  No. HP/WhatsApp <span class="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   v-model="formData.noHp"
                   class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
-                  placeholder="*****@gmail.com"
+                  placeholder="Contoh: 08123456789"
                 />
               </div>
 
@@ -192,7 +210,8 @@
               <div class="flex gap-4 animate-slide-up animation-delay-400">
                 <button
                   @click="prevStep"
-                  class="flex-1 bg-gray-100 text-gray-700 py-5 rounded-2xl font-bold text-lg hover:bg-gray-200 active:scale-[0.98] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+                  :disabled="isSubmitting"
+                  class="flex-1 bg-gray-100 text-gray-700 py-5 rounded-2xl font-bold text-lg hover:bg-gray-200 active:scale-[0.98] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 17l-5-5m0 0l5-5m-5 5h12"/>
                   </svg>
@@ -200,11 +219,15 @@
                 </button>
                 <button
                   @click="handleSubmit"
-                  class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  :disabled="isSubmitting"
+                  class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg v-if="!isSubmitting" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                   </svg>
-                  Kirim
+                  <svg v-else class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                  {{ isSubmitting ? 'Mengirim...' : 'Kirim' }}
                 </button>
               </div>
             </div>
@@ -274,18 +297,39 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../services/api'
 
 const router = useRouter()
+const isSubmitting = ref(false)
+
+const toast = ref({ show: false, message: '', type: 'success' })
+
+const showToast = (message, type = 'success') => {
+  toast.value = { show: true, message, type }
+  setTimeout(() => {
+    toast.value.show = false
+  }, 3000)
+}
+
+const validateRT = (rt) => {
+  return /^\d{3}$/.test(rt)
+}
+
+const validatePhone = (phone) => {
+  const cleaned = phone.replace(/\D/g, '')
+  return cleaned.length >= 10 && cleaned.length <= 15
+}
 
 const handleSubmit = async () => {
   if (!formData.value.namaPermasalahan || !formData.value.kategori || 
       !formData.value.detailPermasalahan || uploadedImages.value.length === 0) {
-    alert('Mohon lengkapi semua field dan upload minimal 1 foto!')
+    showToast('Mohon lengkapi semua field dan upload minimal 1 foto!', 'error')
     return
   }
+  
+  isSubmitting.value = true
   
   const formDataToSend = new FormData()
   
@@ -296,19 +340,20 @@ const handleSubmit = async () => {
   formDataToSend.append('kategori', formData.value.kategori)
   formDataToSend.append('detail_permasalahan', formData.value.detailPermasalahan)
   
-  for (let i = 0; i < uploadedImages.value.length; i++) {
-    const response = await fetch(uploadedImages.value[i].url)
-    const blob = await response.blob()
-    formDataToSend.append(`foto_${i + 1}`, blob, uploadedImages.value[i].name)
-  }
+  uploadedImages.value.forEach((image, i) => {
+    formDataToSend.append(`foto_${i + 1}`, image.file, image.name)
+  })
   
   try {
     await api.post('/pengaduan', formDataToSend, {
       headers: { 'Content-Type': 'multipart/form-data' }
     })
-    alert('Pengaduan berhasil dikirim!')
-    currentStep.value = 1
     
+    showToast('Pengaduan berhasil dikirim!')
+    
+    cleanupImageUrls()
+    
+    currentStep.value = 1
     const userName = formData.value.nama
     formData.value = {
       nama: userName, 
@@ -320,14 +365,25 @@ const handleSubmit = async () => {
       detailPermasalahan: ''
     }
     uploadedImages.value = []
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   } catch (error) {
-    console.error('Error detail:', error.response?.data)
+    console.error('Error:', error)
+    
     if (error.response?.status === 401) {
-      alert('Sesi login habis. Silakan login kembali.')
+      showToast('Sesi login habis. Silakan login kembali.', 'error')
       router.push('/login')
+    } else if (error.response?.status === 413) {
+      showToast('File terlalu besar. Maksimal 5MB per foto.', 'error')
+    } else if (error.response?.status === 422) {
+      showToast('Data tidak valid. Periksa kembali form Anda.', 'error')
+    } else if (!error.response) {
+      showToast('Tidak dapat terhubung ke server. Periksa koneksi internet.', 'error')
     } else {
-      alert('Gagal mengirim pengaduan: ' + (error.response?.data?.message || error.message))
+      showToast('Gagal mengirim pengaduan: ' + (error.response?.data?.message || 'Terjadi kesalahan'), 'error')
     }
+  } finally {
+    isSubmitting.value = false
   }
 }
 
@@ -350,9 +406,20 @@ const fileInput = ref(null)
 
 const nextStep = () => {
   if (!formData.value.nama || !formData.value.rt || !formData.value.noHp || !formData.value.noRumah) {
-    alert('Mohon lengkapi semua field yang wajib diisi!')
+    showToast('Mohon lengkapi semua field yang wajib diisi!', 'error')
     return
   }
+  
+  if (!validateRT(formData.value.rt)) {
+    showToast('Format RT tidak valid! Harus 3 digit angka (contoh: 001)', 'error')
+    return
+  }
+  
+  if (!validatePhone(formData.value.noHp)) {
+    showToast('Nomor HP tidak valid! Minimal 10 digit.', 'error')
+    return
+  }
+  
   currentStep.value = 2
 }
 
@@ -369,29 +436,38 @@ const handleFileChange = (event) => {
   if (!file) return
   
   if (uploadedImages.value.length >= maxImages) {
-    alert(`Maksimal ${maxImages} foto`)
+    showToast(`Maksimal ${maxImages} foto`, 'error')
+    return
+  }
+  
+  if (!file.type.startsWith('image/')) {
+    showToast('File harus berupa gambar (JPG, PNG, dll)', 'error')
     return
   }
   
   if (file.size > 5 * 1024 * 1024) {
-    alert(`File terlalu besar! Max 5MB`)
+    showToast('File terlalu besar! Maksimal 5MB', 'error')
     return
   }
   
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    uploadedImages.value.push({
-      name: file.name,
-      url: e.target.result
-    })
-  }
-  reader.readAsDataURL(file)
+  uploadedImages.value.push({
+    name: file.name,
+    file: file,
+    url: URL.createObjectURL(file)
+  })
   
   event.target.value = ''
 }
 
 const removeImage = (index) => {
+  URL.revokeObjectURL(uploadedImages.value[index].url)
   uploadedImages.value.splice(index, 1)
+}
+
+const cleanupImageUrls = () => {
+  uploadedImages.value.forEach(img => {
+    URL.revokeObjectURL(img.url)
+  })
 }
 
 onMounted(() => {
@@ -404,9 +480,28 @@ onMounted(() => {
   }
   formData.value.nama = user.name || ''
 })
+
+onBeforeUnmount(() => {
+  cleanupImageUrls()
+})
 </script>
 
 <style scoped>
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
 @keyframes bounceIn {
   0% {
     opacity: 0;

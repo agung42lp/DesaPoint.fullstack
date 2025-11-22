@@ -76,18 +76,47 @@
       ></div>
       <div class="absolute inset-0 bg-black/40"></div>
       
-      <div class="relative max-w-7xl mx-auto px-4 h-full flex items-center z-10">
+      <div 
+        class="relative max-w-7xl mx-auto px-4 h-full flex items-center z-10"
+        v-motion
+        :initial="{ opacity: 0, x: -100 }"
+        :enter="{ opacity: 1, x: 0, transition: { duration: 800, delay: 200 } }"
+      >
         <div class="text-white">
-          <h1 class="text-3xl md:text-5xl font-extrabold mb-3 md:mb-4">Selamat Datang di RW 12</h1>
-          <p class="text-base md:text-xl mb-6 md:mb-8 text-green-100">Bersama Membangun Lingkungan yang Harmonis dan Sejahtera</p>
+          <h1 
+            v-motion
+            :initial="{ opacity: 0, y: 30 }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 400 } }"
+            class="text-3xl md:text-5xl font-extrabold mb-3 md:mb-4"
+          >Selamat Datang di RW 12</h1>
+          <p 
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: 600, delay: 500 } }"
+            class="text-base md:text-xl mb-6 md:mb-8 text-green-100"
+          >Bersama Membangun Lingkungan yang Harmonis dan Sejahtera</p>
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.8 }"
+              :enter="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 600 } }"
+              :hovered="{ scale: 1.05 }"
+              :tapped="{ scale: 0.95 }"
               @click="handlePengaduanClick"
               class="px-6 py-3 bg-white text-green-700 rounded-lg font-bold hover:bg-green-50 shadow-lg text-center"
             >
               Ajukan Pengaduan
             </button>
-            <a href="#tentang" @click.prevent="scrollToSection('tentang')" class="px-6 py-3 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800 border-2 border-white/50 hover:border-white text-center">Tentang Kami</a>
+            <a 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.8 }"
+              :enter="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 700 } }"
+              :hovered="{ scale: 1.05 }"
+              :tapped="{ scale: 0.95 }"
+              href="#tentang" 
+              @click.prevent="scrollToSection('tentang')" 
+              class="px-6 py-3 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800 border-2 border-white/50 hover:border-white text-center"
+            >Tentang Kami</a>
           </div>
         </div>
       </div>
@@ -95,7 +124,12 @@
 
     <section class="max-w-7xl mx-auto px-4 -mt-12 md:-mt-16 mb-8 relative z-10">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, y: 50 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 0 } }"
+          class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer"
+        >
           <div>
             <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">{{ stats[0].label }}</p>
             
@@ -132,7 +166,12 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, y: 50 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 100 } }"
+          class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer"
+        >
           <div>
             <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Status Kependudukan</p>
             
@@ -169,7 +208,12 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, y: 50 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 200 } }"
+          class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer"
+        >
           <div>
             <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Distribusi Keuangan</p>
             
@@ -230,7 +274,12 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, y: 50 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 300 } }"
+          class="bg-white rounded-xl md:rounded-2xl shadow-xl p-3 md:p-6 hover:shadow-2xl cursor-pointer"
+        >
           <div>
             <p class="text-gray-600 text-xs md:text-sm font-medium mb-3 md:mb-4">Status Pengaduan</p>
             
@@ -284,11 +333,20 @@
     </section>
 
     <section class="max-w-7xl mx-auto px-4 py-8 md:py-16 mt-4 md:mt-8">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Layanan Cepat</h2>
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center"
+      >Layanan Cepat</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
           v-for="(service, index) in quickServices" 
           :key="index"
+          v-motion
+          :initial="{ opacity: 0, x: -30 }"
+          :visible="{ opacity: 1, x: 0, transition: { duration: 400, delay: index * 150 } }"
+          :hovered="{ scale: 1.02, transition: { duration: 200 } }"
           @click="handleServiceClick(service)"
           class="bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl cursor-pointer transition-shadow"
         >
@@ -313,10 +371,19 @@
     </section>
 
     <section id="tentang" class="max-w-7xl mx-auto px-4 py-8 md:py-16 mt-4 md:mt-8">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">Visi & Misi</h2>
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center"
+      >Visi & Misi</h2>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
+        <div
+          v-motion
+          :initial="{ opacity: 0, scale: 0.95 }"
+          :visible="{ opacity: 1, scale: 1, transition: { duration: 600 } }"
+        >
           <div class="relative overflow-hidden rounded-2xl shadow-2xl mb-4 h-80 bg-gray-200">
             <img :src="currentMainImage" alt="Pengurus RW" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
@@ -324,9 +391,7 @@
               <p class="text-sm font-medium mb-1">Pengurus RW 12</p>
               <h4 class="text-xl font-bold">{{ currentImageTitle }}</h4>
             </div>
-          </div>
-
-          <div class="relative">
+          </div><div class="relative">
             <div class="overflow-hidden">
               <div class="flex gap-3 transition-transform duration-500" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
                 <div class="flex gap-3 min-w-full">
@@ -367,7 +432,11 @@
         </div>
 
         <div class="space-y-6">
-          <div>
+          <div
+            v-motion
+            :initial="{ opacity: 0, x: 50 }"
+            :visible="{ opacity: 1, x: 0, transition: { duration: 500, delay: 200 } }"
+          >
             <h3 class="text-2xl font-bold text-green-700 mb-4 flex items-center">
               <span class="w-2 h-8 bg-green-600 mr-3 rounded"></span>
               Visi
@@ -377,35 +446,28 @@
             </p>
           </div>
           
-          <div>
+          <div
+            v-motion
+            :initial="{ opacity: 0, x: 50 }"
+            :visible="{ opacity: 1, x: 0, transition: { duration: 500, delay: 400 } }"
+          >
             <h3 class="text-2xl font-bold text-green-700 mb-4 flex items-center">
               <span class="w-2 h-8 bg-green-600 mr-3 rounded"></span>
               Misi
             </h3>
             <ul class="space-y-3 text-gray-700">
-              <li class="flex items-start">
+              <li 
+                v-for="(misi, idx) in misiList" 
+                :key="idx"
+                v-motion
+                :initial="{ opacity: 0, x: 30 }"
+                :visible="{ opacity: 1, x: 0, transition: { duration: 400, delay: 500 + (idx * 100) } }"
+                class="flex items-start"
+              >
                 <svg class="w-6 h-6 text-green-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                 </svg>
-                <span>Meningkatkan kualitas pelayanan dan transparansi administrasi warga</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-green-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span>Memberdayakan masyarakat melalui program-program sosial dan ekonomi</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-green-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span>Menciptakan lingkungan yang bersih, aman, dan nyaman untuk semua</span>
-              </li>
-              <li class="flex items-start">
-                <svg class="w-6 h-6 text-green-600 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-                <span>Membangun solidaritas dan kerukunan antar warga melalui kegiatan bersama</span>
+                <span>{{ misi }}</span>
               </li>
             </ul>
           </div>
@@ -415,13 +477,25 @@
 
     <section class="bg-white py-8 md:py-16">
       <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Dokumentasi Kegiatan</h2>
+        <h2 
+          v-motion
+          :initial="{ opacity: 0, y: -20 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+          class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center"
+        >Dokumentasi Kegiatan</h2>
 
         <div class="relative overflow-hidden">
           <div class="flex transition-transform duration-700 ease-in-out" 
               :style="{ transform: `translateX(-${currentNewsSlide * 100}%)` }">
             <div class="min-w-full grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              <div v-for="i in 4" :key="`news1-${i}`" class="group cursor-pointer">
+              <div 
+                v-for="i in 4" 
+                :key="`news1-${i}`" 
+                v-motion
+                :initial="{ opacity: 0, scale: 0.9 }"
+                :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: (i-1) * 100 } }"
+                class="group cursor-pointer"
+              >
                 <div class="relative overflow-hidden rounded-xl h-48 md:h-64 bg-gray-200 shadow-lg">
                   <img :src="allNewsImages[i-1].image" :alt="allNewsImages[i-1].title" 
                       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
@@ -434,7 +508,14 @@
             </div>
             
             <div class="min-w-full grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              <div v-for="i in 4" :key="`news2-${i}`" class="group cursor-pointer">
+              <div 
+                v-for="i in 4" 
+                :key="`news2-${i}`" 
+                v-motion
+                :initial="{ opacity: 0, scale: 0.9 }"
+                :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: (i-1) * 100 } }"
+                class="group cursor-pointer"
+              >
                 <div class="relative overflow-hidden rounded-xl h-48 md:h-64 bg-gray-200 shadow-lg">
                   <img :src="allNewsImages[i+3].image" :alt="allNewsImages[i+3].title" 
                       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
@@ -459,9 +540,22 @@
     </section>
 
     <section id="baksos" class="max-w-5xl mx-auto px-4 mt-8 md:mt-16">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Program Dana Sosial</h2>
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center"
+      >Program Dana Sosial</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-        <div v-for="(stat, index) in stats2" :key="index" class="bg-white rounded-xl md:rounded-2xl shadow-xl p-6 md:p-10 hover:shadow-2xl cursor-pointer">
+        <div 
+          v-for="(stat, index) in stats2" 
+          :key="index" 
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 150 } }"
+          :hovered="{ scale: 1.02, transition: { duration: 200 } }"
+          class="bg-white rounded-xl md:rounded-2xl shadow-xl p-6 md:p-10 hover:shadow-2xl cursor-pointer"
+        >
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm md:text-lg text-gray-600 font-medium">{{ stat.label }}</p>
@@ -479,7 +573,12 @@
     </section>
 
     <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-12 mb-12 md:mb-16">
-      <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
+      <div 
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+        class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden"
+      >
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
           <h2 class="text-xl md:text-2xl font-bold text-white">Riwayat Bantuan Terkini</h2>
           <p class="text-green-100 mt-1 text-sm">Data penerima bantuan terbaru</p>
@@ -513,7 +612,14 @@
               </tr>
             </tbody>
             <tbody v-else>
-              <tr v-for="(item, index) in tableData" :key="index" class="border-b border-gray-100 hover:bg-green-50 cursor-pointer">
+              <tr 
+                v-for="(item, index) in tableData" 
+                :key="index" 
+                v-motion
+                :initial="{ opacity: 0, x: -20 }"
+                :visible="{ opacity: 1, x: 0, transition: { duration: 300, delay: Math.min(index * 50, 400) } }"
+                class="border-b border-gray-100 hover:bg-green-50 cursor-pointer"
+              >
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
                   <div class="flex items-center space-x-3">
@@ -544,7 +650,14 @@
         </div>
 
         <div class="md:hidden divide-y divide-gray-100">
-          <div v-for="(item, index) in tableData" :key="index" class="p-4 hover:bg-green-50">
+          <div 
+            v-for="(item, index) in tableData" 
+            :key="index" 
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible="{ opacity: 1, x: 0, transition: { duration: 300, delay: Math.min(index * 50, 400) } }"
+            class="p-4 hover:bg-green-50"
+          >
             <div class="flex items-start gap-3">
               <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                 <span class="text-green-700 font-semibold text-sm">{{ item.nama_penerima.charAt(0) }}</span>
@@ -570,9 +683,19 @@
     </section>
 
     <section class="max-w-4xl mx-auto px-4 py-8 md:py-16 mt-4 md:mt-8">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Program Kebersihan</h2>
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center"
+      >Program Kebersihan</h2>
       
-      <div class="relative">
+      <div 
+        v-motion
+        :initial="{ opacity: 0, scale: 0.95 }"
+        :visible="{ opacity: 1, scale: 1, transition: { duration: 500 } }"
+        class="relative"
+      >
         <button @click="prevCleaningSlide" :disabled="currentCleaningSlide === 0" class="absolute -left-16 md:-left-18 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed z-10">
           <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -648,15 +771,28 @@
         </button>
 
         <div class="flex justify-center gap-2 mt-6">
-          <button v-for="(event, idx) in sortedEvents" :key="idx" @click="currentCleaningSlide = idx" class="w-2 h-2 rounded-full" :class="currentCleaningSlide === idx ? 'bg-green-600 w-8' : 'bg-gray-300'"></button>
+          <button v-for="(event, idx) in sortedEvents" :key="idx" @click="currentCleaningSlide = idx" class="w-2 h-2 rounded-full transition-all duration-300" :class="currentCleaningSlide === idx ? 'bg-green-600 w-8' : 'bg-gray-300'"></button>
         </div>
       </div>
     </section>
 
     <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-16">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">Program Bank Sampah</h2>
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center"
+      >Program Bank Sampah</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div v-for="(stat, index) in stats3" :key="index" class="bg-white rounded-xl md:rounded-2xl shadow-xl p-6 md:p-10 hover:shadow-2xl cursor-pointer">
+        <div 
+          v-for="(stat, index) in stats3" 
+          :key="index" 
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 150 } }"
+          :hovered="{ scale: 1.02, transition: { duration: 200 } }"
+          class="bg-white rounded-xl md:rounded-2xl shadow-xl p-6 md:p-10 hover:shadow-2xl cursor-pointer"
+        >
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm md:text-lg text-gray-600 font-medium">{{ stat.label }}</p>
@@ -674,11 +810,15 @@
     </section>
 
     <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-12 mb-12 md:mb-16">
-      <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
+      <div 
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+        class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden"
+      >
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
           <h2 class="text-2xl font-bold text-white">Rekening Bank Sampah</h2>
-          <p class="text-green-100 mt-1">1 kg sampah seharga Rp 3.000 (pengantaran sampah
-            dan penarikan uang dilakukan secara offline).</p>
+          <p class="text-green-100 mt-1">1 kg sampah seharga Rp 3.000 (pengantaran sampah dan penarikan uang dilakukan secara offline).</p>
         </div>
 
         <div class="hidden md:block overflow-x-auto">
@@ -709,7 +849,14 @@
               </tr>
             </tbody>
             <tbody v-else>
-              <tr v-for="(item, index) in bankSampahData" :key="index" class="border-b border-gray-100 hover:bg-green-50 cursor-pointer">
+              <tr 
+                v-for="(item, index) in bankSampahData" 
+                :key="index" 
+                v-motion
+                :initial="{ opacity: 0, x: -20 }"
+                :visible="{ opacity: 1, x: 0, transition: { duration: 300, delay: Math.min(index * 50, 400) } }"
+                class="border-b border-gray-100 hover:bg-green-50 cursor-pointer"
+              >
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
                   <div class="flex items-center space-x-3">
@@ -745,7 +892,14 @@
         </div>
 
         <div class="md:hidden divide-y divide-gray-100">
-          <div v-for="(item, index) in bankSampahData" :key="index" class="p-4 hover:bg-green-50">
+          <div 
+            v-for="(item, index) in bankSampahData" 
+            :key="index" 
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible="{ opacity: 1, x: 0, transition: { duration: 300, delay: Math.min(index * 50, 400) } }"
+            class="p-4 hover:bg-green-50"
+          >
             <div class="flex items-start gap-3">
               <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                 <span class="text-green-700 font-semibold text-sm">{{ item.nama.charAt(0) }}</span>
@@ -771,8 +925,18 @@
     </section>
 
     <section class="max-w-5xl mx-auto px-4 mt-8 md:mt-12 mb-12 md:mb-16">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Jadwal Ronda</h2>
-      <div class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden">
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-3xl font-bold text-gray-900 mb-8 text-center"
+      >Jadwal Ronda</h2>
+      <div 
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+        class="bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden"
+      >
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-4 md:px-8 py-4 md:py-6">
           <h2 class="text-2xl font-bold text-white">Jadwal Ronda</h2>
           <p class="text-green-100 mt-1">Ronda dilakukan mulai dari jam 21.00 sampai jam 04.00</p>
@@ -803,9 +967,15 @@
               </tr>
             </tbody>
             <tbody v-else>
-              <tr v-for="(item, index) in jadwalRondaData" :key="index" 
-                  class="border-b border-gray-100 hover:bg-green-50 cursor-pointer"
-                  :class="{ 'bg-red-50': item.isToday }">
+              <tr 
+                v-for="(item, index) in jadwalRondaData" 
+                :key="index"
+                v-motion
+                :initial="{ opacity: 0, x: -20 }"
+                :visible="{ opacity: 1, x: 0, transition: { duration: 300, delay: Math.min(index * 50, 400) } }"
+                class="border-b border-gray-100 hover:bg-green-50 cursor-pointer"
+                :class="{ 'bg-red-50': item.isToday }"
+              >
                 <td class="px-6 py-5 text-gray-700 font-medium">{{ item.no }}</td>
                 <td class="px-6 py-5">
                   <div class="flex items-center space-x-3">
@@ -841,7 +1011,14 @@
         </div>
 
         <div class="md:hidden divide-y divide-gray-100">
-          <div v-for="(item, index) in jadwalRondaData" :key="index" class="p-4 hover:bg-green-50">
+          <div 
+            v-for="(item, index) in jadwalRondaData" 
+            :key="index" 
+            v-motion
+            :initial="{ opacity: 0, x: -20 }"
+            :visible="{ opacity: 1, x: 0, transition: { duration: 300, delay: Math.min(index * 50, 400) } }"
+            class="p-4 hover:bg-green-50"
+          >
             <div class="flex items-start gap-3">
               <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
                 <span class="text-green-700 font-semibold text-sm">{{ item.tanggal.charAt(0) }}</span>
@@ -866,10 +1043,21 @@
     </section>
 
     <section id="keuangan" class="max-w-7xl mx-auto px-4 mt-8 md:mt-16 mb-12 md:mb-16">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Laporan Keuangan</h2>
+      <h2 
+        v-motion
+        :initial="{ opacity: 0, y: -20 }"
+        :visible="{ opacity: 1, y: 0, transition: { duration: 500 } }"
+        class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center"
+      >Laporan Keuangan</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover:shadow-2xl">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, x: -50 }"
+          :visible="{ opacity: 1, x: 0, transition: { duration: 600, delay: 100 } }"
+          :hovered="{ scale: 1.01, transition: { duration: 200 } }"
+          class="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover:shadow-2xl"
+        >
           <div class="flex items-start justify-between mb-6">
             <div>
               <p class="text-gray-600 text-sm md:text-base mb-2">Total Pemasukan</p>
@@ -889,7 +1077,12 @@
           </div>
           
           <div class="grid grid-cols-2 gap-3 md:gap-4">
-            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 200 } }"
+              class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-green-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Iuran</p>
@@ -897,7 +1090,12 @@
               <p class="text-lg md:text-xl font-bold text-green-700">{{ formatNumber(keuanganData.iuran) }}</p>
             </div>
             
-            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 300 } }"
+              class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-blue-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Dana Pemerintah</p>
@@ -905,7 +1103,12 @@
               <p class="text-lg md:text-xl font-bold text-blue-700">{{ formatNumber(keuanganData.danaPemerintah) }}</p>
             </div>
             
-            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 400 } }"
+              class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-purple-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">CSR</p>
@@ -913,7 +1116,12 @@
               <p class="text-lg md:text-xl font-bold text-purple-700">{{ formatNumber(keuanganData.csr) }}</p>
             </div>
             
-            <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 500 } }"
+              class="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-emerald-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Bank Sampah</p>
@@ -923,7 +1131,13 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover:shadow-2xl">
+        <div 
+          v-motion
+          :initial="{ opacity: 0, x: 50 }"
+          :visible="{ opacity: 1, x: 0, transition: { duration: 600, delay: 100 } }"
+          :hovered="{ scale: 1.01, transition: { duration: 200 } }"
+          class="bg-white rounded-2xl shadow-xl p-6 md:p-8 hover:shadow-2xl"
+        >
           <div class="flex items-start justify-between mb-6">
             <div>
               <p class="text-gray-600 text-sm md:text-base mb-2">Total Pengeluaran</p>
@@ -943,7 +1157,12 @@
           </div>
           
           <div class="grid grid-cols-2 gap-3 md:gap-4">
-            <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 200 } }"
+              class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-red-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Dana Sosial</p>
@@ -951,7 +1170,12 @@
               <p class="text-lg md:text-xl font-bold text-red-700">{{ formatNumber(keuanganData.dansos) }}</p>
             </div>
             
-            <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 300 } }"
+              class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-orange-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Program Kebersihan</p>
@@ -959,7 +1183,12 @@
               <p class="text-lg md:text-xl font-bold text-orange-700">{{ formatNumber(keuanganData.programKebersihan) }}</p>
             </div>
             
-            <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 400 } }"
+              class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-yellow-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Bank Sampah</p>
@@ -967,7 +1196,12 @@
               <p class="text-lg md:text-xl font-bold text-yellow-700">{{ formatNumber(keuanganData.bankSampahOut) }}</p>
             </div>
             
-            <div class="bg-gradient-to-br from-rose-50 to-rose-100 rounded-xl p-3 md:p-4">
+            <div 
+              v-motion
+              :initial="{ opacity: 0, scale: 0.9 }"
+              :visible="{ opacity: 1, scale: 1, transition: { duration: 400, delay: 500 } }"
+              class="bg-gradient-to-br from-rose-50 to-rose-100 rounded-xl p-3 md:p-4"
+            >
               <div class="flex items-center gap-2 mb-2">
                 <div class="w-2 h-2 rounded-full bg-rose-600"></div>
                 <p class="text-xs md:text-sm text-gray-600">Lain-Lain</p>
@@ -979,16 +1213,29 @@
       </div>
     </section>
 
-    <footer class="bg-gray-900 text-white py-12 relative overflow-hidden">
+    <footer 
+      v-motion
+      :initial="{ opacity: 0 }"
+      :visible="{ opacity: 1, transition: { duration: 800 } }"
+      class="bg-gray-900 text-white py-12 relative overflow-hidden"
+    >
       <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-400 via-green-600 to-green-400"></div>
       
       <div class="max-w-7xl mx-auto px-4 relative">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 100 } }"
+          >
             <h3 class="text-xl font-bold mb-4">DesaPoint</h3>
             <p class="text-gray-400 text-sm">RW Sejahtera</p>
           </div>
-          <div>
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 200 } }"
+          >
             <h4 class="font-bold mb-4">Menu</h4>
             <div class="space-y-2">
               <a href="/" class="block text-gray-400 hover:text-white text-sm">Beranda</a>
@@ -997,22 +1244,26 @@
             </div>
           </div>
           
-          <div>
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 300 } }"
+          >
             <h4 class="font-bold mb-4">Ikuti Kami</h4>
             <div class="flex space-x-4">
-              <a href="https://www.tiktok.com/@desa.point" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black">
+              <a href="https://www.tiktok.com/@desa.point" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-black transition-colors duration-300">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
                 </svg>
               </a>
 
-              <a href="https://www.instagram.com/desa.point?igsh=MXMyYXdtNTFkbGszcw==" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600">
+              <a href="https://www.instagram.com/desa.point?igsh=MXMyYXdtNTFkbGszcw==" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors duration-300">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                 </svg>
               </a>
 
-              <a href="https://wa.me/6288289175113" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-500">
+              <a href="https://wa.me/6288289175113" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-500 transition-colors duration-300">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                 </svg>
@@ -1020,7 +1271,11 @@
             </div>
           </div>
 
-          <div>
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible="{ opacity: 1, y: 0, transition: { duration: 500, delay: 400 } }"
+          >
             <h4 class="font-bold mb-4">Lokasi</h4>
             <div class="rounded-lg overflow-hidden shadow-lg">
               <iframe 
@@ -1042,110 +1297,146 @@
       </div>
     </footer>
 
-    <div v-if="showBankSampahModal" @click="showBankSampahModal = false" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 md:px-8 py-5 md:py-6 flex items-center justify-between">
-          <div>
-            <h2 class="text-2xl font-bold text-white">Laporan Keuangan</h2>
-            <p class="text-green-100 mt-1 text-sm">Data transaksi keuangan RW</p>
-          </div>
-          <button @click="showBankSampahModal = false" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div v-if="showBankSampahModal" @click="showBankSampahModal = false" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <Transition
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 scale-95 translate-y-4"
+          enter-to-class="opacity-100 scale-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100 scale-100 translate-y-0"
+          leave-to-class="opacity-0 scale-95 translate-y-4"
+        >
+          <div v-if="showBankSampahModal" @click.stop class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 md:px-8 py-5 md:py-6 flex items-center justify-between">
+              <div>
+                <h2 class="text-2xl font-bold text-white">Laporan Keuangan</h2>
+                <p class="text-green-100 mt-1 text-sm">Data transaksi keuangan RW</p>
+              </div>
+              <button @click="showBankSampahModal = false" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors duration-200">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
 
-        <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
-          <div class="hidden md:block overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="bg-gray-50 border-b-2 border-green-200">
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">No</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Debit</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kredit</th>
-                  <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in laporanKeuangan" :key="index" class="border-b border-gray-100 hover:bg-green-50">
-                  <td class="px-6 py-5 text-gray-700 font-medium">{{ index + 1 }}</td>
-                  <td class="px-6 py-5 text-gray-800">{{ item.tanggal }}</td>
-                  <td class="px-6 py-5 text-gray-800">{{ item.keterangan }}</td>
-                  <td class="px-6 py-5">
-                    <span v-if="item.debit > 0" class="text-red-700 font-semibold">Rp {{ formatNumber(item.debit) }}</span>
-                    <span v-else class="text-gray-400">-</span>
-                  </td>
-                  <td class="px-6 py-5">
-                    <span v-if="item.kredit > 0" class="text-green-700 font-semibold">Rp {{ formatNumber(item.kredit) }}</span>
-                    <span v-else class="text-gray-400">-</span>
-                  </td>
-                  <td class="px-6 py-5">
-                    <span class="font-bold" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">Rp {{ formatNumber(item.saldo) }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+              <div class="hidden md:block overflow-x-auto">
+                <table class="w-full">
+                  <thead>
+                    <tr class="bg-gray-50 border-b-2 border-green-200">
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">No</th>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tanggal</th>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Debit</th>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kredit</th>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Saldo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in laporanKeuangan" :key="index" class="border-b border-gray-100 hover:bg-green-50">
+                      <td class="px-6 py-5 text-gray-700 font-medium">{{ index + 1 }}</td>
+                      <td class="px-6 py-5 text-gray-800">{{ item.tanggal }}</td>
+                      <td class="px-6 py-5 text-gray-800">{{ item.keterangan }}</td>
+                      <td class="px-6 py-5">
+                        <span v-if="item.debit > 0" class="text-red-700 font-semibold">Rp {{ formatNumber(item.debit) }}</span>
+                        <span v-else class="text-gray-400">-</span>
+                      </td>
+                      <td class="px-6 py-5">
+                        <span v-if="item.kredit > 0" class="text-green-700 font-semibold">Rp {{ formatNumber(item.kredit) }}</span>
+                        <span v-else class="text-gray-400">-</span>
+                      </td>
+                      <td class="px-6 py-5">
+                        <span class="font-bold" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">Rp {{ formatNumber(item.saldo) }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-          <div class="md:hidden divide-y divide-gray-100">
-            <div v-for="(item, index) in laporanKeuangan" :key="index" class="p-4 hover:bg-green-50">
-              <div class="flex items-start gap-3">
-                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <span class="text-green-700 font-semibold text-sm">{{ index + 1 }}</span>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="font-semibold text-gray-900 mb-1">{{ item.tanggal }}</div>
-                  <div class="text-sm text-gray-600 mb-2">{{ item.keterangan }}</div>
-                  <div class="flex gap-4 text-xs">
-                    <span v-if="item.debit > 0" class="text-red-700 font-bold">D: Rp {{ formatNumber(item.debit) }}</span>
-                    <span v-if="item.kredit > 0" class="text-green-700 font-bold">K: Rp {{ formatNumber(item.kredit) }}</span>
+              <div class="md:hidden divide-y divide-gray-100">
+                <div v-for="(item, index) in laporanKeuangan" :key="index" class="p-4 hover:bg-green-50">
+                  <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                      <span class="text-green-700 font-semibold text-sm">{{ index + 1 }}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="font-semibold text-gray-900 mb-1">{{ item.tanggal }}</div>
+                      <div class="text-sm text-gray-600 mb-2">{{ item.keterangan }}</div>
+                      <div class="flex gap-4 text-xs">
+                        <span v-if="item.debit > 0" class="text-red-700 font-bold">D: Rp {{ formatNumber(item.debit) }}</span>
+                        <span v-if="item.kredit > 0" class="text-green-700 font-bold">K: Rp {{ formatNumber(item.kredit) }}</span>
+                      </div>
+                      <div class="text-sm font-bold mt-1" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">Saldo: Rp {{ formatNumber(item.saldo) }}</div>
+                    </div>
                   </div>
-                  <div class="text-sm font-bold mt-1" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">Saldo: Rp {{ formatNumber(item.saldo) }}</div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="bg-gray-50 px-6 md:px-8 py-4 border-t border-gray-200">
-          <p class="text-sm text-gray-600">Menampilkan {{ laporanKeuangan.length }} transaksi</p>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 rounded-t-2xl">
-          <h2 class="text-xl font-bold text-white">Anda Belum Login!</h2>
-          <p class="text-red-100 text-sm mt-1">Untuk dapat mengirimkan pengaduan, anda harus login terlebih dahulu</p>
-        </div>
-
-        <div class="p-6">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-              </svg>
-            </div>
-            <div>
-              <p class="text-gray-800 font-medium">Ingin lanjutkan ke halaman login?</p>
+            <div class="bg-gray-50 px-6 md:px-8 py-4 border-t border-gray-200">
+              <p class="text-sm text-gray-600">Menampilkan {{ laporanKeuangan.length }} transaksi</p>
             </div>
           </div>
-        </div>
-
-        <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex gap-3 justify-end">
-          <button @click="showDeleteModal = false" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
-            Batal
-          </button>
-          <button @click="() => { showDeleteModal = false; router.push('/login'); }" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
-            Login
-          </button>
-        </div>
+        </Transition>
       </div>
-    </div>
+    </Transition>
+
+    <Transition
+      enter-active-class="transition duration-300 ease-out"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition duration-200 ease-in"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
+        <Transition
+          enter-active-class="transition duration-300 ease-out"
+          enter-from-class="opacity-0 scale-95 translate-y-4"
+          enter-to-class="opacity-100 scale-100 translate-y-0"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="opacity-100 scale-100 translate-y-0"
+          leave-to-class="opacity-0 scale-95 translate-y-4"
+        >
+          <div v-if="showDeleteModal" @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5 rounded-t-2xl">
+              <h2 class="text-xl font-bold text-white">Anda Belum Login!</h2>
+              <p class="text-red-100 text-sm mt-1">Untuk dapat mengirimkan pengaduan, anda harus login terlebih dahulu</p>
+            </div>
+
+            <div class="p-6">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-gray-800 font-medium">Ingin lanjutkan ke halaman login?</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 rounded-b-2xl flex gap-3 justify-end">
+              <button @click="showDeleteModal = false" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
+                Batal
+              </button>
+              <button @click="() => { showDeleteModal = false; router.push('/login'); }" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
+                Login
+              </button>
+            </div>
+          </div>
+        </Transition>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -1182,6 +1473,13 @@ const allNewsImages = ref([
 ])
 
 const scrollY = ref(0)
+
+const misiList = ref([
+  'Meningkatkan kualitas pelayanan dan transparansi administrasi warga',
+  'Memberdayakan masyarakat melalui program-program sosial dan ekonomi',
+  'Menciptakan lingkungan yang bersih, aman, dan nyaman untuk semua',
+  'Membangun solidaritas dan kerukunan antar warga melalui kegiatan bersama'
+])
 
 const handleScroll = () => {
   scrollY.value = window.scrollY
@@ -1266,9 +1564,9 @@ const fetchPengaduanStats = async () => {
 
 const handlePengaduanClick = (e) => {
   if (!isLoggedIn.value) {
-    showDeleteModal.value = true;
+    showDeleteModal.value = true
   } else {
-    router.push('/form');
+    router.push('/form')
   }
 }
 
@@ -1673,7 +1971,13 @@ html {
 }
 
 #baksos,
-#keuangan {
+#keuangan,
+#tentang {
   scroll-margin-top: 6rem;
+}
+
+.min-h-screen {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 </style>

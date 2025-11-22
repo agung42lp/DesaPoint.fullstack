@@ -1,73 +1,36 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 pb-24">
     <transition name="slide-fade">
-    <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
+      <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
         <div 
-        class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
-        :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
-        <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
+          :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+          <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          </svg>
+          <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <p class="text-white font-medium">{{ toast.message }}</p>
-        </div>
-    </div>
-    </transition>
-    
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 md:h-20">
-          <div class="flex items-center space-x-4">
-            <div class="h-10 w-10 md:h-12 md:w-12 rounded-lg flex items-center justify-center overflow-hidden">
-              <img :src="`/images/logo.jpg`" alt="Logo" class="h-full w-full object-cover" />
-            </div>
-            <div>
-              <h1 class="text-lg md:text-xl font-bold text-green-700">DesaPoint</h1>
-              <p class="text-xs text-gray-600">RW Sejahtera</p>
-            </div>
-          </div>
-          
-          <div class="hidden md:flex items-center space-x-6">
-            <router-link to="/" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
-            <router-link to="/form" class="text-gray-700 hover:text-green-600 font-medium">Pengaduan</router-link>
-            
-            <div class="flex items-center gap-4">
-              <router-link to="/profile" class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
-                  {{ currentUser?.name?.charAt(0).toUpperCase() }}
-                </div>
-                <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
-              </router-link>
-              <button @click="handleLogout" class="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-shadow">
-                <span class="flex items-center gap-2">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                  </svg>
-                  Logout
-                </span>
-              </button>
-            </div>
-          </div>
-
-          <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
-          <div class="flex flex-col space-y-3 pt-4">
-            <router-link @click="mobileMenuOpen = false" to="/" class="text-gray-700 hover:text-green-600 font-medium py-2">Beranda</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/form" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</router-link>
-            <button @click="() => { handleLogout(); mobileMenuOpen = false; }" class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">Logout</button>
-          </div>
+          </svg>
+          <p class="text-white font-medium">{{ toast.message }}</p>
         </div>
       </div>
-    </nav>
+    </transition>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+      <router-link to="/" class="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 group">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="absolute right-16 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Beranda</span>
+      </router-link>
+      
+      <router-link to="/form" class="w-14 h-14 bg-blue-600 hover:bg-blue-700 rounded-full shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 group">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+        </svg>
+        <span class="absolute right-16 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Pengaduan</span>
+      </router-link>
+    </div>
 
     <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
@@ -97,6 +60,12 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                 </svg>
                 Ubah Password
+              </button>
+              <button @click="handleLogout" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold shadow-md transition-colors flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
               </button>
             </div>
           </div>
@@ -250,6 +219,7 @@
           <p class="text-gray-600 text-sm font-medium">Selesai</p>
         </div>
       </div>
+
       <div class="mt-8 bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gradient-to-r from-green-600 to-green-700 px-6 py-5">
           <h2 class="text-xl font-bold text-white">Riwayat Pengaduan Saya</h2>
@@ -485,6 +455,29 @@
         </div>
       </div>
     </div>
+    <div v-if="showLogoutConfirm" @click="showLogoutConfirm = false" class="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+      <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="p-6 text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+          </div>
+          
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Konfirmasi Logout</h3>
+          <p class="text-gray-600 mb-6">Apakah Anda yakin ingin keluar dari akun?</p>
+          
+          <div class="flex gap-3">
+            <button @click="showLogoutConfirm = false" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
+              Batal
+            </button>
+            <button @click="confirmLogout" class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+              Ya, Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -558,7 +551,6 @@ const formatCurrency = (value) => {
 
 const router = useRouter()
 const currentUser = ref(null)
-const mobileMenuOpen = ref(false)
 const showEditModal = ref(false)
 const showChangePasswordModal = ref(false)
 const toast = ref({ show: false, message: '', type: '' })
@@ -653,7 +645,13 @@ const changePassword = async () => {
   }
 }
 
-const handleLogout = async () => {
+const showLogoutConfirm = ref(false)
+
+const handleLogout = () => {
+  showLogoutConfirm.value = true
+}
+
+const confirmLogout = async () => {
   try {
     await authService.logout()
   } catch (error) {

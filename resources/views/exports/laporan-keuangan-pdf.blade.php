@@ -11,8 +11,8 @@
         h2 { color: #333; margin-bottom: 5px; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
-        .debit { color: #dc2626; font-weight: bold; }
-        .kredit { color: #16a34a; font-weight: bold; }
+        .debit { color: #16a34a; font-weight: bold; }
+        .kredit { color:  #dc2626; font-weight: bold; }
         .saldo-positive { color: #16a34a; font-weight: bold; }
         .saldo-negative { color: #dc2626; font-weight: bold; }
         .summary { background-color: #f3f4f6; padding: 10px; margin-top: 20px; border-radius: 5px; }
@@ -67,11 +67,11 @@
     <div class="summary">
         <div class="summary-item">
             <strong>Total Pemasukan:</strong> 
-            <span class="kredit">Rp {{ number_format($totalDebit, 0, ',', '.') }}</span>
+            <span class="debit">Rp {{ number_format($totalDebit, 0, ',', '.') }}</span>
         </div>
         <div class="summary-item">
             <strong>Total Pengeluaran:</strong> 
-            <span class="debit">Rp {{ number_format($totalKredit, 0, ',', '.') }}</span>
+            <span class="kredit">Rp {{ number_format($totalKredit, 0, ',', '.') }}</span>
         </div>
         <div class="summary-item">
             <strong>Saldo Akhir:</strong> 

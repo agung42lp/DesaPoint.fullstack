@@ -61,7 +61,7 @@
       </nav>
 
       <div class="w-full flex flex-col items-center space-y-2 pt-4 border-t border-gray-100 px-2">
-        <router-link to="/profile" class="group relative w-14 h-14 flex items-center justify-center">
+        <router-link to="/profileadmin" class="group relative w-14 h-14 flex items-center justify-center">
           <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold cursor-pointer hover:scale-110 transition-all duration-300 shadow-lg">
             {{ currentUser?.name?.charAt(0).toUpperCase() }}
           </div>
@@ -83,7 +83,7 @@
 
     <div class="flex-1 ml-20">
       <transition name="slide-fade">
-        <div v-if="toast.show" class="fixed top-6 right-6 z-[100] max-w-md animate-slideIn">
+        <div v-if="toast.show" class="fixed top-6 right-6 z-[150] max-w-md animate-slideIn">
           <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
                :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
             <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">

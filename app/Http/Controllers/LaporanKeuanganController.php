@@ -21,11 +21,19 @@ class LaporanKeuanganController extends Controller
 
     public function exportPdf()
     {
-        $data = LaporanKeuangan::orderBy('tanggal', 'asc')->get();
+        $data = LaporanKeuangan::orderBy('tanggal', 'asc')
+                            ->orderBy('id', 'asc')
+                            ->get();
+        
+        $runningSaldo = 0;
+        foreach ($data as $item) {
+            $runningSaldo = $runningSaldo + $item->debit - $item->kredit;
+            $item->saldo = $runningSaldo;
+        }
         
         $totalDebit = $data->sum('debit');
         $totalKredit = $data->sum('kredit');
-        $saldoAkhir = $data->last()->saldo ?? 0;
+        $saldoAkhir = $runningSaldo; 
         
         $pdf = Pdf::loadView('exports.laporan-keuangan-pdf', compact('data', 'totalDebit', 'totalKredit', 'saldoAkhir'));
         return $pdf->download('laporan-keuangan-' . date('Y-m-d') . '.pdf');

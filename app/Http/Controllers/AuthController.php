@@ -203,4 +203,19 @@ class AuthController extends Controller
         Admin::findOrFail($id)->delete();
         return response()->json(['message' => 'Admin deleted']);
     }
+    public function checkName(Request $request)
+    {
+        $name = $request->query('name');
+        
+        if (!$name) {
+            return response()->json(['available' => true]);
+        }
+        
+        $existsInUsers = User::whereRaw('LOWER(name) = ?', [strtolower($name)])->exists();
+        $existsInAdmins = Admin::whereRaw('LOWER(name) = ?', [strtolower($name)])->exists();
+        
+        return response()->json([
+            'available' => !($existsInUsers || $existsInAdmins)
+        ]);
+    }
 }

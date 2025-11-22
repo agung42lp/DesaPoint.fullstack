@@ -1,72 +1,29 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 pb-24">
     <transition name="slide-fade">
-    <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
+      <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
         <div 
-        class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
-        :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
-        <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
+          :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+          <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          </svg>
+          <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        <p class="text-white font-medium">{{ toast.message }}</p>
-        </div>
-    </div>
-    </transition>
-    
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 md:h-20">
-          <div class="flex items-center space-x-4">
-            <div class="h-10 w-10 md:h-12 md:w-12 rounded-lg flex items-center justify-center overflow-hidden">
-              <img :src="`/images/logo.jpg`" alt="Logo" class="h-full w-full object-cover" />
-            </div>
-            <div>
-              <h1 class="text-lg md:text-xl font-bold text-green-700">DesaPoint</h1>
-              <p class="text-xs text-gray-600">RW Sejahtera</p>
-            </div>
-          </div>
-          
-          <div class="hidden md:flex items-center space-x-6">
-            <router-link to="/homeadmin" class="text-gray-700 hover:text-green-600 font-medium">Beranda</router-link>
-            
-            <div class="flex items-center gap-4">
-              <router-link to="/profile" class="flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-purple-50 to-blue-50 rounded-full border border-purple-200/50 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
-                  {{ currentUser?.name?.charAt(0).toUpperCase() }}
-                </div>
-                <span class="text-gray-800 font-semibold">{{ currentUser?.name }}</span>
-              </router-link>
-              <button @click="handleLogout" class="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-shadow">
-                <span class="flex items-center gap-2">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                  </svg>
-                  Logout
-                </span>
-              </button>
-            </div>
-          </div>
-
-          <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-              <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
-          <div class="flex flex-col space-y-3 pt-4">
-            <router-link @click="mobileMenuOpen = false" to="/" class="text-gray-700 hover:text-green-600 font-medium py-2">Beranda</router-link>
-            <router-link @click="mobileMenuOpen = false" to="/form" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</router-link>
-            <button @click="() => { handleLogout(); mobileMenuOpen = false; }" class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">Logout</button>
-          </div>
+          </svg>
+          <p class="text-white font-medium">{{ toast.message }}</p>
         </div>
       </div>
-    </nav>
+    </transition>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+      <router-link to="/homeadmin" class="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 group">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="absolute right-16 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Beranda</span>
+      </router-link>
+    </div>
 
     <section class="max-w-5xl mx-auto px-4 py-8 md:py-12">
       <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
@@ -80,7 +37,7 @@
               <p class="text-gray-600 mb-3">@{{ currentUser?.username }}</p>
               <div class="flex flex-wrap gap-2">
                 <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
-                  Admin sejak {{ formatDate(currentUser?.created_at) }}
+                  Member sejak {{ formatDate(currentUser?.created_at) }}
                 </span>
               </div>
             </div>
@@ -96,6 +53,12 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
                 </svg>
                 Ubah Password
+              </button>
+              <button @click="handleLogout" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold shadow-md transition-colors flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
               </button>
             </div>
           </div>
@@ -149,7 +112,14 @@
         <div class="p-6 space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-            <input v-model="editForm.name" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition-all">
+            <input 
+              v-model="editForm.name" 
+              type="text" 
+              disabled
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+              title="Nama tidak dapat diubah"
+            >
+            <p class="text-xs text-gray-500 mt-1">Nama tidak dapat diubah</p>
           </div>
 
           <div>
@@ -210,16 +180,43 @@
         </div>
       </div>
     </div>
+    <div v-if="showLogoutConfirm" @click="showLogoutConfirm = false" class="fixed inset-0 bg-black/50 z-[70] flex items-center justify-center p-4">
+      <div @click.stop class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="p-6 text-center">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+          </div>
+          
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Konfirmasi Logout</h3>
+          <p class="text-gray-600 mb-6">Apakah Anda yakin ingin keluar dari akun?</p>
+          
+          <div class="flex gap-3">
+            <button @click="showLogoutConfirm = false" class="flex-1 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
+              Batal
+            </button>
+            <button @click="confirmLogout" class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+              Ya, Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { authService } from '../services/api.js'
+import { authService, bankSampahAPI } from '../services/api.js'
 import api from '../services/api.js'
 
 const loadingPengaduan = ref(false)
+const showDetailModal = ref(false)
+const selectedPengaduanDetail = ref({})
+const bankSampahData = ref(null)
 
 const loadMyPengaduan = async () => {
   loadingPengaduan.value = true
@@ -233,9 +230,52 @@ const loadMyPengaduan = async () => {
   }
 }
 
+const loadBankSampahData = async () => {
+  if (!currentUser.value?.name) return
+  
+  try {
+    const response = await bankSampahAPI.getByName(currentUser.value.name)
+    bankSampahData.value = response.data
+  } catch (error) {
+    if (error.response?.status !== 404) {
+      console.error('Failed to load bank sampah data:', error)
+    }
+  }
+}
+
+const openDetail = (pengaduan) => {
+  selectedPengaduanDetail.value = pengaduan
+  showDetailModal.value = true
+}
+
+const getKategoriColor = (kategori) => {
+  const colors = {
+    'Infrastruktur': 'bg-orange-100 text-orange-700',
+    'Kebersihan': 'bg-green-100 text-green-700',
+    'Keamanan': 'bg-red-100 text-red-700',
+    'Pelayanan': 'bg-blue-100 text-blue-700',
+    'Lainnya': 'bg-gray-100 text-gray-700'
+  }
+  return colors[kategori] || 'bg-gray-100 text-gray-700'
+}
+
+const getStatusColor = (status) => {
+  const colors = {
+    'diterima': 'bg-blue-100 text-blue-700',
+    'diproses': 'bg-yellow-100 text-yellow-700',
+    'selesai': 'bg-green-100 text-green-700',
+    'ditolak': 'bg-red-100 text-red-700'
+  }
+  return colors[status] || 'bg-gray-100 text-gray-700'
+}
+
+const formatCurrency = (value) => {
+  if (!value) return '0'
+  return new Intl.NumberFormat('id-ID').format(value)
+}
+
 const router = useRouter()
 const currentUser = ref(null)
-const mobileMenuOpen = ref(false)
 const showEditModal = ref(false)
 const showChangePasswordModal = ref(false)
 const toast = ref({ show: false, message: '', type: '' })
@@ -285,6 +325,8 @@ const loadUserData = async () => {
       name: currentUser.value.name || '',
       username: currentUser.value.username || ''
     }
+
+    await loadBankSampahData()
   } catch (error) {
     console.error('Failed to load user data:', error)
     router.push('/login')
@@ -293,9 +335,9 @@ const loadUserData = async () => {
 
 const updateProfile = async () => {
   try {
-    await api.put('/user/profile', editForm.value)
+    await api.put('/user/profile', { username: editForm.value.username })
     
-    const updatedUser = { ...currentUser.value, ...editForm.value }
+    const updatedUser = { ...currentUser.value, username: editForm.value.username }
     localStorage.setItem('user', JSON.stringify(updatedUser))
     
     showEditModal.value = false
@@ -328,7 +370,13 @@ const changePassword = async () => {
   }
 }
 
-const handleLogout = async () => {
+const showLogoutConfirm = ref(false)
+
+const handleLogout = () => {
+  showLogoutConfirm.value = true
+}
+
+const confirmLogout = async () => {
   try {
     await authService.logout()
   } catch (error) {
@@ -345,6 +393,7 @@ onMounted(() => {
   loadMyPengaduan() 
 })
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 

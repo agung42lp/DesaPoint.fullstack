@@ -17,26 +17,29 @@ class KebersihanController extends Controller
         return response()->json($data);
     }
 
-   public function exportPdf()
+    public function exportPdf()
     {
-        $data = Kebersihan::all()->map(function($item) {
-            if ($item->image && file_exists(public_path('storage/' . $item->image))) {
-                try {
-                    $item->image_base64 = $this->processImageForPdf(public_path('storage/' . $item->image));
-                } catch (\Exception $e) {
-                    Log::error('Error processing image: ' . $e->getMessage());
-                    $item->image_base64 = null;
-                }
-            } else {
-                $item->image_base64 = null;
-            }
-            return $item;
-        });
+        $data = Kebersihan::orderBy('date', 'asc')  
+                        ->orderBy('time', 'asc') 
+                        ->get()
+                        ->map(function($item) {
+                            if ($item->image && file_exists(public_path('storage/' . $item->image))) {
+                                try {
+                                    $item->image_base64 = $this->processImageForPdf(public_path('storage/' . $item->image));
+                                } catch (\Exception $e) {
+                                    Log::error('Error processing image: ' . $e->getMessage());
+                                    $item->image_base64 = null;
+                                }
+                            } else {
+                                $item->image_base64 = null;
+                            }
+                            return $item;
+                        });
         
         $pdf = Pdf::loadView('exports.kebersihan-pdf', compact('data'));
         return $pdf->download('kebersihan-' . date('Y-m-d') . '.pdf');
     }
-
+    
     private function processImageForPdf($path)
     {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));

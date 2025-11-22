@@ -48,6 +48,7 @@ Route::post('/bank-sampah', [BankSampahController::class, 'store']);
 Route::put('/bank-sampah/{bankSampah}', [BankSampahController::class, 'update']);
 Route::delete('/bank-sampah/{bankSampah}', [BankSampahController::class, 'destroy']);
 
+Route::get('/check-name', [AuthController::class, 'checkName']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
