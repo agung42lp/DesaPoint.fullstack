@@ -1,43 +1,43 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 py-12 px-4">
+  <div class="min-h-screen bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 py-6 sm:py-12 px-3 sm:px-4">
     <transition name="slide-fade">
-      <div v-if="toast.show" class="fixed top-6 right-6 z-[150] max-w-md animate-slideIn">
-        <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
+      <div v-if="toast.show" class="fixed top-4 sm:top-6 right-3 sm:right-6 left-3 sm:left-auto z-[150] max-w-md animate-slideIn">
+        <div class="rounded-xl sm:rounded-2xl shadow-2xl p-3 sm:p-4 flex items-center gap-2 sm:gap-3 backdrop-blur-sm"
              :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
-          <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-            <svg v-if="toast.type === 'success'" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg v-if="toast.type === 'success'" class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <svg v-else class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg v-else class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <p class="text-white font-semibold">{{ toast.message }}</p>
+          <p class="text-white font-semibold text-sm sm:text-base">{{ toast.message }}</p>
         </div>
       </div>
     </transition>
 
     <div class="max-w-6xl mx-auto">
-      <div class="mb-10 animate-fade-in-down">
-        <div class="flex items-center justify-center gap-4">
-          <div class="flex items-center">
+      <div class="mb-6 sm:mb-10 animate-fade-in-down px-2">
+        <div class="flex items-center justify-center gap-2 sm:gap-4">
+          <div class="flex items-center flex-1 sm:flex-none">
             <div 
               :class="[
-                'w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-lg shadow-xl transition-all duration-500',
+                'w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center font-bold text-base sm:text-lg shadow-lg sm:shadow-xl transition-all duration-500',
                 currentStep === 1 ? 'bg-gradient-to-br from-green-600 to-green-700 text-white animate-bounce-in' : 'bg-green-500 text-white scale-90'
               ]">
               <span class="transition-all duration-300">{{ currentStep > 1 ? '✓' : '1' }}</span>
             </div>
             <span 
               :class="[
-                'ml-3 font-bold text-base transition-all duration-300',
+                'ml-2 sm:ml-3 font-bold text-xs sm:text-base transition-all duration-300',
                 currentStep === 1 ? 'text-green-700' : 'text-green-600'
               ]">
               Data Diri
             </span>
           </div>
           
-          <div class="relative w-28 h-1 bg-gray-200 rounded-full overflow-hidden">
+          <div class="relative w-16 sm:w-28 h-1 bg-gray-200 rounded-full overflow-hidden">
             <div 
               :class="[
                 'absolute inset-0 bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-700 ease-out',
@@ -45,100 +45,102 @@
               ]"></div>
           </div>
           
-          <div class="flex items-center">
+          <div class="flex items-center flex-1 sm:flex-none justify-end sm:justify-start">
             <div 
               :class="[
-                'w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-lg transition-all duration-500',
-                currentStep === 2 ? 'bg-gradient-to-br from-green-600 to-green-700 text-white shadow-xl animate-bounce-in' : 'bg-gray-200 text-gray-400 scale-90'
+                'w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center font-bold text-base sm:text-lg transition-all duration-500',
+                currentStep === 2 ? 'bg-gradient-to-br from-green-600 to-green-700 text-white shadow-lg sm:shadow-xl animate-bounce-in' : 'bg-gray-200 text-gray-400 scale-90'
               ]">
               2
             </div>
             <span 
               :class="[
-                'ml-3 font-bold text-base transition-all duration-300',
+                'ml-2 sm:ml-3 font-bold text-xs sm:text-base transition-all duration-300',
                 currentStep === 2 ? 'text-green-700' : 'text-gray-400'
               ]">
-              Detail Permasalahan
+              Detail
             </span>
           </div>
         </div>
       </div>
 
-      <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-green-100">
-        <div class="bg-gradient-to-r from-green-600 via-green-600 to-emerald-600 px-8 py-8 animate-slide-down-fade relative overflow-hidden">
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl overflow-hidden border border-green-100">
+        <div class="bg-gradient-to-r from-green-600 via-green-600 to-emerald-600 px-4 sm:px-8 py-5 sm:py-8 animate-slide-down-fade relative overflow-hidden">
           <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzMuMzEzIDAgNiAyLjY4NyA2IDZzLTIuNjg3IDYtNiA2LTYtMi42ODctNi02IDIuNjg3LTYgNi02ek0yMCAzNGMzLjMxMyAwIDYgMi42ODcgNiA2cy0yLjY4NyA2LTYgNi02LTIuNjg3LTYtNiAyLjY4Ny02IDYtNnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
           <div class="relative">
-            <h1 class="text-4xl font-bold text-white mb-2">Form Pengaduan Warga</h1>
-            <p class="text-green-50 text-lg">
+            <h1 class="text-2xl sm:text-4xl font-bold text-white mb-1 sm:mb-2">Form Pengaduan Warga</h1>
+            <p class="text-green-50 text-sm sm:text-lg">
               {{ currentStep === 1 ? 'Lengkapi data diri Anda' : 'Ceritakan permasalahan yang dihadapi' }}
             </p>
           </div>
         </div>
 
         <transition name="slide-fade">
-          <div v-if="currentStep === 1" class="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
-            <div class="p-10 space-y-6">
+          <div v-if="currentStep === 1" class="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] sm:min-h-[600px]">
+            <div class="p-5 sm:p-10 space-y-4 sm:space-y-6">
               <div class="animate-slide-up animation-delay-100">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   Nama Lengkap
                 </label>
                 <input
                   type="text"
                   v-model="formData.nama"
                   readonly
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl bg-gray-50 text-gray-700 font-medium cursor-not-allowed"
+                  class="w-full px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl sm:rounded-2xl bg-gray-50 text-gray-700 font-medium cursor-not-allowed"
                   placeholder="Nama otomatis terisi"
                 />
               </div>
 
               <div class="animate-slide-up animation-delay-200">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   RT<span class="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   v-model="formData.rt"
                   maxlength="3"
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
+                  inputmode="numeric"
+                  class="w-full px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
                   placeholder="Contoh: 001"
                 />
               </div>
 
               <div class="animate-slide-up animation-delay-300">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   No. HP/WhatsApp <span class="text-red-500">*</span>
                 </label>
                 <input
                   type="tel"
                   v-model="formData.noHp"
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
+                  inputmode="tel"
+                  class="w-full px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
                   placeholder="Contoh: 08123456789"
                 />
               </div>
 
               <div class="animate-slide-up animation-delay-400">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   No. Rumah <span class="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   v-model="formData.noRumah"
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
+                  class="w-full px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
                   placeholder="Nomor rumah"
                 />
               </div>
 
               <button
                 @click="nextStep"
-                class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-3 animate-slide-up animation-delay-500">
+                class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3.5 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg sm:shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 sm:gap-3 animate-slide-up animation-delay-500">
                 Lanjut ke Step 2
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                 </svg>
               </button>
             </div>
 
-            <div class="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-10 flex items-center justify-center animate-fade-in-right animation-delay-200">
+            <div class="hidden lg:flex bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-10 items-center justify-center animate-fade-in-right animation-delay-200">
               <div class="text-center">
                 <div class="relative inline-block">
                   <div class="absolute inset-0 bg-green-400 blur-3xl opacity-20 animate-pulse-slow"></div>
@@ -154,30 +156,30 @@
         </transition>
 
         <transition name="slide-fade">
-          <div v-if="currentStep === 2" class="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
-            <div class="p-10 space-y-6">
+          <div v-if="currentStep === 2" class="grid grid-cols-1 lg:grid-cols-2 min-h-[500px] sm:min-h-[600px]">
+            <div class="p-5 sm:p-10 space-y-4 sm:space-y-6 order-2 lg:order-1">
               <div class="animate-slide-up animation-delay-100">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   Nama Permasalahan <span class="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   v-model="formData.namaPermasalahan"
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
+                  class="w-full px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none text-gray-700 font-medium placeholder:text-gray-400"
                   placeholder="Contoh: Jalan Rusak di RT 01"
                 />
               </div>
 
               <div class="animate-slide-up animation-delay-200">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   Kategori Masalah <span class="text-red-500">*</span>
                 </label>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2 sm:gap-3">
                   <label 
                     v-for="kategori in kategoriMasalah" 
                     :key="kategori"
                     :class="[
-                      'flex items-center p-4 border-2 rounded-2xl cursor-pointer transition-all',
+                      'flex items-center p-3 sm:p-4 border-2 rounded-xl sm:rounded-2xl cursor-pointer transition-all',
                       formData.kategori === kategori 
                         ? 'bg-green-50 border-green-500 shadow-md' 
                         : 'border-gray-200 hover:border-green-300 hover:bg-green-50/50'
@@ -186,9 +188,9 @@
                       type="radio"
                       v-model="formData.kategori"
                       :value="kategori"
-                      class="w-5 h-5 text-green-600 focus:ring-2 focus:ring-green-500"
+                      class="w-4 h-4 sm:w-5 sm:h-5 text-green-600 focus:ring-2 focus:ring-green-500 flex-shrink-0"
                     />
-                    <span class="ml-3 text-sm text-gray-700 font-semibold">
+                    <span class="ml-2 sm:ml-3 text-xs sm:text-sm text-gray-700 font-semibold">
                       {{ kategori }}
                     </span>
                   </label>
@@ -196,23 +198,23 @@
               </div>
 
               <div class="animate-slide-up animation-delay-300">
-                <label class="block text-sm font-bold text-gray-800 mb-3">
+                <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-2 sm:mb-3">
                   Detail Permasalahan <span class="text-red-500">*</span>
                 </label>
                 <textarea
                   v-model="formData.detailPermasalahan"
-                  rows="5"
-                  class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none resize-none text-gray-700 font-medium placeholder:text-gray-400"
+                  rows="4"
+                  class="w-full px-4 sm:px-5 py-3 sm:py-4 text-sm sm:text-base border-2 border-gray-200 rounded-xl sm:rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all outline-none resize-none text-gray-700 font-medium placeholder:text-gray-400"
                   placeholder="Jelaskan permasalahan secara detail..."
                 ></textarea>
               </div>
 
-              <div class="flex gap-4 animate-slide-up animation-delay-400">
+              <div class="flex gap-3 sm:gap-4 animate-slide-up animation-delay-400">
                 <button
                   @click="prevStep"
                   :disabled="isSubmitting"
-                  class="flex-1 bg-gray-100 text-gray-700 py-5 rounded-2xl font-bold text-lg hover:bg-gray-200 active:scale-[0.98] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  class="flex-1 bg-gray-100 text-gray-700 py-3.5 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg hover:bg-gray-200 active:scale-[0.98] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 17l-5-5m0 0l5-5m-5 5h12"/>
                   </svg>
                   Kembali
@@ -220,11 +222,11 @@
                 <button
                   @click="handleSubmit"
                   :disabled="isSubmitting"
-                  class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-5 rounded-2xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                  <svg v-if="!isSubmitting" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3.5 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg sm:shadow-xl hover:shadow-2xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg v-if="!isSubmitting" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
                   </svg>
-                  <svg v-else class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg v-else class="w-4 h-4 sm:w-5 sm:h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
                   </svg>
                   {{ isSubmitting ? 'Mengirim...' : 'Kirim' }}
@@ -232,15 +234,15 @@
               </div>
             </div>
 
-            <div class="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-10 animate-fade-in-right animation-delay-200">
-              <label class="block text-sm font-bold text-gray-800 mb-4">
+            <div class="p-5 sm:p-10 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 lg:bg-none animate-fade-in-right animation-delay-200 order-1 lg:order-2">
+              <label class="block text-xs sm:text-sm font-bold text-gray-800 mb-3 sm:mb-4">
                 Upload Foto Bukti <span class="text-red-500">*</span>
               </label>
               
               <div 
                 v-if="uploadedImages.length < maxImages"
                 @click="triggerFileInput"
-                class="border-3 border-dashed border-gray-300 rounded-2xl p-10 text-center hover:border-green-500 hover:bg-green-50/50 transition-all cursor-pointer mb-4 group">
+                class="border-2 sm:border-3 border-dashed border-gray-300 rounded-xl sm:rounded-2xl p-6 sm:p-10 text-center hover:border-green-500 hover:bg-green-50/50 transition-all cursor-pointer mb-3 sm:mb-4 group">
                 <input
                   type="file"
                   accept="image/*"
@@ -248,36 +250,36 @@
                   class="hidden"
                   ref="fileInput"
                 />
-                <svg class="w-20 h-20 mx-auto text-gray-400 group-hover:text-green-500 transition-all mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-14 h-14 sm:w-20 sm:h-20 mx-auto text-gray-400 group-hover:text-green-500 transition-all mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                <p class="text-gray-700 font-bold text-lg">Klik untuk upload foto</p>
-                <p class="text-sm text-gray-500 mt-2">PNG, JPG (Max 5MB)</p>
+                <p class="text-gray-700 font-bold text-base sm:text-lg">Klik untuk upload foto</p>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">PNG, JPG (Max 5MB)</p>
                 <p class="text-xs text-gray-400 mt-1">Maksimal {{ maxImages }} foto</p>
               </div>
 
-              <div class="space-y-4">
+              <div class="space-y-3 sm:space-y-4">
                 <div 
                   v-for="(image, index) in uploadedImages" 
                   :key="index"
-                  class="relative rounded-2xl overflow-hidden shadow-xl animate-scale-in-bounce group">
+                  class="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl animate-scale-in-bounce group">
                   <img 
                     :src="image.url" 
                     :alt="image.name"
-                    class="w-full h-56 object-cover"
+                    class="w-full h-40 sm:h-56 object-cover"
                   />
                   <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                   <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
                     <button
                       @click="removeImage(index)"
-                      class="opacity-0 group-hover:opacity-100 transform scale-0 group-hover:scale-100 transition-all bg-red-500 text-white p-3 rounded-full hover:bg-red-600 shadow-lg">
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      class="opacity-0 group-hover:opacity-100 transform scale-0 group-hover:scale-100 transition-all bg-red-500 text-white p-2.5 sm:p-3 rounded-full hover:bg-red-600 shadow-lg">
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
                       </svg>
                     </button>
                   </div>
-                  <div class="absolute bottom-0 left-0 right-0 p-4">
-                    <p class="text-white text-sm font-bold truncate">{{ image.name }}</p>
+                  <div class="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+                    <p class="text-white text-xs sm:text-sm font-bold truncate">{{ image.name }}</p>
                   </div>
                 </div>
               </div>
@@ -288,8 +290,8 @@
     </div>
    <button 
     @click="router.push('/')"
-    class="fixed top-6 left-6 w-12 h-12 bg-green-700/60 backdrop-blur-sm hover:bg-green-700 rounded-full flex items-center justify-center text-green-100 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl group z-50">
-    <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    class="fixed top-4 sm:top-6 left-3 sm:left-6 w-10 h-10 sm:w-12 sm:h-12 bg-green-700/60 backdrop-blur-sm hover:bg-green-700 rounded-full flex items-center justify-center text-green-100 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl group z-50">
+    <svg class="w-5 h-5 sm:w-6 sm:h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
     </svg>
   </button>
@@ -416,15 +418,17 @@ const nextStep = () => {
   }
   
   if (!validatePhone(formData.value.noHp)) {
-    showToast('Nomor HP tidak valid! Minimal 10 digit.', 'error')
+    showToast('Nomor HP tidak valid! 10 digit.', 'error')
     return
   }
   
   currentStep.value = 2
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const prevStep = () => {
   currentStep.value = 1
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const triggerFileInput = () => {
@@ -636,5 +640,17 @@ onBeforeUnmount(() => {
 .slide-fade-leave-to {
   transform: translateX(-30px);
   opacity: 0;
+}
+
+@media (max-width: 640px) {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  input, textarea, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
 }
 </style>

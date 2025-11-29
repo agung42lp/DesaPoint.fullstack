@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
-    <aside class="fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex flex-col items-center py-6 border-r border-gray-100">
+    <!-- Sidebar - Hidden on mobile, shown on desktop -->
+    <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex-col items-center py-6 border-r border-gray-100">
       <div class="mb-10">
         <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
           <img :src="`/images/logo.jpg`" alt="Logo" class="h-full w-full object-cover rounded-2xl" />
@@ -96,12 +97,127 @@
       </div>
     </aside>
 
-    <div class="flex-1 ml-20">
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50">
+      <div class="grid grid-cols-5 h-16">
+        <router-link 
+          to="/homeadmin"
+          class="flex flex-col items-center justify-center text-green-600 bg-green-50">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Home</span>
+        </router-link>
+
+        <router-link 
+          to="/program"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Program</span>
+        </router-link>
+
+        <router-link 
+          to="/keuangan"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Keuangan</span>
+        </router-link>
+
+        <router-link 
+          to="/pengaduan"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Pengaduan</span>
+        </router-link>
+
+        <button 
+          @click="toggleMobileMenu"
+          class="flex flex-col items-center justify-center text-gray-600 hover:text-green-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Menu</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div 
+      v-if="showMobileMenu"
+      @click="toggleMobileMenu"
+      class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+    ></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div 
+      :class="['lg:hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300', showMobileMenu ? 'translate-x-0' : 'translate-x-full']">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-xl font-bold text-gray-900">Menu</h2>
+          <button @click="toggleMobileMenu" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3 mb-8 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
+          <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+            {{ currentUser?.name?.charAt(0).toUpperCase() }}
+          </div>
+          <div>
+            <p class="font-bold text-gray-900">{{ currentUser?.name }}</p>
+            <p class="text-xs text-gray-600">Administrator</p>
+          </div>
+        </div>
+
+        <nav class="space-y-2">
+          <router-link 
+            to="/profileadmin"
+            @click="toggleMobileMenu"
+            class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <span class="font-medium text-gray-900">Profil Saya</span>
+          </router-link>
+
+          <router-link 
+            to="/manajemen-akun"
+            @click="toggleMobileMenu"
+            class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <span class="font-medium text-gray-900">Manajemen Akun</span>
+          </router-link>
+
+          <div class="border-t border-gray-200 my-4"></div>
+
+          <button 
+            @click="handleLogout"
+            class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 transition-colors text-red-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <span class="font-medium">Logout</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <div class="flex-1 lg:ml-20 pb-16 lg:pb-0">
       <transition name="slide-fade">
-        <div v-if="toast.show" class="fixed top-6 right-6 z-[100] max-w-md animate-slideIn">
+        <div v-if="toast.show" class="fixed top-4 left-4 right-4 lg:top-6 lg:left-auto lg:right-6 lg:max-w-md z-[100] animate-slideIn">
           <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
                :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
-            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
               <svg v-if="toast.type === 'success'" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
@@ -109,181 +225,180 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <p class="text-white font-semibold">{{ toast.message }}</p>
+            <p class="text-white font-semibold text-sm lg:text-base">{{ toast.message }}</p>
           </div>
         </div>
       </transition>
 
-      <section class="relative bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-16 md:py-20 overflow-hidden">
+      <section class="relative bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-12 lg:py-16 md:py-20 overflow-hidden">
         <div class="absolute inset-0 bg-grid-white/10"></div>
-        <div class="max-w-7xl mx-auto px-6 relative">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 bg-white/20 rounded-2xl backdrop-blur-sm flex items-center justify-center">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="max-w-7xl mx-auto px-4 lg:px-6 relative">
+          <div class="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white/20 rounded-xl lg:rounded-2xl backdrop-blur-sm flex items-center justify-center">
+              <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
               </svg>
             </div>
-            <span class="text-green-200 font-medium">Dashboard Admin</span>
+            <span class="text-green-200 font-medium text-sm lg:text-base">Dashboard Admin</span>
           </div>
-          <h1 class="text-4xl md:text-5xl font-black text-white mb-3 tracking-tight">
+          <h1 class="text-2xl lg:text-4xl md:text-5xl font-black text-white mb-2 lg:mb-3 tracking-tight">
             Selamat Datang, {{ currentUser?.name }}
           </h1>
-          <p class="text-green-100 text-lg">Kelola semua program dan aktivitas RW dengan mudah</p>
+          <p class="text-green-100 text-sm lg:text-lg">Kelola semua program dan aktivitas RW dengan mudah</p>
           
-          <div class="mt-6 flex items-center gap-4">
-            <div class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-              <p class="text-white/80 text-sm">Hari ini</p>
-              <p class="text-white font-bold">{{ currentDate }}</p>
+          <div class="mt-4 lg:mt-6 flex flex-wrap items-center gap-2 lg:gap-4">
+            <div class="px-3 py-2 lg:px-4 bg-white/20 backdrop-blur-sm rounded-lg lg:rounded-xl border border-white/30">
+              <p class="text-white/80 text-xs lg:text-sm">Hari ini</p>
+              <p class="text-white font-bold text-sm lg:text-base">{{ currentDate }}</p>
             </div>
-            <div class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl border border-white/30">
-              <p class="text-white/80 text-sm">Waktu</p>
-              <p class="text-white font-bold">{{ currentTime }}</p>
+            <div class="px-3 py-2 lg:px-4 bg-white/20 backdrop-blur-sm rounded-lg lg:rounded-xl border border-white/30">
+              <p class="text-white/80 text-xs lg:text-sm">Waktu</p>
+              <p class="text-white font-bold text-sm lg:text-base">{{ currentTime }}</p>
             </div>
           </div>
         </div>
       </section>
 
-      <div class="max-w-7xl mx-auto px-6 -mt-8 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="max-w-7xl mx-auto px-4 lg:px-6 -mt-6 lg:-mt-8 relative z-10">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 hover:shadow-2xl transition-all">
+            <div class="flex items-center justify-between mb-3 lg:mb-4">
+              <div class="w-10 h-10 lg:w-12 lg:h-12 bg-red-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 lg:w-6 lg:h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
               </div>
-              <span class="text-xs font-semibold text-green-600 bg-green-100 px-3 py-1 rounded-full">
+              <span class="text-xs font-semibold text-green-600 bg-green-100 px-2 py-1 rounded-full">
                 {{ stats.danaSosial.change }}
               </span>
             </div>
-            <h3 class="text-gray-600 text-sm font-medium mb-1">Total Dana Sosial</h3>
-            <p class="text-2xl font-bold text-gray-900">{{ stats.danaSosial.total }}</p>
-            <p class="text-xs text-gray-500 mt-2">{{ stats.danaSosial.count }} penerima bulan ini</p>
+            <h3 class="text-gray-600 text-xs lg:text-sm font-medium mb-1">Total Dana Sosial</h3>
+            <p class="text-lg lg:text-2xl font-bold text-gray-900 truncate">{{ stats.danaSosial.total }}</p>
+            <p class="text-xs text-gray-500 mt-1 lg:mt-2">{{ stats.danaSosial.count }} penerima</p>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 hover:shadow-2xl transition-all">
+            <div class="flex items-center justify-between mb-3 lg:mb-4">
+              <div class="w-10 h-10 lg:w-12 lg:h-12 bg-emerald-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 lg:w-6 lg:h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                 </svg>
               </div>
-              <span class="text-xs font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+              <span class="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
                 {{ stats.bankSampah.change }}
               </span>
             </div>
-            <h3 class="text-gray-600 text-sm font-medium mb-1">Bank Sampah</h3>
-            <p class="text-2xl font-bold text-gray-900">{{ stats.bankSampah.total }}</p>
-            <p class="text-xs text-gray-500 mt-2">{{ stats.bankSampah.count }} rekening aktif</p>
+            <h3 class="text-gray-600 text-xs lg:text-sm font-medium mb-1">Bank Sampah</h3>
+            <p class="text-lg lg:text-2xl font-bold text-gray-900 truncate">{{ stats.bankSampah.total }}</p>
+            <p class="text-xs text-gray-500 mt-1 lg:mt-2">{{ stats.bankSampah.count }} rekening</p>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 hover:shadow-2xl transition-all">
+            <div class="flex items-center justify-between mb-3 lg:mb-4">
+              <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
               </div>
-              <span class="text-xs font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
+              <span class="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
                 Minggu Ini
               </span>
             </div>
-            <h3 class="text-gray-600 text-sm font-medium mb-1">Jadwal Ronda</h3>
-            <p class="text-2xl font-bold text-gray-900">{{ stats.ronda.thisWeek }}</p>
-            <p class="text-xs text-gray-500 mt-2">{{ stats.ronda.total }} jadwal total</p>
+            <h3 class="text-gray-600 text-xs lg:text-sm font-medium mb-1">Jadwal Ronda</h3>
+            <p class="text-lg lg:text-2xl font-bold text-gray-900">{{ stats.ronda.thisWeek }}</p>
+            <p class="text-xs text-gray-500 mt-1 lg:mt-2">{{ stats.ronda.total }} jadwal</p>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all">
-            <div class="flex items-center justify-between mb-4">
-              <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 hover:shadow-2xl transition-all">
+            <div class="flex items-center justify-between mb-3 lg:mb-4">
+              <div class="w-10 h-10 lg:w-12 lg:h-12 bg-yellow-100 rounded-lg lg:rounded-xl flex items-center justify-center">
+                <svg class="w-5 h-5 lg:w-6 lg:h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                 </svg>
               </div>
-              <span class="text-xs font-semibold text-orange-600 bg-orange-100 px-3 py-1 rounded-full">
-                {{ stats.kebersihan.upcoming }} Upcoming
+              <span class="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                {{ stats.kebersihan.upcoming }}
               </span>
             </div>
-            <h3 class="text-gray-600 text-sm font-medium mb-1">Program Kebersihan</h3>
-            <p class="text-2xl font-bold text-gray-900">{{ stats.kebersihan.total }}</p>
-            <p class="text-xs text-gray-500 mt-2">{{ stats.kebersihan.completed }} program selesai</p>
+            <h3 class="text-gray-600 text-xs lg:text-sm font-medium mb-1">Kebersihan</h3>
+            <p class="text-lg lg:text-2xl font-bold text-gray-900">{{ stats.kebersihan.total }}</p>
+            <p class="text-xs text-gray-500 mt-1 lg:mt-2">{{ stats.kebersihan.completed }} selesai</p>
           </div>
         </div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-6 py-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <router-link to="/program" class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all group">
-            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="max-w-7xl mx-auto px-4 lg:px-6 py-6 lg:py-8">
+        <h2 class="text-xl lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Quick Actions</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+          <router-link to="/program" class="bg-white rounded-xl shadow-md p-4 lg:p-6 hover:shadow-xl transition-all group">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-100 rounded-lg lg:rounded-xl flex items-center justify-center mb-3 lg:mb-4 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
               </svg>
             </div>
-            <h3 class="font-bold text-gray-900 mb-1">Kelola Program</h3>
-            <p class="text-sm text-gray-600">Dana Sosial, Bank Sampah & Ronda</p>
+            <h3 class="font-bold text-gray-900 mb-1 text-sm lg:text-base">Kelola Program</h3>
+            <p class="text-xs lg:text-sm text-gray-600">Dana Sosial & Ronda</p>
           </router-link>
 
-          <router-link to="/keuangan" class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all group">
-            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <router-link to="/keuangan" class="bg-white rounded-xl shadow-md p-4 lg:p-6 hover:shadow-xl transition-all group">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-100 rounded-lg lg:rounded-xl flex items-center justify-center mb-3 lg:mb-4 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <h3 class="font-bold text-gray-900 mb-1">Keuangan</h3>
-            <p class="text-sm text-gray-600">Kelola kas & transaksi RW</p>
+            <h3 class="font-bold text-gray-900 mb-1 text-sm lg:text-base">Keuangan</h3>
+            <p class="text-xs lg:text-sm text-gray-600">Kelola kas RW</p>
           </router-link>
 
-          <router-link to="/pengaduan" class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all group">
-            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <router-link to="/pengaduan" class="bg-white rounded-xl shadow-md p-4 lg:p-6 hover:shadow-xl transition-all group">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-100 rounded-lg lg:rounded-xl flex items-center justify-center mb-3 lg:mb-4 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
               </svg>
             </div>
-            <h3 class="font-bold text-gray-900 mb-1">Pengaduan</h3>
-            <p class="text-sm text-gray-600">Tangani laporan warga</p>
+            <h3 class="font-bold text-gray-900 mb-1 text-sm lg:text-base">Pengaduan</h3>
+            <p class="text-xs lg:text-sm text-gray-600">Laporan warga</p>
           </router-link>
 
-          <router-link to="/manajemen-akun" class="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all group">
-            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <router-link to="/manajemen-akun" class="bg-white rounded-xl shadow-md p-4 lg:p-6 hover:shadow-xl transition-all group">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-orange-100 rounded-lg lg:rounded-xl flex items-center justify-center mb-3 lg:mb-4 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
               </svg>
             </div>
-            <h3 class="font-bold text-gray-900 mb-1">Manajemen Akun</h3>
-            <p class="text-sm text-gray-600">Kelola user & permissions</p>
+            <h3 class="font-bold text-gray-900 mb-1 text-sm lg:text-base">Akun</h3>
+            <p class="text-xs lg:text-sm text-gray-600">Kelola user</p>
           </router-link>
         </div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-6 pb-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl p-6">
-            <div class="flex items-center justify-between mb-6">
-              <h2 class="text-2xl font-bold text-gray-900">Aktivitas Terbaru di Program</h2>
-              <span class="text-sm text-gray-500">{{ recentActivities.length }} aktivitas</span>
+      <div class="max-w-7xl mx-auto px-4 lg:px-6 pb-8 lg:pb-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
+          <div class="lg:col-span-2 bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6">
+            <div class="flex items-center justify-between mb-4 lg:mb-6">
+              <h2 class="text-lg lg:text-2xl font-bold text-gray-900">Aktivitas Terbaru</h2>
+              <span class="text-xs lg:text-sm text-gray-500">{{ recentActivities.length }} aktivitas</span>
             </div>
             
-            <div v-if="isLoading" class="space-y-4">
-              <div v-for="n in 5" :key="n" class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl animate-pulse">
-                <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
-                <div class="flex-1">
-                  <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+            <div v-if="isLoading" class="space-y-3 lg:space-y-4">
+              <div v-for="n in 5" :key="n" class="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-gray-100 rounded-lg lg:rounded-xl animate-pulse">
+                <div class="w-8 h-8 lg:w-10 lg:h-10 bg-gray-200 rounded-full flex-shrink-0"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="h-3 lg:h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div class="h-2 lg:h-3 bg-gray-200 rounded w-1/2"></div>
                 </div>
               </div>
             </div>
 
-            <div v-else class="space-y-3">
-              <div v-for="activity in recentActivities" :key="activity.id" class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors">
-                <div class="w-10 h-10 rounded-full flex items-center justify-center"
+            <div v-else class="space-y-2 lg:space-y-3">
+              <div v-for="activity in recentActivities" :key="activity.id" class="flex items-center gap-3 lg:gap-4 p-3 lg:p-4 border border-gray-100 rounded-lg lg:rounded-xl hover:bg-gray-50 transition-colors">
+                <div class="w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center flex-shrink-0"
                      :class="{
                        'bg-red-100': activity.type === 'danasosial',
                        'bg-emerald-100': activity.type === 'banksampah',
                        'bg-blue-100': activity.type === 'ronda',
                        'bg-yellow-100': activity.type === 'kebersihan'
                      }">
-                  <svg class="w-5 h-5" :class="{
+                  <svg class="w-4 h-4 lg:w-5 lg:h-5" :class="{
                          'text-red-600': activity.type === 'danasosial',
                          'text-emerald-600': activity.type === 'banksampah',
                          'text-blue-600': activity.type === 'ronda',
@@ -292,11 +407,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
-                <div class="flex-1">
-                  <p class="font-semibold text-gray-900 text-sm">{{ activity.title }}</p>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-gray-900 text-xs lg:text-sm truncate">{{ activity.title }}</p>
                   <p class="text-xs text-gray-500">{{ activity.time }}</p>
                 </div>
-                <span class="text-xs font-medium px-3 py-1 rounded-full"
+                <span class="text-xs font-medium px-2 py-1 rounded-full flex-shrink-0"
                       :class="{
                         'bg-red-100 text-red-700': activity.type === 'danasosial',
                         'bg-emerald-100 text-emerald-700': activity.type === 'banksampah',
@@ -309,30 +424,30 @@
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-xl p-6">
-            <div class="flex items-center justify-between mb-6">
-              <h2 class="text-xl font-bold text-gray-900">Jadwal Mendatang</h2>
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6">
+            <div class="flex items-center justify-between mb-4 lg:mb-6">
+              <h2 class="text-lg lg:text-xl font-bold text-gray-900">Jadwal Mendatang</h2>
+              <svg class="w-4 h-4 lg:w-5 lg:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
               </svg>
             </div>
 
-            <div v-if="isLoading" class="space-y-4">
-              <div v-for="n in 4" :key="n" class="p-4 border border-gray-100 rounded-xl animate-pulse">
-                <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div class="h-3 bg-gray-200 rounded w-1/2"></div>
+            <div v-if="isLoading" class="space-y-3 lg:space-y-4">
+              <div v-for="n in 4" :key="n" class="p-3 lg:p-4 border border-gray-100 rounded-lg lg:rounded-xl animate-pulse">
+                <div class="h-3 lg:h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                <div class="h-2 lg:h-3 bg-gray-200 rounded w-1/2"></div>
               </div>
             </div>
 
-            <div v-else class="space-y-3">
-              <div v-for="schedule in upcomingSchedules" :key="schedule.id" class="p-4 border-l-4 rounded-lg hover:bg-gray-50 transition-colors"
+            <div v-else class="space-y-2 lg:space-y-3">
+              <div v-for="schedule in upcomingSchedules" :key="schedule.id" class="p-3 lg:p-4 border-l-4 rounded-lg hover:bg-gray-50 transition-colors"
                    :class="{
                      'border-blue-500 bg-blue-50/50': schedule.type === 'ronda',
                      'border-yellow-500 bg-yellow-50/50': schedule.type === 'kebersihan'
                    }">
-                <div class="flex items-start justify-between mb-2">
-                  <h3 class="font-bold text-gray-900 text-sm">{{ schedule.title }}</h3>
-                  <span class="text-xs font-semibold px-2 py-1 rounded-full"
+                <div class="flex items-start justify-between mb-2 gap-2">
+                  <h3 class="font-bold text-gray-900 text-xs lg:text-sm flex-1">{{ schedule.title }}</h3>
+                  <span class="text-xs font-semibold px-2 py-1 rounded-full flex-shrink-0"
                         :class="{
                           'bg-blue-100 text-blue-700': schedule.type === 'ronda',
                           'bg-yellow-100 text-yellow-700': schedule.type === 'kebersihan'
@@ -341,104 +456,104 @@
                   </span>
                 </div>
                 <div class="flex items-center gap-2 text-xs text-gray-600">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
-                  <span>{{ schedule.date }}</span>
+                  <span class="line-clamp-1">{{ schedule.date }}</span>
                 </div>
-                <p v-if="schedule.participants" class="text-xs text-gray-500 mt-2">{{ schedule.participants }}</p>
+                <p v-if="schedule.participants" class="text-xs text-gray-500 mt-2 line-clamp-1">{{ schedule.participants }}</p>
               </div>
 
-              <div v-if="upcomingSchedules.length === 0" class="text-center py-8">
-                <svg class="w-16 h-16 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div v-if="upcomingSchedules.length === 0" class="text-center py-6 lg:py-8">
+                <svg class="w-12 h-12 lg:w-16 lg:h-16 mx-auto text-gray-300 mb-2 lg:mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                 </svg>
-                <p class="text-gray-500 text-sm">Tidak ada jadwal mendatang</p>
+                <p class="text-gray-500 text-xs lg:text-sm">Tidak ada jadwal mendatang</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-6 pb-12">
-        <div class="bg-white rounded-2xl shadow-xl p-6">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6">Statistik Dana Sosial per Kategori</h2>
+      <div class="max-w-7xl mx-auto px-4 lg:px-6 pb-8 lg:pb-12">
+        <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6">
+          <h2 class="text-lg lg:text-2xl font-bold text-gray-900 mb-4 lg:mb-6">Statistik Dana Sosial per Kategori</h2>
           
-          <div v-if="isLoading" class="h-64 flex items-center justify-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div v-if="isLoading" class="h-48 lg:h-64 flex items-center justify-center">
+            <div class="animate-spin rounded-full h-10 w-10 lg:h-12 lg:w-12 border-b-2 border-green-500"></div>
           </div>
 
-          <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="text-center p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-xl">
-            <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+            <div class="text-center p-4 lg:p-6 bg-gradient-to-br from-red-50 to-red-100 rounded-xl">
+            <div class="w-12 h-12 lg:w-16 lg:h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3 lg:mb-4">
+              <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
             <div class="flex items-center justify-center gap-2 mb-2">
-              <h3 class="font-bold text-gray-900">Korban Meninggal</h3>
+              <h3 class="font-bold text-gray-900 text-sm lg:text-base">Korban Meninggal</h3>
               <div class="relative group">
-                <button class="w-5 h-5 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-colors">
-                  <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="w-4 h-4 lg:w-5 lg:h-5 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                  <svg class="w-2.5 h-2.5 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </button>
-                <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
+                <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-40 lg:w-48 px-2 lg:px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
                   Dana diterima oleh keluarga almarhum
                   <div class="absolute left-1/2 -translate-x-1/2 top-full -mt-1 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
                 </div>
               </div>
             </div>
-            <p class="text-3xl font-black text-red-600">{{ chartData.korbanMeninggal }}</p>
-            <p class="text-sm text-gray-600 mt-2">{{ chartData.korbanMeninggalNominal }}</p>
+            <p class="text-2xl lg:text-3xl font-black text-red-600">{{ chartData.korbanMeninggal }}</p>
+            <p class="text-xs lg:text-sm text-gray-600 mt-1 lg:mt-2 truncate">{{ chartData.korbanMeninggalNominal }}</p>
             </div>
 
-            <div class="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl">
-              <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="text-center p-4 lg:p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl">
+              <div class="w-12 h-12 lg:w-16 lg:h-16 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-3 lg:mb-4">
+                <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                 </svg>
               </div>
               <div class="flex items-center justify-center gap-2 mb-2">
-                <h3 class="font-bold text-gray-900">Penderita Sakit</h3>
+                <h3 class="font-bold text-gray-900 text-sm lg:text-base">Penderita Sakit</h3>
                 <div class="relative group">
-                  <button class="w-5 h-5 bg-yellow-600 hover:bg-yellow-700 rounded-full flex items-center justify-center transition-colors">
-                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <button class="w-4 h-4 lg:w-5 lg:h-5 bg-yellow-600 hover:bg-yellow-700 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                    <svg class="w-2.5 h-2.5 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                   </button>
-                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
+                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-40 lg:w-48 px-2 lg:px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
                     Dana diterima oleh korban langsung
                     <div class="absolute left-1/2 -translate-x-1/2 top-full -mt-1 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
                   </div>
                 </div>
               </div>
-              <p class="text-3xl font-black text-yellow-600">{{ chartData.penderitaSakit }}</p>
-              <p class="text-sm text-gray-600 mt-2">{{ chartData.penderitaSakitNominal }}</p>
+              <p class="text-2xl lg:text-3xl font-black text-yellow-600">{{ chartData.penderitaSakit }}</p>
+              <p class="text-xs lg:text-sm text-gray-600 mt-1 lg:mt-2 truncate">{{ chartData.penderitaSakitNominal }}</p>
             </div>
 
-            <div class="text-center p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
-              <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="text-center p-4 lg:p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
+              <div class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-3 lg:mb-4">
+                <svg class="w-6 h-6 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                 </svg>
               </div>
               <div class="flex items-center justify-center gap-2 mb-2">
-                <h3 class="font-bold text-gray-900">Korban Bencana</h3>
+                <h3 class="font-bold text-gray-900 text-sm lg:text-base">Korban Bencana</h3>
                 <div class="relative group">
-                  <button class="w-5 h-5 bg-orange-600 hover:bg-orange-700 rounded-full flex items-center justify-center transition-colors">
-                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <button class="w-4 h-4 lg:w-5 lg:h-5 bg-orange-600 hover:bg-orange-700 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                    <svg class="w-2.5 h-2.5 lg:w-3 lg:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                   </button>
-                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
+                  <div class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-40 lg:w-48 px-2 lg:px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all shadow-xl z-10">
                     Dana diterima oleh korban terdampak
                     <div class="absolute left-1/2 -translate-x-1/2 top-full -mt-1 w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-4 border-t-gray-900"></div>
                   </div>
                 </div>
               </div>
-              <p class="text-3xl font-black text-orange-600">{{ chartData.korbanBencana }}</p>
-              <p class="text-sm text-gray-600 mt-2">{{ chartData.korbanBencanaNominal }}</p>
+              <p class="text-2xl lg:text-3xl font-black text-orange-600">{{ chartData.korbanBencana }}</p>
+              <p class="text-xs lg:text-sm text-gray-600 mt-1 lg:mt-2 truncate">{{ chartData.korbanBencanaNominal }}</p>
             </div>
           </div>
         </div>
@@ -460,6 +575,7 @@ const isLoading = ref(false)
 const toast = ref({ show: false, message: '', type: '' })
 const currentDate = ref('')
 const currentTime = ref('')
+const showMobileMenu = ref(false)
 
 const stats = ref({
   danaSosial: {
@@ -493,6 +609,10 @@ const chartData = ref({
   korbanBencana: 0,
   korbanBencanaNominal: 'Rp 0'
 })
+
+const toggleMobileMenu = () => {
+  showMobileMenu.value = !showMobileMenu.value
+}
 
 const showToast = (message, type = 'success') => {
   toast.value = { show: true, message, type }
@@ -529,6 +649,7 @@ const handleLogout = async () => {
     localStorage.removeItem('user')
     isLoggedIn.value = false
     currentUser.value = null
+    showMobileMenu.value = false
     router.push('/login')
   }
 }
@@ -830,5 +951,12 @@ onUnmounted(() => {
     linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>

@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
 
-    <aside class="fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex flex-col items-center py-6 border-r border-gray-100">
+    <!-- Sidebar Desktop -->
+    <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex-col items-center py-6 border-r border-gray-100">
       <div class="mb-10">
         <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
           <img :src="`/images/logo.jpg`" alt="Logo" class="h-full w-full object-cover rounded-2xl" />
@@ -81,12 +82,108 @@
       </div>
     </aside>
 
-    <div class="flex-1 ml-20">
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50">
+      <div class="grid grid-cols-5 h-16">
+        <router-link to="/homeadmin" class="flex flex-col items-center justify-center transition-colors"
+          :class="$route.path === '/homeadmin' ? 'text-green-600 bg-green-50' : 'text-gray-600'">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Home</span>
+        </router-link>
+
+        <router-link to="/program" class="flex flex-col items-center justify-center transition-colors"
+          :class="$route.path === '/program' ? 'text-green-600 bg-green-50' : 'text-gray-600'">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Program</span>
+        </router-link>
+
+        <router-link to="/keuangan" class="flex flex-col items-center justify-center transition-colors"
+          :class="$route.path === '/keuangan' ? 'text-green-600 bg-green-50' : 'text-gray-600'">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Keuangan</span>
+        </router-link>
+
+        <router-link to="/pengaduan" class="flex flex-col items-center justify-center transition-colors"
+          :class="$route.path === '/pengaduan' ? 'text-green-600 bg-green-50' : 'text-gray-600'">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Pengaduan</span>
+        </router-link>
+
+        <button @click="toggleMobileMenu" class="flex flex-col items-center justify-center text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <span class="text-xs font-medium mt-1">Menu</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div v-if="showMobileMenu" @click="toggleMobileMenu" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div :class="['lg:hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300', showMobileMenu ? 'translate-x-0' : 'translate-x-full']">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-xl font-bold text-gray-900">Menu</h2>
+          <button @click="toggleMobileMenu" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-3 mb-8 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-xl">
+          <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+            {{ currentUser?.name?.charAt(0).toUpperCase() }}
+          </div>
+          <div>
+            <p class="font-bold text-gray-900">{{ currentUser?.name }}</p>
+            <p class="text-xs text-gray-600">Administrator</p>
+          </div>
+        </div>
+
+        <nav class="space-y-2">
+          <router-link to="/profileadmin" @click="toggleMobileMenu" class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <span class="font-medium text-gray-900">Profil Saya</span>
+          </router-link>
+
+          <router-link to="/manajemen-akun" @click="toggleMobileMenu" class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+            <span class="font-medium text-gray-900">Manajemen Akun</span>
+          </router-link>
+
+          <div class="border-t border-gray-200 my-4"></div>
+
+          <button @click="handleLogout" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 transition-colors text-red-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <span class="font-medium">Logout</span>
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <div class="flex-1 lg:ml-20 pb-16 lg:pb-0">
       <transition name="slide-fade">
-        <div v-if="toast.show" class="fixed top-6 right-6 z-[150] max-w-md animate-slideIn">
+        <div v-if="toast.show" class="fixed top-4 left-4 right-4 lg:top-6 lg:left-auto lg:right-6 lg:max-w-md z-[150] animate-slideIn">
           <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
                :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
-            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
               <svg v-if="toast.type === 'success'" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
@@ -94,28 +191,28 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <p class="text-white font-semibold">{{ toast.message }}</p>
+            <p class="text-white font-semibold text-sm lg:text-base">{{ toast.message }}</p>
           </div>
         </div>
       </transition>
 
-      <section class="relative bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-16 md:py-24 overflow-hidden">
+      <section class="relative bg-gradient-to-br from-green-600 via-green-700 to-green-800 py-12 lg:py-16 md:py-24 overflow-hidden">
         <div class="absolute inset-0 bg-grid-white/10"></div>
-        <div class="max-w-7xl mx-auto px-6 relative">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 bg-white/20 rounded-2xl backdrop-blur-sm flex items-center justify-center">
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="max-w-7xl mx-auto px-4 lg:px-6 relative">
+          <div class="flex items-center gap-2 lg:gap-3 mb-3 lg:mb-4">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-white/20 rounded-xl lg:rounded-2xl backdrop-blur-sm flex items-center justify-center">
+              <svg class="w-5 h-5 lg:w-7 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
             </div>
-            <span class="text-green-200 font-medium">Admin Panel</span>
+            <span class="text-green-200 font-medium text-sm lg:text-base">Admin Panel</span>
           </div>
-          <h1 class="text-4xl md:text-5xl font-black text-white mb-3 tracking-tight">Kelola Keuangan RW</h1>
-          <p class="text-green-100 text-lg">Manajemen pemasukan dan pengeluaran kas RW</p>
+          <h1 class="text-2xl lg:text-4xl md:text-5xl font-black text-white mb-2 lg:mb-3 tracking-tight">Kelola Keuangan RW</h1>
+          <p class="text-green-100 text-sm lg:text-lg">Manajemen pemasukan dan pengeluaran kas RW</p>
           
           <button @click="exportKeuangan" :disabled="isExporting"
-                  class="mt-6 px-6 py-3 bg-white/20 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 flex items-center gap-2 border border-white/30">
-            <svg v-if="isExporting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  class="mt-4 lg:mt-6 px-4 lg:px-6 py-2 lg:py-3 bg-white/20 backdrop-blur-sm text-white rounded-lg lg:rounded-xl font-semibold hover:bg-white/30 transition-all duration-300 flex items-center gap-2 border border-white/30 text-sm lg:text-base">
+            <svg v-if="isExporting" class="animate-spin h-4 w-4 lg:h-5 lg:w-5" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -124,41 +221,41 @@
         </div>
       </section>
 
-      <div class="max-w-7xl mx-auto px-6 -mt-16 relative z-10">
-        <div class="space-y-4">
-          <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-            <h3 class="text-sm font-bold text-gray-700 mb-4">Pemasukan</h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div class="max-w-7xl mx-auto px-4 lg:px-6 -mt-8 lg:-mt-12 relative z-10">
+        <div class="space-y-3 lg:space-y-4">
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 border border-gray-100">
+            <h3 class="text-xs lg:text-sm font-bold text-gray-700 mb-3 lg:mb-4">Pemasukan</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 lg:gap-3">
               <div v-for="(stat, index) in statsPemasukan" :key="index"
-                   class="p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <p class="text-xs text-gray-600 font-semibold mb-2">{{ stat.label }}</p>
-                <p class="text-lg font-black text-green-700">Rp {{ formatNumber(stat.value) }}</p>
+                   class="p-3 lg:p-4 rounded-lg lg:rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <p class="text-xs text-gray-600 font-semibold mb-1 lg:mb-2">{{ stat.label }}</p>
+                <p class="text-base lg:text-lg font-black text-green-700 truncate">Rp {{ formatNumber(stat.value) }}</p>
               </div>
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
-            <h3 class="text-sm font-bold text-gray-700 mb-4">Pengeluaran</h3>
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-4 lg:p-6 border border-gray-100">
+            <h3 class="text-xs lg:text-sm font-bold text-gray-700 mb-3 lg:mb-4">Pengeluaran</h3>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2 lg:gap-3">
               <div v-for="(stat, index) in statsPengeluaran" :key="index"
-                   class="p-4 rounded-xl bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <p class="text-xs text-gray-600 font-semibold mb-2">{{ stat.label }}</p>
-                <p class="text-lg font-black text-red-700">Rp {{ formatNumber(stat.value) }}</p>
+                   class="p-3 lg:p-4 rounded-lg lg:rounded-xl bg-gradient-to-br from-red-50 to-pink-50 border-2 border-red-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <p class="text-xs text-gray-600 font-semibold mb-1 lg:mb-2">{{ stat.label }}</p>
+                <p class="text-base lg:text-lg font-black text-red-700 truncate">Rp {{ formatNumber(stat.value) }}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <section class="max-w-7xl mx-auto px-6 py-8">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-          <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-6 flex justify-between items-center">
+      <section class="max-w-7xl mx-auto px-4 lg:px-6 py-6 lg:py-8">
+        <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+          <div class="bg-gradient-to-r from-green-500 to-green-600 px-4 lg:px-8 py-4 lg:py-6 flex justify-between items-center">
             <div>
-              <h2 class="text-2xl font-black text-white">Laporan Keuangan</h2>
-              <p class="text-green-100 mt-1 text-sm">Data transaksi keuangan RW</p>
+              <h2 class="text-lg lg:text-2xl font-black text-white">Laporan Keuangan</h2>
+              <p class="text-green-100 mt-1 text-xs lg:text-sm">Data transaksi keuangan RW</p>
             </div>
-            <button @click="openCreateModal" class="w-12 h-12 bg-white/20 hover:bg-white/30 rounded-2xl flex items-center justify-center transition-all">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button @click="openCreateModal" class="w-10 h-10 lg:w-12 lg:h-12 bg-white/20 hover:bg-white/30 rounded-xl lg:rounded-2xl flex items-center justify-center transition-all">
+              <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
               </svg>
             </button>
@@ -217,79 +314,82 @@
             <div v-for="(item, index) in laporanKeuangan" :key="index" class="p-4 hover:bg-green-50 transition-all duration-300">
               <div class="mb-3">
                 <div class="text-xs text-gray-500">{{ item.tanggal }}</div>
-                <div class="font-semibold text-gray-900">{{ item.keterangan }}</div>
+                <div class="font-semibold text-gray-900 text-sm">{{ item.keterangan }}</div>
               </div>
-              <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+              <div class="grid grid-cols-2 gap-2 text-xs lg:text-sm mb-3">
                 <div>
                   <span class="text-gray-600">Debit:</span>
-                  <span v-if="item.debit > 0" class="text-green-700 font-semibold ml-2">Rp {{ formatNumber(item.debit) }}</span>
+                  <span v-if="item.debit > 0" class="text-green-700 font-semibold ml-2 block truncate">Rp {{ formatNumber(item.debit) }}</span>
                   <span v-else class="text-gray-400 ml-2">-</span>
                 </div>
                 <div>
                   <span class="text-gray-600">Kredit:</span>
-                  <span v-if="item.kredit > 0" class="text-red-700 font-semibold ml-2">Rp {{ formatNumber(item.kredit) }}</span>
+                  <span v-if="item.kredit > 0" class="text-red-700 font-semibold ml-2 block truncate">Rp {{ formatNumber(item.kredit) }}</span>
                   <span v-else class="text-gray-400 ml-2">-</span>
                 </div>
               </div>
-              <div class="text-sm mb-3">
+              <div class="text-xs lg:text-sm mb-3">
                 <span class="text-gray-600">Saldo:</span>
-                <span class="font-bold ml-2" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">Rp {{ formatNumber(item.saldo) }}</span>
+                <span class="font-bold ml-2 truncate inline-block max-w-[200px]" :class="item.saldo >= 0 ? 'text-green-700' : 'text-red-700'">Rp {{ formatNumber(item.saldo) }}</span>
               </div>
               <div class="flex gap-2 pt-3 border-t border-gray-100">
-                <button @click="openEditModal(item, index)" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                <button @click="openEditModal(item, index)" class="flex-1 p-2 hover:bg-green-100 rounded-lg transition-colors flex items-center justify-center gap-2">
                   <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                   </svg>
+                  <span class="text-xs font-medium">Edit</span>
                 </button>
-                <button @click="openDeleteModal(index, item)" class="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                <button @click="openDeleteModal(index, item)" class="flex-1 p-2 hover:bg-red-100 rounded-lg transition-colors flex items-center justify-center gap-2">
                   <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                   </svg>
+                  <span class="text-xs font-medium">Hapus</span>
                 </button>
               </div>
             </div>
           </div>
 
-          <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
-            <p class="text-sm text-gray-600">Menampilkan {{ laporanKeuangan.length }} transaksi</p>
+          <div class="bg-gray-50 px-4 lg:px-8 py-3 lg:py-4 border-t border-gray-200">
+            <p class="text-xs lg:text-sm text-gray-600">Menampilkan {{ laporanKeuangan.length }} transaksi</p>
           </div>
         </div>
       </section>
     </div>
 
+    <!-- Form Modal -->
     <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
-        <div class="bg-gradient-to-r from-green-500 to-green-600 px-8 py-6 rounded-t-3xl flex-shrink-0">
-          <h2 class="text-2xl font-black text-white">{{ formMode === 'create' ? 'Tambah Transaksi' : 'Edit Transaksi' }}</h2>
-          <p class="text-green-100 text-sm mt-1">Laporan Keuangan</p>
+      <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 lg:px-8 py-4 lg:py-6 rounded-t-2xl lg:rounded-t-3xl flex-shrink-0">
+          <h2 class="text-xl lg:text-2xl font-black text-white">{{ formMode === 'create' ? 'Tambah Transaksi' : 'Edit Transaksi' }}</h2>
+          <p class="text-green-100 text-xs lg:text-sm mt-1">Laporan Keuangan</p>
         </div>
 
-        <div class="p-8 space-y-5 overflow-y-auto">
+        <div class="p-6 lg:p-8 space-y-4 lg:space-y-5 overflow-y-auto">
           <div>
-            <label class="block text-sm font-bold text-gray-700mb-2">Tanggal</label>
-            <input v-model="formData.tanggal" type="date" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
+            <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">Tanggal</label>
+            <input v-model="formData.tanggal" type="date" class="w-full px-3 lg:px-4 py-2 lg:py-3 text-sm lg:text-base border-2 border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all">
           </div>
           
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Keterangan</label>
+            <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">Keterangan</label>
             <textarea v-model="formData.keterangan" rows="3"
-                      class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all resize-none"
+                      class="w-full px-3 lg:px-4 py-2 lg:py-3 text-sm lg:text-base border-2 border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all resize-none"
                       placeholder="Masukkan keterangan"></textarea>
           </div>
 
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
+            <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">Kategori</label>
             <div class="flex gap-4">
               <label class="flex items-center cursor-pointer">
                 <input v-model="formData.kategori" type="radio" value="debit" 
                        class="w-4 h-4 text-green-600 focus:ring-green-500">
-                <span class="ml-2 text-gray-700 font-medium">Debit (Masuk)</span>
+                <span class="ml-2 text-gray-700 font-medium text-sm lg:text-base">Debit (Masuk)</span>
               </label>
               <label class="flex items-center cursor-pointer" :class="{'opacity-50 cursor-not-allowed': isFirstTransaction && formMode === 'create'}">
                 <input v-model="formData.kategori" type="radio" value="kredit" 
                        :disabled="isFirstTransaction && formMode === 'create'"
                        class="w-4 h-4 text-green-600 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                <span class="ml-2 text-gray-700 font-medium">Kredit (Keluar)</span>
+                <span class="ml-2 text-gray-700 font-medium text-sm lg:text-base">Kredit (Keluar)</span>
               </label>
             </div>
             <p v-if="isFirstTransaction && formMode === 'create'" class="text-xs text-orange-600 mt-2 font-medium flex items-center gap-1">
@@ -301,93 +401,95 @@
           </div>
 
           <div>
-            <label class="block text-sm font-bold text-gray-700 mb-2">Jumlah (Rp)</label>
+            <label class="block text-xs lg:text-sm font-bold text-gray-700 mb-2">Jumlah (Rp)</label>
             <input v-model.number="formData.jumlah" type="number" min="0"
-                   class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                   class="w-full px-3 lg:px-4 py-2 lg:py-3 text-sm lg:text-base border-2 border-gray-200 rounded-lg lg:rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                    placeholder="0">
           </div>
         </div>
 
-        <div class="px-8 py-6 bg-gray-50 rounded-b-3xl flex gap-3">
+        <div class="px-6 lg:px-8 py-4 lg:py-6 bg-gray-50 rounded-b-2xl lg:rounded-b-3xl flex gap-3">
           <button @click="closeFormModal"
-                  class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-xl font-semibold transition-all duration-300">
+                  class="flex-1 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg lg:rounded-xl font-semibold transition-all duration-300">
             Batal
           </button>
           <button @click="saveData"
-                  class="flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:shadow-lg hover:shadow-green-500/30 text-white rounded-xl font-semibold transition-all duration-300">
+                  class="flex-1 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base bg-gradient-to-r from-green-500 to-green-600 hover:shadow-lg hover:shadow-green-500/30 text-white rounded-lg lg:rounded-xl font-semibold transition-all duration-300">
             {{ formMode === 'create' ? 'Tambah' : 'Simpan' }}
           </button>
         </div>
       </div>
     </div>
 
+    <!-- Delete Modal -->
     <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-3xl shadow-2xl max-w-md w-full">
-        <div class="bg-gradient-to-r from-red-500 to-red-600 px-8 py-6 rounded-t-3xl">
-          <h2 class="text-2xl font-black text-white">Konfirmasi Hapus</h2>
-          <p class="text-red-100 text-sm mt-1">Data yang dihapus tidak dapat dikembalikan</p>
+      <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 lg:px-8 py-4 lg:py-6 rounded-t-2xl lg:rounded-t-3xl">
+          <h2 class="text-xl lg:text-2xl font-black text-white">Konfirmasi Hapus</h2>
+          <p class="text-red-100 text-xs lg:text-sm mt-1">Data yang dihapus tidak dapat dikembalikan</p>
         </div>
 
-        <div class="p-8">
-          <div class="flex items-center gap-5 mb-6">
-            <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-              <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center gap-4 lg:gap-5 mb-4 lg:mb-6">
+            <div class="w-12 h-12 lg:w-16 lg:h-16 bg-red-100 rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 lg:w-8 lg:h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
               </svg>
             </div>
             <div>
-              <p class="text-gray-900 font-bold text-lg mb-1">Hapus transaksi ini?</p>
-              <p class="text-gray-600 font-medium">{{ formData.keterangan }}</p>
+              <p class="text-gray-900 font-bold text-base lg:text-lg mb-1">Hapus transaksi ini?</p>
+              <p class="text-gray-600 font-medium text-sm lg:text-base">{{ formData.keterangan }}</p>
             </div>
           </div>
         </div>
 
-        <div class="px-8 py-6 bg-gray-50 rounded-b-3xl flex gap-3">
+        <div class="px-6 lg:px-8 py-4 lg:py-6 bg-gray-50 rounded-b-2xl lg:rounded-b-3xl flex gap-3">
           <button @click="showDeleteModal = false"
-                  class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-xl font-semibold transition-all duration-300">
+                  class="flex-1 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg lg:rounded-xl font-semibold transition-all duration-300">
             Batal
           </button>
           <button @click="confirmDelete"
-                  class="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:shadow-red-500/30 text-white rounded-xl font-semibold transition-all duration-300">
+                  class="flex-1 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base bg-gradient-to-r from-red-500 to-red-600 hover:shadow-lg hover:shadow-red-500/30 text-white rounded-lg lg:rounded-xl font-semibold transition-all duration-300">
             Hapus
           </button>
         </div>
       </div>
     </div>
 
+    <!-- Confirmation Modal -->
     <div v-if="showConfirmationModal" @click="showConfirmationModal = false" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[120] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-3xl shadow-2xl max-w-md w-full">
-        <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 rounded-t-3xl">
-          <h2 class="text-2xl font-black text-white">Peringatan Saldo Minus</h2>
-          <p class="text-orange-100 text-sm mt-1">Transaksi ini akan membuat saldo menjadi minus</p>
+      <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 lg:px-8 py-4 lg:py-6 rounded-t-2xl lg:rounded-t-3xl">
+          <h2 class="text-xl lg:text-2xl font-black text-white">Peringatan Saldo Minus</h2>
+          <p class="text-orange-100 text-xs lg:text-sm mt-1">Transaksi ini akan membuat saldo menjadi minus</p>
         </div>
 
-        <div class="p-8">
-          <div class="flex items-center gap-5 mb-6">
-            <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-              <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="p-6 lg:p-8">
+          <div class="flex items-center gap-4 lg:gap-5 mb-4 lg:mb-6">
+            <div class="w-12 h-12 lg:w-16 lg:h-16 bg-orange-100 rounded-xl lg:rounded-2xl flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 lg:w-8 lg:h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
               </svg>
             </div>
             <div>
-              <p class="text-gray-900 font-bold text-lg mb-2">Saldo akan menjadi minus</p>
-              <div class="space-y-1 text-sm">
+              <p class="text-gray-900 font-bold text-base lg:text-lg mb-2">Saldo akan menjadi minus</p>
+              <div class="space-y-1 text-xs lg:text-sm">
                 <p class="text-gray-600">Saldo saat ini: <span class="font-bold text-green-700">Rp {{ formatNumber(pendingSaldo.current) }}</span></p>
                 <p class="text-gray-600">Pengeluaran: <span class="font-bold text-red-700">Rp {{ formatNumber(pendingSaldo.amount) }}</span></p>
                 <p class="text-gray-600">Saldo setelah: <span class="font-bold text-red-700">Rp {{ formatNumber(pendingSaldo.after) }}</span></p>
               </div>
             </div>
           </div>
-          <p class="text-gray-700 text-sm">Apakah Anda yakin ingin melanjutkan transaksi ini?</p>
+          <p class="text-gray-700 text-xs lg:text-sm">Apakah Anda yakin ingin melanjutkan transaksi ini?</p>
         </div>
 
-        <div class="px-8 py-6 bg-gray-50 rounded-b-3xl flex gap-3">
+        <div class="px-6 lg:px-8 py-4 lg:py-6 bg-gray-50 rounded-b-2xl lg:rounded-b-3xl flex gap-3">
           <button @click="showConfirmationModal = false"
-                  class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-xl font-semibold transition-all duration-300">
+                  class="flex-1 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 rounded-lg lg:rounded-xl font-semibold transition-all duration-300">
             Batal
           </button>
           <button @click="confirmSaveWithMinus"
-                  class="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:shadow-lg hover:shadow-orange-500/30 text-white rounded-xl font-semibold transition-all duration-300">
+                  class="flex-1 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base bg-gradient-to-r from-orange-500 to-orange-600 hover:shadow-lg hover:shadow-orange-500/30 text-white rounded-lg lg:rounded-xl font-semibold transition-all duration-300">
             Ya, Lanjutkan
           </button>
         </div>
@@ -403,6 +505,11 @@ import { useRouter } from 'vue-router'
 import api from '../services/api.js'
 
 const toast = ref({ show: false, message: '', type: '' })
+const showMobileMenu = ref(false)
+
+const toggleMobileMenu = () => {
+  showMobileMenu.value = !showMobileMenu.value
+}
 
 const showToast = (message, type = 'success') => {
   toast.value = { show: true, message, type }
@@ -464,6 +571,7 @@ const handleLogout = async () => {
     localStorage.removeItem('user')
     isLoggedIn.value = false
     currentUser.value = null
+    showMobileMenu.value = false
     router.push('/login')
   }
 }
@@ -528,8 +636,7 @@ const statsPengeluaran = computed(() => {
     { label: 'Dana Sosial', value: dansos, hover: false },
     { label: 'Program Kebersihan', value: programKebersihan, hover: false },
     { label: 'Bank Sampah', value: bankSampah, hover: false },
-    { label: 'Lain-lain', value: lainLain, hover: false }
-  ]
+    { label: 'Lain-lain', value: lainLain, hover: false }]
 })
 
 const recalculateSaldo = (data) => {
