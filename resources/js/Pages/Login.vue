@@ -326,7 +326,7 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { authService } from '@/services/api'
 import gsap from 'gsap'
 
@@ -336,6 +336,7 @@ const isLoading = ref(false)
 const checkingName = ref(false)
 const nameAvailable = ref(true)
 const router = useRouter()
+const route = useRoute()
 const isMobile = ref(false)
 
 const formPanel = ref(null)
@@ -636,8 +637,12 @@ const handleSubmit = async () => {
       
       await new Promise(resolve => setTimeout(resolve, 500))
 
-      const redirectPath = this.$route.query.redirect || (response.role === 'admin' ? '/homeadmin' : '/')
-      this.$router.push(redirectPath)
+      console.log('Login response:', response)
+      console.log('User role:', response.role)
+
+      const redirectPath = route.query.redirect || (response.role === 'admin' ? '/homeadmin' : '/')
+      console.log('Redirect to:', redirectPath)
+      router.push(redirectPath)
     }
   } catch (error) {
     console.error('Error:', error)

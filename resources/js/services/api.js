@@ -114,15 +114,21 @@ export const authService = {
   },
 
   async login(data) {
-    const response = await api.post('/login', data)
-    
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
-    }
-    
-    return response.data
-  },
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  
+  const response = await api.post('/login', data)
+  
+  if (response.data.token) {
+    localStorage.setItem('token', response.data.token)
+    localStorage.setItem('user', JSON.stringify({
+      ...response.data.user,
+      role: response.data.role  
+    }))
+  }
+  
+  return response.data
+},
 
   async logout() {
     await api.post('/logout')

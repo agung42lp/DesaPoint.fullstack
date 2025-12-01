@@ -132,7 +132,6 @@ router.beforeEach((to, from, next) => {
 
   next()
 })
-
 router.afterEach(() => {
   window.dispatchEvent(new Event('route-changed'))
 })
