@@ -102,21 +102,45 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
-  let user = null
-  
-  
+const getStoredUser = () => {
   try {
     const userStr = localStorage.getItem('user')
-    user = userStr ? JSON.parse(userStr) : null
+    return userStr ? JSON.parse(userStr) : null
   } catch (e) {
-    console.error('❌ Error parsing user:', e)
-    localStorage.removeItem('user')
-    localStorage.removeItem('token')
+    console.error('Error parsing user:', e)
+    clearAuth()
+    return null
   }
+}
+
+const isTokenExpired = () => {
+  const loginTime = localStorage.getItem('loginTime')
+  if (!loginTime) return false
+  
+  const now = Date.now()
+  const expiryTime = 24 * 60 * 60 * 1000
+  return (now - parseInt(loginTime)) > expiryTime
+}
+
+const clearAuth = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  localStorage.removeItem('loginTime')
+}
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  const user = getStoredUser()
 
   document.title = to.meta.title || 'DesaPoint'
+
+  if (token && to.meta.requiresAuth && isTokenExpired()) {
+    clearAuth()
+    return next({ 
+      path: '/login', 
+      query: { redirect: to.fullPath }
+    })
+  }
 
   if (to.meta.requiresAuth && !token) {
     return next({ 
@@ -126,12 +150,12 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta.role && (!user || to.meta.role !== user.role)) {
-    console.warn('⚠️ Role mismatch or user null:', { requiredRole: to.meta.role, userRole: user?.role })
+    console.warn('Access denied - insufficient permissions')
     return next('/')
   }
 
-  if (to.meta.guest && token) {
-    return next(user?.role === 'admin' ? '/homeadmin' : '/')
+  if (to.meta.guest && token && user) {
+    return next(user.role === 'admin' ? '/homeadmin' : '/')
   }
 
   if (to.path === '/' && token && user?.role === 'admin') {
