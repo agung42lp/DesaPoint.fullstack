@@ -115,6 +115,10 @@ router.beforeEach((to, from, next) => {
 
   document.title = to.meta.title || 'DesaPoint'
 
+  if (to.path === '/' && token && user.role === 'admin') {
+    return next('/homeadmin')
+  }
+
   if (to.meta.guest && token) {
     return next(user.role === 'admin' ? '/homeadmin' : '/')
   }
@@ -132,6 +136,7 @@ router.beforeEach((to, from, next) => {
 
   next()
 })
+
 router.afterEach(() => {
   window.dispatchEvent(new Event('route-changed'))
 })
