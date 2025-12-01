@@ -482,8 +482,15 @@ const checkAuthStatus = async () => {
   try {
     const response = await api.get('/user')
     isLoggedIn.value = true
-    currentUser.value = response.data
-    localStorage.setItem('user', JSON.stringify(response.data))
+
+    const existingUser = JSON.parse(localStorage.getItem('user') || '{}')
+    const userData = {
+      ...response.data,
+      role: existingUser.role || response.data.role || 'user'
+    }
+
+    currentUser.value = userData
+    localStorage.setItem('user', JSON.stringify(userData))
   } catch (error) {
     console.error('Auth check failed:', error)
     localStorage.removeItem('token')

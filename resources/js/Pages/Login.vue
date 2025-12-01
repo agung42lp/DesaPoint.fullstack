@@ -629,20 +629,22 @@ const handleSubmit = async () => {
     } else {
       console.log('Sending login request...')
       const response = await authService.login({
-        username: formData.value.username,
-        password: formData.value.password
-      })
+      username: formData.value.username,
+      password: formData.value.password
+    })
 
-      showToast('Login berhasil!')
-      
-      await new Promise(resolve => setTimeout(resolve, 500))
+    localStorage.setItem('token', response.token)
+    localStorage.setItem('user', JSON.stringify({
+      name: response.user.name,
+      username: response.user.username,
+      role: response.role
+    }))
 
-      console.log('Login response:', response)
-      console.log('User role:', response.role)
+    showToast('Login berhasil!')
+    await new Promise(resolve => setTimeout(resolve, 500))
 
-      const redirectPath = route.query.redirect || (response.role === 'admin' ? '/homeadmin' : '/')
-      console.log('Redirect to:', redirectPath)
-      router.push(redirectPath)
+    const redirectPath = route.query.redirect || (response.role === 'admin' ? '/homeadmin' : '/')
+    router.push(redirectPath)
     }
   } catch (error) {
     console.error('Error:', error)

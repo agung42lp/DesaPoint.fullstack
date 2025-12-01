@@ -106,22 +106,17 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   let user = null
   
+  
   try {
-    user = JSON.parse(localStorage.getItem('user') || '{}')
+    const userStr = localStorage.getItem('user')
+    user = userStr ? JSON.parse(userStr) : null
   } catch (e) {
+    console.error('❌ Error parsing user:', e)
     localStorage.removeItem('user')
     localStorage.removeItem('token')
   }
 
   document.title = to.meta.title || 'DesaPoint'
-
-  if (to.path === '/' && token && user.role === 'admin') {
-    return next('/homeadmin')
-  }
-
-  if (to.meta.guest && token) {
-    return next(user.role === 'admin' ? '/homeadmin' : '/')
-  }
 
   if (to.meta.requiresAuth && !token) {
     return next({ 
@@ -130,8 +125,17 @@ router.beforeEach((to, from, next) => {
     })
   }
 
-  if (to.meta.role && to.meta.role !== user?.role) {
+  if (to.meta.role && (!user || to.meta.role !== user.role)) {
+    console.warn('⚠️ Role mismatch or user null:', { requiredRole: to.meta.role, userRole: user?.role })
     return next('/')
+  }
+
+  if (to.meta.guest && token) {
+    return next(user?.role === 'admin' ? '/homeadmin' : '/')
+  }
+
+  if (to.path === '/' && token && user?.role === 'admin') {
+    return next('/homeadmin')
   }
 
   next()

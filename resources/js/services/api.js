@@ -9,8 +9,24 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(config => {
+  
   const token = localStorage.getItem('token')
+  const loginTime = localStorage.getItem('loginTime')
+  
   if (token) {
+    if (loginTime) {
+      const now = Date.now()
+      const expiryTime = 24 * 60 * 60 * 1000 
+      
+      if ((now - parseInt(loginTime)) > expiryTime) {
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        localStorage.removeItem('loginTime')
+        window.location.href = '/login'
+        return Promise.reject(new Error('Session expired'))
+      }
+    }
+    
     config.headers.Authorization = `Bearer ${token}`
   }
   return config
@@ -29,24 +45,6 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token')
-  const loginTime = localStorage.getItem('loginTime')
-  
-  if (token) {
-    const now = Date.now()
-    const expiryTime = 24 * 60 * 60 * 1000 
-    
-    if (loginTime && (now - parseInt(loginTime)) > expiryTime) {
-      localStorage.clear()
-      window.location.href = '/login'
-      return Promise.reject(new Error('Session expired'))
-    }
-    
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
 
 export const userManagementAPI = {
     getAllUsers: () => api.get('/users'),
@@ -134,22 +132,25 @@ export const authService = {
   },
 
   async login(data) {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  
+  const response = await api.post('/login', data)
+  
+  if (response.data.token) {
+    localStorage.setItem('token', response.data.token)
+    localStorage.setItem('loginTime', Date.now().toString())
     
-    const response = await api.post('/login', data)
-    
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token)
-      localStorage.setItem('loginTime', Date.now().toString()) 
-      localStorage.setItem('user', JSON.stringify({
-        ...response.data.user,
-        role: response.data.role
-      }))
+    const userToSave = {
+      ...response.data.user,
+      role: response.data.role
     }
     
-    return response.data
-  },
+    localStorage.setItem('user', JSON.stringify(userToSave))    
+  }
+  
+  return response.data
+},
 
   async logout() {
     await api.post('/logout')
