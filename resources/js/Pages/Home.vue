@@ -59,8 +59,47 @@
             <a @click="mobileMenuOpen = false; scrollToSection('baksos')" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
             <a @click="mobileMenuOpen = false; scrollToSection('keuangan')" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
             <a @click="mobileMenuOpen = false; handlePengaduanClick()" href="#" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</a>
-            <router-link v-if="!isLoggedIn" @click="mobileMenuOpen = false" to="/login" class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-center">Login</router-link>
-            <button v-else @click="() => { handleLogout(); mobileMenuOpen = false; }" class="px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-center">Logout</button>
+            <router-link 
+              v-if="isLoggedIn" 
+              @click="mobileMenuOpen = false" 
+              to="/profile" 
+              class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200/50 shadow-sm"
+            >
+              <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
+                {{ currentUser?.name?.charAt(0).toUpperCase() }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="text-gray-800 font-semibold text-sm block truncate">{{ currentUser?.name }}</span>
+                <span class="text-gray-500 text-xs">Lihat Profile</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </router-link>
+            <div class="pt-2 border-t border-gray-200">
+              <router-link 
+                v-if="!isLoggedIn" 
+                @click="mobileMenuOpen = false" 
+                to="/login" 
+                class="flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg font-medium shadow-md"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                Login
+              </router-link>
+              
+              <button 
+                v-else 
+                @click="() => { handleLogout(); mobileMenuOpen = false; }" 
+                class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg font-semibold shadow-lg"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </div>

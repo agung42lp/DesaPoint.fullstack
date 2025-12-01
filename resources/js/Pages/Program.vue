@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
 
-    <!-- Sidebar Desktop -->
     <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex-col items-center py-6 border-r border-gray-100">
       <div class="mb-10">
         <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
@@ -10,101 +9,79 @@
       </div>
 
       <nav class="flex-1 w-full flex flex-col items-center space-y-2 px-2">
-        <router-link 
-          to="/homeadmin"
-          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+        <router-link to="/homeadmin" class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
           :class="$route.path === '/homeadmin' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
           <svg class="w-6 h-6 transition-colors" :class="$route.path === '/homeadmin' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
           </svg>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            Beranda
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            Beranda<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </router-link>
 
-        <router-link 
-          to="/program"
-          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+        <router-link to="/program" class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
           :class="$route.path === '/program' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
           <svg class="w-6 h-6 transition-colors" :class="$route.path === '/program' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
           </svg>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            Program
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            Program<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </router-link>
 
-        <router-link 
-          to="/keuangan"
-          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+        <router-link to="/keuangan" class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
           :class="$route.path === '/keuangan' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
           <svg class="w-6 h-6 transition-colors" :class="$route.path === '/keuangan' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            Keuangan
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            Keuangan<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </router-link>
 
-        <router-link 
-          to="/pengaduan"
-          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+        <router-link to="/pengaduan" class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
           :class="$route.path === '/pengaduan' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
           <svg class="w-6 h-6 transition-colors" :class="$route.path === '/pengaduan' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
           </svg>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            Pengaduan
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            Pengaduan<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </router-link>
 
-        <router-link 
-          to="/manajemen-akun"
-          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
+        <router-link to="/manajemen-akun" class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300"
           :class="$route.path === '/manajemen-akun' ? 'bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30' : 'hover:bg-gray-100'">
           <svg class="w-6 h-6 transition-colors" :class="$route.path === '/manajemen-akun' ? 'text-white' : 'text-gray-600 group-hover:text-green-600'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
           </svg>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            Manajemen Akun
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            Manajemen Akun<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </router-link>
       </nav>
 
       <div class="w-full flex flex-col items-center space-y-2 pt-4 border-t border-gray-100 px-2">
-        <router-link 
-          to="/profileadmin"
-          class="group relative w-14 h-14 flex items-center justify-center">
+        <router-link to="/profileadmin" class="group relative w-14 h-14 flex items-center justify-center">
           <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center text-white font-bold cursor-pointer hover:scale-110 transition-all duration-300 shadow-lg">
             {{ currentUser?.name?.charAt(0).toUpperCase() }}
           </div>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            {{ currentUser?.name }}
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            {{ currentUser?.name }}<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </router-link>
 
-        <button 
-          @click="handleLogout"
-          class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300 hover:bg-red-50">
+        <button @click="handleLogout" class="group relative w-14 h-14 flex items-center justify-center rounded-2xl transition-all duration-300 hover:bg-red-50">
           <svg class="w-6 h-6 text-red-500 group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>
           <div class="absolute left-full ml-6 px-4 py-2 bg-gray-900 text-white text-sm rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap shadow-2xl">
-            Logout
-            <div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
+            Logout<div class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-gray-900"></div>
           </div>
         </button>
       </div>
     </aside>
 
-    <!-- Mobile Bottom Navigation -->
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50 safe-bottom">
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50">
       <div class="grid grid-cols-5 h-16">
         <router-link to="/homeadmin" class="flex flex-col items-center justify-center transition-colors"
           :class="$route.path === '/homeadmin' ? 'text-green-600 bg-green-50' : 'text-gray-600'">
@@ -147,10 +124,8 @@
       </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
     <div v-if="showMobileMenu" @click="toggleMobileMenu" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
 
-    <!-- Mobile Menu Drawer -->
     <div :class="['lg:hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300', showMobileMenu ? 'translate-x-0' : 'translate-x-full']">
       <div class="p-6">
         <div class="flex items-center justify-between mb-8">
@@ -199,9 +174,9 @@
       </div>
     </div>
 
-    <div class="flex-1 lg:ml-20 pb-20 lg:pb-0">
+    <div class="flex-1 lg:ml-20 pb-16 lg:pb-0 overflow-x-hidden">
       <transition name="slide-fade">
-        <div v-if="toast.show" class="fixed top-4 left-4 right-4 lg:top-6 lg:left-auto lg:right-6 lg:max-w-md z-[100] animate-slideIn safe-top">
+        <div v-if="toast.show" class="fixed top-4 left-4 right-4 lg:top-6 lg:left-auto lg:right-6 lg:max-w-md z-[150] animate-slideIn">
           <div class="rounded-2xl shadow-2xl p-4 flex items-center gap-3 backdrop-blur-sm"
                :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
             <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -245,15 +220,15 @@
       </section>
 
       <div class="max-w-7xl mx-auto px-4 lg:px-6 -mt-6 lg:-mt-8 relative z-10">
-        <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-2 lg:p-3 flex flex-wrap gap-2 lg:gap-3">
+        <div class="bg-white rounded-xl lg:rounded-2xl shadow-xl p-2 flex gap-2 backdrop-blur-sm border border-gray-100">
           <button 
             v-for="tab in tabs" 
             :key="tab.id"
             @click="activeTab = tab.id"
-            class="flex-1 min-w-[calc(50%-4px)] lg:min-w-[200px] px-3 lg:px-4 py-2 lg:py-3 rounded-lg font-medium transition-all text-xs lg:text-base"
+            class="flex-1 px-3 lg:px-6 py-2.5 lg:py-3 rounded-lg lg:rounded-xl font-semibold transition-all duration-300 text-xs lg:text-base"
             :class="activeTab === tab.id 
-              ? 'bg-green-600 text-white shadow-md' 
-              : 'text-gray-600 hover:bg-gray-100'">
+              ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/30' 
+              : 'text-gray-600 hover:bg-gray-50'">
             {{ tab.label }}
           </button>
         </div>
@@ -591,9 +566,8 @@
       </div>
     </div>
 
-    <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/50 z-50flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-xl lg:rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div class="bg-gradient-to-r from-green-600 to-green-700 px-5 lg:px-6 py-4 lg:py-5 rounded-t-xl lg:rounded-t-2xl">
+    <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 overflow-y-auto">
+      <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full my-8"><div class="bg-gradient-to-r from-green-600 to-green-700 px-5 lg:px-6 py-4 lg:py-5 rounded-t-2xl lg:rounded-t-3xl">
           <h2 class="text-lg lg:text-xl font-bold text-white">
             {{ formMode === 'create' ? 'Tambah Data' : 'Edit Data' }}
           </h2>
@@ -729,7 +703,7 @@
           </template>
         </div>
 
-        <div class="px-5 lg:px-6 py-3 lg:py-4 bg-gray-50 rounded-b-xl lg:rounded-b-2xl flex gap-2 lg:gap-3 justify-end">
+        <div class="px-5 lg:px-6 py-3 lg:py-4 bg-gray-50 rounded-b-2xl lg:rounded-b-3xl flex gap-2 lg:gap-3 justify-end">
           <button @click="closeFormModal" class="px-3 lg:px-4 py-1.5 lg:py-2 text-sm lg:text-base bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
             Batal
           </button>
@@ -747,9 +721,9 @@
       </div>
     </div>
 
-    <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4">
-      <div @click.stop class="bg-white rounded-xl lg:rounded-2xl shadow-2xl max-w-md w-full">
-        <div class="bg-gradient-to-r from-red-600 to-red-700 px-5 lg:px-6 py-4 lg:py-5 rounded-t-xl lg:rounded-t-2xl">
+    <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
+      <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-red-600 to-red-700 px-5 lg:px-6 py-4 lg:py-5 rounded-t-2xl lg:rounded-t-3xl">
           <h2 class="text-lg lg:text-xl font-bold text-white">Konfirmasi Hapus</h2>
           <p class="text-red-100 text-xs lg:text-sm mt-1">Data yang dihapus tidak dapat dikembalikan</p>
         </div>
@@ -773,7 +747,7 @@
           </div>
         </div>
 
-        <div class="px-5 lg:px-6 py-3 lg:py-4 bg-gray-50 rounded-b-xl lg:rounded-b-2xl flex gap-2 lg:gap-3 justify-end">
+        <div class="px-5 lg:px-6 py-3 lg:py-4 bg-gray-50 rounded-b-2xl lg:rounded-b-3xl flex gap-2 lg:gap-3 justify-end">
           <button @click="showDeleteModal = false" class="px-3 lg:px-4 py-1.5 lg:py-2 text-sm lg:text-base bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors">
             Batal
           </button>
@@ -781,7 +755,7 @@
             @click="confirmDelete"
             :disabled="isDeleting"
             class="px-3 lg:px-4 py-1.5 lg:py-2 text-sm lg:text-base bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2">
-            <svg v-if="isDeleting" class="animate-spin h-4 w-4 lg:h-5 lg:h-5" fill="none" viewBox="0 0 24 24">
+            <svg v-if="isDeleting" class="animate-spin h-4 w-4 lg:h-5 lg:w-5" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -791,7 +765,7 @@
       </div>
     </div>
 
-    <div v-if="showImageModal" @click="showImageModal = false" class="fixed inset-0 bg-black/80 z-[70] flex items-center justify-center p-4">
+    <div v-if="showImageModal" @click="showImageModal = false" class="fixed inset-0 bg-black/80 z-[120] flex items-center justify-center p-4">
       <div @click.stop class="relative max-w-4xl w-full">
         <button @click="showImageModal = false" class="absolute -top-10 lg:-top-12 right-0 text-white hover:text-gray-300">
           <svg class="w-7 h-7 lg:w-8 lg:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -820,7 +794,6 @@ const toast = ref({ show: false, message: '', type: '' })
 const showImageModal = ref(false)
 const currentImage = ref('')
 const showMobileMenu = ref(false)
-
 const isExporting = ref(false)
 
 const toggleMobileMenu = () => {
@@ -1438,11 +1411,52 @@ onMounted(() => {
   background-size: 40px 40px;
 }
 
-.safe-top {
-  top: max(1rem, env(safe-area-inset-top));
+.overflow-y-auto {
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
 }
 
-.safe-bottom {
-  padding-bottom: max(4rem, calc(4rem + env(safe-area-inset-bottom)));
+.overflow-y-auto::-webkit-scrollbar {
+  display: none; 
+}
+
+@media (max-width: 1023px) {
+  .overflow-x-auto {
+    scrollbar-width: thin;
+    scrollbar-color: #10b981 #f3f4f6;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 10px;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 10px;
+  }
+}
+
+.fixed.inset-0 {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overscroll-behavior: contain;
+}
+
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
 }
 </style>
