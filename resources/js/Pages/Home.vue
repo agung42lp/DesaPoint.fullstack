@@ -59,10 +59,10 @@
             <a @click.prevent="() => { mobileMenuOpen = false; scrollToSection('baksos'); }" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
             <a @click.prevent="() => { mobileMenuOpen = false; scrollToSection('keuangan'); }" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
             <a @click.prevent="() => { handlePengaduanClick(); mobileMenuOpen = false; }" href="#" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</a>
-            <router-link 
+            <a 
               v-if="isLoggedIn" 
-              @click="mobileMenuOpen = false" 
-              to="/profile" 
+              @click.prevent="handleProfileClick" 
+              href="#"
               class="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200/50 shadow-sm"
             >
               <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
@@ -75,7 +75,7 @@
               <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
               </svg>
-            </router-link>
+            </a>
             <div class="pt-2 border-t border-gray-200">
               <router-link 
                 v-if="!isLoggedIn" 
@@ -1676,6 +1676,11 @@ const handlePengaduanClick = () => {
   } else {
     router.push('/form')
   }
+}
+
+const handleProfileClick = () => {
+  mobileMenuOpen.value = false
+  router.push('/profile')
 }
 
 const scrollToSection = (id) => {
