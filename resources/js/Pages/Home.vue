@@ -58,7 +58,7 @@
             <router-link @click="mobileMenuOpen = false" to="/" class="text-green-600 font-medium py-2">Beranda</router-link>
             <a @click="mobileMenuOpen = false; scrollToSection('baksos')" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
             <a @click="mobileMenuOpen = false; scrollToSection('keuangan')" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
-            <a @click="mobileMenuOpen = false; handlePengaduanClick()" href="#" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</a>
+            <a @click.prevent="() => { handlePengaduanClick(); mobileMenuOpen = false; }" href="#" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</a>
             <router-link 
               v-if="isLoggedIn" 
               @click="mobileMenuOpen = false" 
@@ -752,8 +752,12 @@
         :visible="{ opacity: 1, scale: 1, transition: { duration: 500 } }"
         class="relative px-8 md:px-12"
       >
-        <button @click="prevCleaningSlide" :disabled="currentCleaningSlide === 0" class="absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed z-10">
-          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button 
+          @click="prevCleaningSlide" 
+          :disabled="currentCleaningSlide === 0" 
+          class="absolute -left-2 md:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed z-10 no-active-transform"
+        >
+          <svg class="w-6 h-6 md:w-7 md:h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
@@ -820,8 +824,12 @@
           </div>
         </div>
 
-        <button @click="nextCleaningSlide" :disabled="currentCleaningSlide === sortedEvents.length - 1" class="absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed z-10">
-          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button 
+          @click="nextCleaningSlide" 
+          :disabled="currentCleaningSlide === sortedEvents.length - 1" 
+          class="no-active-transform absolute -right-2 md:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 md:w-14 md:h-14 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed z-10 transition-colors"
+        >
+          <svg class="w-6 h-6 md:w-7 md:h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
         </button>
@@ -1662,7 +1670,7 @@ const fetchPengaduanStats = async () => {
   }
 }
 
-const handlePengaduanClick = (e) => {
+const handlePengaduanClick = () => {
   if (!isLoggedIn.value) {
     showDeleteModal.value = true
   } else {
@@ -2539,5 +2547,9 @@ pre {
   -webkit-user-select: text;
   -moz-user-select: text;
   -ms-user-select: text;
+}
+
+.no-active-transform:active {
+  transform: translateY(-50%) !important;
 }
 </style>

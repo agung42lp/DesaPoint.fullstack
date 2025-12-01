@@ -1023,11 +1023,37 @@ const fetchKebersihan = async () => {
   isLoading.value = true
   try {
     const response = await kebersihanAPI.getAll()
-    cleaningEvents.value = response.data.map((item, index) => ({
-      ...item,
-      no: index + 1,
-      image: item.image ? `/storage/${item.image}` : null
-    }))
+    
+    const parseIndonesianDate = (dateString) => {
+      const months = {
+        'Januari': '01', 'Februari': '02', 'Maret': '03',
+        'April': '04', 'Mei': '05', 'Juni': '06',
+        'Juli': '07', 'Agustus': '08', 'September': '09',
+        'Oktober': '10', 'November': '11', 'Desember': '12'
+      }
+      
+      const parts = dateString.split(',')
+      if (parts.length < 2) return new Date()
+      
+      const datePart = parts[1].trim()
+      const dateArray = datePart.split(' ')
+      
+      if (dateArray.length < 3) return new Date()
+      
+      const day = dateArray[0].padStart(2, '0')
+      const month = months[dateArray[1]] || '01'
+      const year = dateArray[2]
+      
+      return new Date(`${year}-${month}-${day}`)
+    }
+    
+    cleaningEvents.value = response.data
+      .sort((a, b) => parseIndonesianDate(a.date) - parseIndonesianDate(b.date))
+      .map((item, index) => ({
+        ...item,
+        no: index + 1,
+        image: item.image ? `/storage/${item.image}` : null
+      }))
   } catch (error) {
     showToast('Gagal memuat data Program Kebersihan', 'error')
   } finally {

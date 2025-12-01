@@ -2,25 +2,34 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Program Kebersihan</title>
+    <title>Data Program Kebersihan</title>
     <style>
-        body { font-family: Arial, sans-serif; }
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h2 { color: #333; text-align: center; }
+        .header { text-align: center; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #4CAF50; color: white; }
-        h2 { color: #333; }
-        .photo { width: 60px; height: 60px; object-fit: cover; }
+        .status { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .status-upcoming { background-color: #3B82F6; color: white; }
+        .status-thisweek { background-color: #EF4444; color: white; }
+        .status-completed { background-color: #10B981; color: white; }
+        .image-cell { text-align: center; }
+        .image-cell img { max-width: 100px; height: auto; }
     </style>
 </head>
 <body>
-    <h2>Program Kebersihan RW Sejahtera</h2>
-    <p>Tanggal Export: {{ date('d F Y') }}</p>
+    <div class="header">
+        <h2>Data Program Kebersihan RW Sejahtera</h2>
+        <p>Tanggal Export: {{ date('d F Y') }}</p>
+    </div>
+    
     <table>
         <thead>
             <tr>
                 <th>No</th>
                 <th>Foto</th>
-                <th>Judul</th>
+                <th>Judul Program</th>
                 <th>Tanggal</th>
                 <th>Waktu</th>
                 <th>Lokasi</th>
@@ -28,14 +37,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($data as $index => $item)
+        @foreach($data as $index => $item)
             <tr>
                 <td>{{ $index + 1 }}</td>
-                <td>
+                <td class="image-cell">
                     @if($item->image_base64)
-                        <img src="{{ $item->image_base64 }}" class="photo">
+                        <img src="{{ $item->image_base64 }}" alt="Foto">
                     @else
-                        Tidak ada foto
+                        <span style="color: #999;">Tidak ada foto</span>
                     @endif
                 </td>
                 <td>{{ $item->title }}</td>
@@ -44,15 +53,15 @@
                 <td>{{ $item->location }}</td>
                 <td>
                     @if($item->status === 'completed')
-                        Selesai
+                        <span class="status status-completed">Selesai</span>
                     @elseif($item->status === 'thisweek')
-                        Minggu Ini
+                        <span class="status status-thisweek">Minggu Ini</span>
                     @else
-                        Akan Datang
+                        <span class="status status-upcoming">Akan Datang</span>
                     @endif
                 </td>
             </tr>
-            @endforeach
+        @endforeach
         </tbody>
     </table>
 </body>

@@ -1,7 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
 
-    <!-- Sidebar Desktop -->
     <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex-col items-center py-6 border-r border-gray-100">
       <div class="mb-10">
         <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
@@ -82,7 +81,6 @@
       </div>
     </aside>
 
-    <!-- Mobile Bottom Navigation -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50">
       <div class="grid grid-cols-5 h-16">
         <router-link to="/homeadmin" class="flex flex-col items-center justify-center transition-colors"
@@ -126,10 +124,8 @@
       </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
     <div v-if="showMobileMenu" @click="toggleMobileMenu" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
 
-    <!-- Mobile Menu Drawer -->
     <div :class="['lg:hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300', showMobileMenu ? 'translate-x-0' : 'translate-x-full']">
       <div class="p-6">
         <div class="flex items-center justify-between mb-8">
@@ -356,7 +352,6 @@
       </section>
     </div>
 
-    <!-- Form Modal -->
     <div v-if="showFormModal" @click="closeFormModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
         <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 lg:px-8 py-4 lg:py-6 rounded-t-2xl lg:rounded-t-3xl flex-shrink-0">
@@ -421,7 +416,6 @@
       </div>
     </div>
 
-    <!-- Delete Modal -->
     <div v-if="showDeleteModal" @click="showDeleteModal = false" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[110] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full">
         <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 lg:px-8 py-4 lg:py-6 rounded-t-2xl lg:rounded-t-3xl">
@@ -456,7 +450,6 @@
       </div>
     </div>
 
-    <!-- Confirmation Modal -->
     <div v-if="showConfirmationModal" @click="showConfirmationModal = false" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[120] flex items-center justify-center p-4">
       <div @click.stop class="bg-white rounded-2xl lg:rounded-3xl shadow-2xl max-w-md w-full">
         <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 lg:px-8 py-4 lg:py-6 rounded-t-2xl lg:rounded-t-3xl">

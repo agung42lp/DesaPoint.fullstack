@@ -6,38 +6,67 @@ use App\Models\Kebersihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\KebersihanPdfExport;
 use Illuminate\Support\Facades\Log;
 
 class KebersihanController extends Controller
 {
     public function index()
     {
-        $data = Kebersihan::orderBy('created_at', 'desc')->get();
+        $data = Kebersihan::all()
+            ->sortBy(function($item) {
+                return $this->parseIndonesianDate($item->date);
+            })
+            ->values();
+        
         return response()->json($data);
     }
 
     public function exportPdf()
     {
-        $data = Kebersihan::orderBy('date', 'asc')  
-                        ->orderBy('time', 'asc') 
-                        ->get()
-                        ->map(function($item) {
-                            if ($item->image && file_exists(public_path('storage/' . $item->image))) {
-                                try {
-                                    $item->image_base64 = $this->processImageForPdf(public_path('storage/' . $item->image));
-                                } catch (\Exception $e) {
-                                    Log::error('Error processing image: ' . $e->getMessage());
-                                    $item->image_base64 = null;
-                                }
-                            } else {
-                                $item->image_base64 = null;
-                            }
-                            return $item;
-                        });
+        $data = Kebersihan::all()
+            ->sortBy(function($item) {
+                return $this->parseIndonesianDate($item->date);
+            })
+            ->map(function($item) {
+                if ($item->image && file_exists(public_path('storage/' . $item->image))) {
+                    try {
+                        $item->image_base64 = $this->processImageForPdf(public_path('storage/' . $item->image));
+                    } catch (\Exception $e) {
+                        Log::error('Error processing image: ' . $e->getMessage());
+                        $item->image_base64 = null;
+                    }
+                } else {
+                    $item->image_base64 = null;
+                }
+                return $item;
+            });
         
         $pdf = Pdf::loadView('exports.kebersihan-pdf', compact('data'));
         return $pdf->download('kebersihan-' . date('Y-m-d') . '.pdf');
+    }
+    
+    private function parseIndonesianDate($dateString)
+    {
+        $months = [
+            'Januari' => '01', 'Februari' => '02', 'Maret' => '03',
+            'April' => '04', 'Mei' => '05', 'Juni' => '06',
+            'Juli' => '07', 'Agustus' => '08', 'September' => '09',
+            'Oktober' => '10', 'November' => '11', 'Desember' => '12'
+        ];
+        
+        $parts = explode(',', $dateString);
+        if (count($parts) < 2) return now();
+        
+        $datePart = trim($parts[1]);
+        $dateArray = explode(' ', $datePart);
+        
+        if (count($dateArray) < 3) return now();
+        
+        $day = str_pad($dateArray[0], 2, '0', STR_PAD_LEFT);
+        $month = $months[$dateArray[1]] ?? '01';
+        $year = $dateArray[2];
+        
+        return "$year-$month-$day";
     }
     
     private function processImageForPdf($path)

@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
-    <!-- Sidebar - Hidden on mobile, shown on desktop -->
     <aside class="hidden lg:flex fixed left-0 top-0 h-screen w-20 bg-white shadow-xl z-50 flex-col items-center py-6 border-r border-gray-100">
       <div class="mb-10">
         <div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
@@ -97,7 +96,6 @@
       </div>
     </aside>
 
-    <!-- Mobile Bottom Navigation -->
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl z-50">
       <div class="grid grid-cols-5 h-16">
         <router-link 
@@ -147,14 +145,12 @@
       </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
     <div 
       v-if="showMobileMenu"
       @click="toggleMobileMenu"
       class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
     ></div>
 
-    <!-- Mobile Menu Drawer -->
     <div 
       :class="['lg:hidden fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300', showMobileMenu ? 'translate-x-0' : 'translate-x-full']">
       <div class="p-6">
@@ -396,7 +392,9 @@
                        'bg-red-100': activity.type === 'danasosial',
                        'bg-emerald-100': activity.type === 'banksampah',
                        'bg-blue-100': activity.type === 'ronda',
-                       'bg-yellow-100': activity.type === 'kebersihan'
+                       'bg-yellow-100': activity.type === 'kebersihan',
+                       'bg-purple-100': activity.type === 'keuangan',
+                       'bg-orange-100': activity.type === 'pengaduan'
                      }">
                   <svg class="w-4 h-4 lg:w-5 lg:h-5" :class="{
                          'text-red-600': activity.type === 'danasosial',
@@ -416,7 +414,9 @@
                         'bg-red-100 text-red-700': activity.type === 'danasosial',
                         'bg-emerald-100 text-emerald-700': activity.type === 'banksampah',
                         'bg-blue-100 text-blue-700': activity.type === 'ronda',
-                        'bg-yellow-100 text-yellow-700': activity.type === 'kebersihan'
+                        'bg-yellow-100 text-yellow-700': activity.type === 'kebersihan',
+                        'bg-purple-100 text-purple-700': activity.type === 'keuangan',
+                        'bg-orange-100 text-orange-700': activity.type === 'pengaduan'
                       }">
                   {{ activity.label }}
                 </span>
@@ -565,7 +565,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { danaSosialAPI, bankSampahAPI, jadwalRondaAPI, kebersihanAPI, authService } from '../services/api.js'
+import { danaSosialAPI, bankSampahAPI, jadwalRondaAPI, kebersihanAPI, authService, laporanKeuanganAPI, pengaduanAPI } from '../services/api.js'
 import api from '../services/api.js'
 
 const router = useRouter()
@@ -674,11 +674,13 @@ const updateDateTime = () => {
 const fetchDashboardData = async () => {
   isLoading.value = true
   try {
-    const [danaSosialRes, bankSampahRes, rondaRes, kebersihanRes] = await Promise.all([
+    const [danaSosialRes, bankSampahRes, rondaRes, kebersihanRes, keuanganRes, pengaduanRes] = await Promise.all([
       danaSosialAPI.getAll(),
       bankSampahAPI.getAll(),
       jadwalRondaAPI.getAll(),
-      kebersihanAPI.getAll()
+      kebersihanAPI.getAll(),
+      laporanKeuanganAPI.getAll(),
+      pengaduanAPI.getAll()
     ])
 
     const danaSosialData = danaSosialRes.data
@@ -692,8 +694,8 @@ const fetchDashboardData = async () => {
 
     stats.value.danaSosial = {
       total: 'Rp ' + new Intl.NumberFormat('id-ID').format(totalDanaSosial),
-      count: thisMonthCount,
-      change: thisMonthCount > 0 ? `+${thisMonthCount}` : '0'
+      count: danaSosialData.length,  
+      change: `${danaSosialData.length} total`
     }
 
     const kategoriBantuan = {
@@ -733,12 +735,14 @@ const fetchDashboardData = async () => {
 
     const now = new Date()
     const currentDay = now.getDay() 
+    const offset = currentDay === 0 ? 6 : currentDay - 1 
+
     const weekStart = new Date(now)
-    weekStart.setDate(now.getDate() - currentDay)
+    weekStart.setDate(now.getDate() - offset)
     weekStart.setHours(0, 0, 0, 0)
 
     const weekEnd = new Date(weekStart)
-    weekEnd.setDate(weekStart.getDate() + 6)
+    weekEnd.setDate(weekStart.getDate() + 6) 
     weekEnd.setHours(23, 59, 59, 999)
 
     const thisWeekRonda = rondaData.filter(item => {
@@ -763,70 +767,122 @@ const fetchDashboardData = async () => {
     }
 
     const activities = []
-
-    const sortedDanaSosial = [...danaSosialData].sort((a, b) => 
-      new Date(b.updated_at) - new Date(a.updated_at)
-    )
-
-    sortedDanaSosial.slice(0, 2).forEach(item => {
-      const itemDate = new Date(item.updated_at)
+    const formatTime = (date) => {
       const now = new Date()
-      const diffHours = Math.floor((now - itemDate) / 3600000)
+      const diffMs = now - date
+      const diffHours = Math.floor(diffMs / 3600000)
+      const diffDays = Math.floor(diffMs / 86400000)
+      
+      if (diffHours < 1) return 'Baru saja'
+      if (diffHours < 24) return `${diffHours} jam lalu`
+      if (diffDays === 1) return 'Kemarin'
+      if (diffDays < 7) return `${diffDays} hari lalu`
+      
+      return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+    }
+
+    danaSosialData.forEach(item => {
+      const createdDate = new Date(item.created_at)
+      const updatedDate = new Date(item.updated_at)
+      const isUpdated = updatedDate - createdDate > 1000
+      
+      const kategoriLabel = {
+        'korban_meninggal': 'Korban Meninggal',
+        'penderita_sakit': 'Penderita Sakit',
+        'korban_bencana': 'Korban Bencana'
+      }
       
       activities.push({
         id: `ds-${item.id}`,
         type: 'danasosial',
         label: 'Dana Sosial',
-        title: `Dana Sosial untuk ${item.nama_penerima}`,
-        time: diffHours < 24 ? `${diffHours} jam lalu` : itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-        timestamp: itemDate.getTime()
+        title: `${isUpdated ? 'Update' : 'Tambah'} dana sosial ${kategoriLabel[item.kategori_bantuan]} untuk ${item.nama_penerima} sebesar Rp ${new Intl.NumberFormat('id-ID').format(item.nominal_bantuan)}`,
+        time: formatTime(isUpdated ? updatedDate : createdDate),
+        timestamp: (isUpdated ? updatedDate : createdDate).getTime()
       })
     })
 
-    bankSampahData.slice(0, 1).forEach(item => {
-      const itemDate = new Date(item.updated_at)
-      const now = new Date()
-      const diffHours = Math.floor((now - itemDate) / 3600000)
+    bankSampahData.forEach(item => {
+      const createdDate = new Date(item.created_at)
+      const updatedDate = new Date(item.updated_at)
+      const isUpdated = updatedDate - createdDate > 1000
       
       activities.push({
         id: `bs-${item.id}`,
         type: 'banksampah',
         label: 'Bank Sampah',
-        title: `Update rekening ${item.nama}`,
-        time: diffHours < 1 ? 'Baru saja' : diffHours < 24 ? `${diffHours} jam lalu` : itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-        timestamp: itemDate.getTime()
+        title: `${isUpdated ? 'Update' : 'Tambah'} rekening bank sampah ${item.nama} dengan total saldo Rp ${new Intl.NumberFormat('id-ID').format(item.total_konversi)}`,
+        time: formatTime(isUpdated ? updatedDate : createdDate),
+        timestamp: (isUpdated ? updatedDate : createdDate).getTime()
       })
     })
 
-    const sortedRonda = [...rondaData].sort((a, b) => 
-      new Date(b.updated_at) - new Date(a.updated_at)
-    )
-
-    sortedRonda.slice(0, 1).forEach(item => {
-      const itemDate = new Date(item.updated_at)
+    rondaData.forEach(item => {
+      const createdDate = new Date(item.created_at)
+      const updatedDate = new Date(item.updated_at)
+      const isUpdated = updatedDate - createdDate > 1000
+      const tanggalRonda = new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+      
       activities.push({
         id: `r-${item.id}`,
         type: 'ronda',
         label: 'Ronda',
-        title: `Jadwal ronda ${new Date(item.tanggal).toLocaleDateString('id-ID')}`,
-        time: itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-        timestamp: itemDate.getTime()
+        title: `${isUpdated ? 'Update' : 'Tambah'} jadwal ronda ${tanggalRonda} - ${item.peserta_ronda}`,
+        time: formatTime(isUpdated ? updatedDate : createdDate),
+        timestamp: (isUpdated ? updatedDate : createdDate).getTime()
       })
     })
 
-    const sortedKebersihan = [...kebersihanData].sort((a, b) => 
-      new Date(b.updated_at) - new Date(a.updated_at)
-    )
-
-    sortedKebersihan.slice(0, 1).forEach(item => {
-      const itemDate = new Date(item.updated_at)
+    kebersihanData.forEach(item => {
+      const createdDate = new Date(item.created_at)
+      const updatedDate = new Date(item.updated_at)
+      const isUpdated = updatedDate - createdDate > 1000
+      
       activities.push({
         id: `k-${item.id}`,
         type: 'kebersihan',
         label: 'Kebersihan',
-        title: item.title,
-        time: itemDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-        timestamp: itemDate.getTime()
+        title: `${isUpdated ? 'Update' : 'Tambah'} jadwal kebersihan ${item.title} di ${item.location} pada ${item.date}`,
+        time: formatTime(isUpdated ? updatedDate : createdDate),
+        timestamp: (isUpdated ? updatedDate : createdDate).getTime()
+      })
+    })
+
+    const keuanganData = keuanganRes.data
+    keuanganData.forEach(item => {
+      const createdDate = new Date(item.created_at)
+      const updatedDate = new Date(item.updated_at)
+      const isUpdated = updatedDate - createdDate > 1000
+      
+      activities.push({
+        id: `lk-${item.id}`,
+        type: 'keuangan',
+        label: 'Keuangan',
+        title: `${isUpdated ? 'Update' : 'Tambah'} transaksi ${item.jenis_transaksi} sebesar Rp ${new Intl.NumberFormat('id-ID').format(item.nominal)} - ${item.keterangan}`,
+        time: formatTime(isUpdated ? updatedDate : createdDate),
+        timestamp: (isUpdated ? updatedDate : createdDate).getTime()
+      })
+    })
+
+    const pengaduanData = pengaduanRes.data
+    pengaduanData.forEach(item => {
+      const createdDate = new Date(item.created_at)
+      const updatedDate = new Date(item.updated_at)
+      const isUpdated = updatedDate - createdDate > 1000
+      
+      const statusLabel = {
+        'pending': 'Pending',
+        'diproses': 'Sedang Diproses',
+        'selesai': 'Selesai'
+      }
+      
+      activities.push({
+        id: `p-${item.id}`,
+        type: 'pengaduan',
+        label: 'Pengaduan',
+        title: `${isUpdated ? `Update status menjadi ${statusLabel[item.status]}` : 'Pengaduan baru'} kategori ${item.kategori} - ${item.judul}`,
+        time: formatTime(isUpdated ? updatedDate : createdDate),
+        timestamp: (isUpdated ? updatedDate : createdDate).getTime()
       })
     })
 
@@ -890,7 +946,22 @@ const fetchDashboardData = async () => {
   }
 }
 
+
 let timeInterval
+
+const formatTime = (date) => {
+  const now = new Date()
+  const diffMs = now - date
+  const diffHours = Math.floor(diffMs / 3600000)
+  const diffDays = Math.floor(diffMs / 86400000)
+  
+  if (diffHours < 1) return 'Baru saja'
+  if (diffHours < 24) return `${diffHours} jam lalu`
+  if (diffDays === 1) return 'Kemarin'
+  if (diffDays < 7) return `${diffDays} hari lalu`
+  
+  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
+}
 
 onMounted(() => {
   checkAuthStatus()
