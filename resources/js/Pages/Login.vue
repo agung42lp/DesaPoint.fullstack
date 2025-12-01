@@ -636,11 +636,8 @@ const handleSubmit = async () => {
       
       await new Promise(resolve => setTimeout(resolve, 500))
 
-      if (response.role === 'admin') {
-        router.push('/homeadmin')
-      } else {
-        router.push('/')
-      }
+      const redirectPath = this.$route.query.redirect || (response.role === 'admin' ? '/homeadmin' : '/')
+      this.$router.push(redirectPath)
     }
   } catch (error) {
     console.error('Error:', error)
