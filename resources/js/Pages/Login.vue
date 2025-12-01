@@ -303,13 +303,23 @@
       </div>
     </div>
 
-    <a 
-      href="#"
-      class="hidden md:flex fixed top-6 left-6 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full items-center justify-center text-white transition-all duration-300 shadow-lg hover:shadow-xl group z-50">
-      <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button 
+      @click="$router.push('/')"
+      class="fixed z-50 transition-all hover:scale-110 group"
+      :class="isMobile 
+        ? 'top-4 right-4 w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full shadow-2xl flex items-center justify-center text-white' 
+        : 'top-6 left-6 w-12 h-12 bg-white/20 backdrop-blur-sm hover:bg-white/30 rounded-full items-center justify-center text-white shadow-lg hover:shadow-xl hidden md:flex'">
+      
+      <svg v-if="isMobile" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+      
+      <svg v-else class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
       </svg>
-    </a>
+      
+      <span v-if="isMobile" class="absolute left-16 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Tutup</span>
+    </button>
 
   </div>
 </template>

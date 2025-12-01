@@ -56,8 +56,8 @@
         <div v-if="mobileMenuOpen" class="md:hidden pb-4 border-t border-gray-100 mt-2">
           <div class="flex flex-col space-y-3 pt-4">
             <router-link @click="mobileMenuOpen = false" to="/" class="text-green-600 font-medium py-2">Beranda</router-link>
-            <a @click="mobileMenuOpen = false; scrollToSection('baksos')" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
-            <a @click="mobileMenuOpen = false; scrollToSection('keuangan')" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
+            <a @click.prevent="() => { mobileMenuOpen = false; scrollToSection('baksos'); }" href="#baksos" class="text-gray-700 hover:text-green-600 font-medium py-2">Program</a>
+            <a @click.prevent="() => { mobileMenuOpen = false; scrollToSection('keuangan'); }" href="#keuangan" class="text-gray-700 hover:text-green-600 font-medium py-2">Keuangan</a>
             <a @click.prevent="() => { handlePengaduanClick(); mobileMenuOpen = false; }" href="#" class="text-gray-700 hover:text-green-600 font-medium py-2">Pengaduan</a>
             <router-link 
               v-if="isLoggedIn" 
@@ -2071,37 +2071,31 @@ html {
   max-width: 100vw;
 }
 
-/* Prevent horizontal scroll on mobile */
 body {
   overflow-x: hidden;
 }
 
-/* Better text wrapping on mobile */
 @media (max-width: 768px) {
   * {
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
   
-  /* Smooth scrolling for mobile */
   html {
     scroll-padding-top: 5rem;
   }
   
-  /* Optimize images for mobile */
   img {
     max-width: 100%;
     height: auto;
   }
   
-  /* Better touch targets */
   button, a {
     min-height: 44px;
     min-width: 44px;
   }
 }
 
-/* Loading animation */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -2115,7 +2109,6 @@ body {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Custom scrollbar for desktop */
 @media (min-width: 768px) {
   ::-webkit-scrollbar {
     width: 8px;
@@ -2135,20 +2128,17 @@ body {
   }
 }
 
-/* Smooth transitions */
 * {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-/* Focus styles for accessibility */
 button:focus, a:focus, input:focus, select:focus, textarea:focus {
   outline: 2px solid #16a34a;
   outline-offset: 2px;
 }
 
-/* Better hover effects on desktop */
 @media (hover: hover) {
   .hover\:scale-110:hover {
     transform: scale(1.1);
@@ -2159,31 +2149,25 @@ button:focus, a:focus, input:focus, select:focus, textarea:focus {
   }
 }
 
-/* Improve readability */
 p, li, span {
   line-height: 1.6;
 }
 
-/* Mobile-specific improvements */
 @media (max-width: 640px) {
-  /* Better spacing */
   section {
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
   
-  /* Improve button tap targets */
   button {
     padding: 0.625rem 1rem;
   }
   
-  /* Better card shadows */
   .shadow-xl {
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   }
 }
 
-/* Loading states */
 .loading-skeleton {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
@@ -2199,12 +2183,10 @@ p, li, span {
   }
 }
 
-/* Improved modal backdrop */
 .modal-backdrop {
   backdrop-filter: blur(4px);
 }
 
-/* Better table overflow on mobile */
 @media (max-width: 768px) {
   table {
     display: block;
@@ -2213,14 +2195,12 @@ p, li, span {
   }
 }
 
-/* Optimize for iOS Safari */
 @supports (-webkit-touch-callout: none) {
   .min-h-screen {
     min-height: -webkit-fill-available;
   }
 }
 
-/* Better card shadows on mobile */
 @media (max-width: 640px) {
   .rounded-xl {
     border-radius: 1rem;
@@ -2231,7 +2211,6 @@ p, li, span {
   }
 }
 
-/* Smooth fade transitions */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -2242,12 +2221,10 @@ p, li, span {
   opacity: 0;
 }
 
-/* Better gradient overlays */
 .gradient-overlay {
   background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.7));
 }
 
-/* Improve touch feedback */
 @media (hover: none) {
   button:active,
   a:active {
@@ -2255,7 +2232,6 @@ p, li, span {
   }
 }
 
-/* Better spacing for small screens */
 @media (max-width: 375px) {
   .container {
     padding-left: 1rem;
@@ -2263,7 +2239,6 @@ p, li, span {
   }
 }
 
-/* Optimize animations for performance */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -2274,14 +2249,12 @@ p, li, span {
   }
 }
 
-/* Better focus indicators */
 .focus-visible:focus {
   outline: 2px solid #16a34a;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Improve text contrast */
 .text-gray-600 {
   color: #4b5563;
 }
@@ -2294,7 +2267,6 @@ p, li, span {
   color: #1f2937;
 }
 
-/* Better card hover states */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -2304,7 +2276,6 @@ p, li, span {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
 
-/* Improve modal animations */
 .modal-enter-active,
 .modal-leave-active {
   transition: all 0.3s ease;
@@ -2316,12 +2287,10 @@ p, li, span {
   transform: scale(0.95) translateY(1rem);
 }
 
-/* Better gradient backgrounds */
 .gradient-bg {
   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
 }
 
-/* Improve button states */
 button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
@@ -2331,7 +2300,6 @@ button:not(:disabled):active {
   transform: scale(0.98);
 }
 
-/* Better carousel indicators */
 .carousel-indicator {
   transition: all 0.3s ease;
 }
@@ -2340,12 +2308,10 @@ button:not(:disabled):active {
   width: 2rem;
 }
 
-/* Improve image loading */
 img {
   image-rendering: -webkit-optimize-contrast;
 }
 
-/* Better overflow handling */
 .overflow-hidden {
   overflow: hidden;
 }
@@ -2355,7 +2321,6 @@ img {
   -webkit-overflow-scrolling: touch;
 }
 
-/* Improve input fields */
 input,
 select,
 textarea {
@@ -2364,30 +2329,25 @@ textarea {
   appearance: none;
 }
 
-/* Better link states */
 a {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Improve list styles */
 ul, ol {
   padding-left: 1.5rem;
 }
 
-/* Better table styles */
 table {
   border-collapse: collapse;
   width: 100%;
 }
 
-/* Improve hr elements */
 hr {
   border: 0;
   height: 1px;
   background: #e5e7eb;
 }
 
-/* Better blockquote styles */
 blockquote {
   border-left: 4px solid #16a34a;
   padding-left: 1rem;
@@ -2395,7 +2355,6 @@ blockquote {
   color: #6b7280;
 }
 
-/* Improve code blocks */
 code {
   background: #f3f4f6;
   padding: 0.125rem 0.25rem;
@@ -2411,7 +2370,6 @@ pre {
   overflow-x: auto;
 }
 
-/* Better selection styles */
 ::selection {
   background: #bbf7d0;
   color: #14532d;
@@ -2422,7 +2380,6 @@ pre {
   color: #14532d;
 }
 
-/* Improve placeholder styles */
 ::placeholder {
   color: #9ca3af;
   opacity: 1;
@@ -2436,7 +2393,6 @@ pre {
   color: #9ca3af;
 }
 
-/* Better print styles */
 @media print {
   body {
     background: white;
