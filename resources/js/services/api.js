@@ -16,18 +16,19 @@ api.interceptors.request.use(config => {
   return config
 })
 
+import router from '../router'
+
 api.interceptors.response.use(
   response => response,
   error => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      window.location.href = '/login'
+      router.push('/login')
     }
     return Promise.reject(error)
   }
 )
-
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('token')
   const loginTime = localStorage.getItem('loginTime')
