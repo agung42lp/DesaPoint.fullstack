@@ -1,6 +1,22 @@
 <template>
   <div class="min-h-screen bg-gray-50">
 
+    <transition name="slide-fade">
+      <div v-if="toast.show" class="fixed top-4 right-4 z-[100] max-w-md animate-slideIn">
+        <div 
+          class="rounded-lg shadow-2xl p-4 flex items-center gap-3"
+          :class="toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'">
+          <svg v-if="toast.type === 'success'" class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <svg v-else class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="text-white font-medium">{{ toast.message }}</p>
+        </div>
+      </div>
+    </transition>
+
     <nav class="bg-white shadow-lg sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 md:h-20">
@@ -106,14 +122,49 @@
     </nav>
 
     <section class="relative h-[400px] md:h-[500px] bg-gradient-to-br from-green-600 to-green-800 overflow-hidden">
-      <div 
-        class="absolute inset-0 bg-cover bg-center"
-        :style="{ 
-          backgroundImage: 'url(/images/banner.jpg)',
-          transform: `translateY(${scrollY * 0.5}px)`
-        }"
-      ></div>
+      <div class="absolute inset-0">
+        <div 
+          class="banner-container flex h-full"
+          :style="{ transform: `translateX(-${currentBannerSlide * 100}%)` }"
+        >
+          <div 
+            v-for="(image, index) in bannerImages" 
+            :key="index"
+            class="min-w-full h-full bg-cover bg-center flex-shrink-0"
+            :style="{ backgroundImage: `url(${image})` }"
+          ></div>
+        </div>
+      </div>
+      
       <div class="absolute inset-0 bg-black/40"></div>
+      
+      <button 
+        @click="prevBannerSlide"
+        class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center z-20 transition-colors"
+      >
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      
+      <button 
+        @click="nextBannerSlide"
+        class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center z-20 transition-colors"
+      >
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+      
+      <button
+        @click="callEmergency"
+        class="absolute top-4 right-4 md:top-6 md:right-6 z-20 flex items-center gap-2 px-4 py-2 md:px-5 md:py-3 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold shadow-lg transition-all hover:scale-105 animate-pulse"
+      >
+        <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+        </svg>
+        <span class="text-sm md:text-base">112</span>
+      </button>
       
       <div 
         class="relative max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center z-10"
@@ -2023,6 +2074,59 @@ const sortedEvents = computed(() => {
   return [...completed, ...thisweek, ...upcoming]
 })
 
+const currentBannerSlide = ref(0)
+const bannerImages = ref([
+  '/images/banner.jpg',
+  '/images/banner2.jpg', 
+  '/images/banner3.jpg'  
+])
+let bannerInterval = null
+
+import { gsap } from 'gsap'
+
+const nextBannerSlide = () => {
+  const nextSlide = (currentBannerSlide.value + 1) % bannerImages.value.length
+  gsap.to('.banner-container', {
+    x: `-${nextSlide * 100}%`,
+    duration: 0.8,
+    ease: 'power2.inOut',
+    onComplete: () => {
+      currentBannerSlide.value = nextSlide
+    }
+  })
+}
+
+const prevBannerSlide = () => {
+  const prevSlide = (currentBannerSlide.value - 1 + bannerImages.value.length) % bannerImages.value.length
+  gsap.to('.banner-container', {
+    x: `-${prevSlide * 100}%`,
+    duration: 0.8,
+    ease: 'power2.inOut',
+    onComplete: () => {
+      currentBannerSlide.value = prevSlide
+    }
+  })
+}
+
+const toast = ref({ show: false, message: '', type: '' })
+
+const callEmergency = () => {
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+  
+  if (isMobile) {
+    window.location.href = 'tel:112'
+  } else {
+    showToast('Nomor Darurat: 112 - Hubungi melalui telepon Anda', 'success')
+  }
+}
+
+const showToast = (message, type = 'success') => {
+  toast.value = { show: true, message, type }
+  setTimeout(() => {
+    toast.value.show = false
+  }, 4000)
+}
+
 onMounted(() => {
   checkAuthStatus()
   fetchLaporanKeuangan()
@@ -2044,6 +2148,8 @@ onMounted(() => {
   newsInterval = setInterval(() => {
     currentNewsSlide.value = (currentNewsSlide.value + 1) % 2
   }, 5000)
+
+  bannerInterval = setInterval(nextBannerSlide, 5000) 
 })
 
 onUnmounted(() => {
@@ -2051,6 +2157,7 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('visibilitychange', checkAuthStatus)
   if (newsInterval) clearInterval(newsInterval)
+  if (bannerInterval) clearInterval(bannerInterval)
 })
 </script>
 
@@ -2063,6 +2170,55 @@ onUnmounted(() => {
 
 html {
   scroll-behavior: smooth;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.3s ease-in;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 #baksos,

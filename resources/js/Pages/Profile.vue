@@ -351,10 +351,10 @@
               <label class="text-sm font-bold text-gray-700 mb-4 block">Foto Bukti</label>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div v-if="selectedPengaduanDetail.foto_1" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                  <img :src="`/${selectedPengaduanDetail.foto_1}`" alt="Foto 1" class="w-full h-72 object-cover" />
+                  <img :src="`/storage/${selectedPengaduanDetail.foto_1}`" alt="Foto 1" class="w-full h-72 object-cover" />
                 </div>
                 <div v-if="selectedPengaduanDetail.foto_2" class="rounded-xl overflow-hidden shadow-lg border border-gray-200">
-                  <img :src="`/${selectedPengaduanDetail.foto_2}`" alt="Foto 2" class="w-full h-72 object-cover" />
+                  <img :src="`/storage/${selectedPengaduanDetail.foto_2}`" alt="Foto 2" class="w-full h-72 object-cover" />
                 </div>
               </div>
             </div>
