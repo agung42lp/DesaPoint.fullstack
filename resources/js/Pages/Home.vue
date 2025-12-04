@@ -138,24 +138,6 @@
       
       <div class="absolute inset-0 bg-black/40"></div>
       
-      <button 
-        @click="prevBannerSlide"
-        class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center z-20 transition-colors"
-      >
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-        </svg>
-      </button>
-      
-      <button 
-        @click="nextBannerSlide"
-        class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center z-20 transition-colors"
-      >
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
-      </button>
-      
       <button
         @click="callEmergency"
         class="absolute top-4 right-4 md:top-6 md:right-6 z-20 flex items-center gap-2 px-4 py-2 md:px-5 md:py-3 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold shadow-lg transition-all hover:scale-105 animate-pulse"
